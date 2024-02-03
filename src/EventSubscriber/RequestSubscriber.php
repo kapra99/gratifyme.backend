@@ -16,12 +16,12 @@ class RequestSubscriber implements EventSubscriberInterface
             return;
         }
 
-        if ($event->getRequest()->getContentType() == "json") {
-            $data = json_decode($event->getRequest()->getContent(), true);
-            if (!empty($data) && is_array($data)) {
-                $event->getRequest()->request->replace($data);
-            }
-        }
+//        if ($event->getRequest()->getContentType() == "json") {
+//            $data = json_decode($event->getRequest()->getContent(), true);
+//            if (!empty($data) && is_array($data)) {
+//                $event->getRequest()->request->replace($data);
+//            }
+//        }
     }
 
     /**
