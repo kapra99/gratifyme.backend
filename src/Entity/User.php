@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Entity;
+
 use App\Interface\SoftDeleteInterface;
 use App\Repository\UserRepository;
 use App\Trait\SoftDeleteTrait;

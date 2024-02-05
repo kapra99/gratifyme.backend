@@ -12,10 +12,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: CityRepository::class)]
 class City
 {
+
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    #[Groups(['city'])]
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[Groups(['BASE'])]
     private ?int $id = null;
     #[Groups(['city'])]
     #[ORM\Column(length: 255, nullable: true)]
