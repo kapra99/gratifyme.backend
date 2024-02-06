@@ -93,7 +93,7 @@ class ActionController extends ApiController
             $responseDto->getServer()->setHttpCode(400);
             return $this->json($responseDto);
         }
-        $cityRepository->deleteWorkPlace($city);
+        $cityRepository->deleteCity($city);
         $responseDto = new ResponseDto();
         $responseDto->setMessages([
             'City removed successfully!',
