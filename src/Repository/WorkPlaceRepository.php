@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\City;
 use App\Entity\WorkPlace;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -21,32 +22,42 @@ class WorkPlaceRepository extends ServiceEntityRepository
         parent::__construct($registry, WorkPlace::class);
     }
 
-//    /**
-//     * @return Institutions[] Returns an array of Institutions objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('i')
-//            ->andWhere('i.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('i.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function createWorkPlace(string $name, string $type, City|null $city, string $address, int $workercapacity): void
+    {
+        $entityManager = $this->getEntityManager();
+        $newWorkPlace = new WorkPlace();
+        $newWorkPlace->setName($name);
+        $newWorkPlace->setType($type);
+        $newWorkPlace->setCity($city);
+        $newWorkPlace->setAddress($address);
+        $newWorkPlace->setWorkercapacity($workercapacity);
+        $entityManager->persist($newWorkPlace);
+        $entityManager->flush();
+    }
 
-//    public function findOneBySomeField($value): ?Institutions
-//    {
-//        return $this->createQueryBuilder('i')
-//            ->andWhere('i.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function updateWorkPlace(WorkPlace $currentWorkPlace, string $name, string $type, City|null $city, string $address, int $workerCapacity): void
+    {
+        $entityManager = $this->getEntityManager();
+        $currentWorkPlace->setName($name);
+        $currentWorkPlace->setType($type);
 
-    public function findAllWorkPlaces():array
+        if($city !== null){
+            $currentWorkPlace->setCity($city);
+        }
+
+        $currentWorkPlace->setAddress($address);
+        $currentWorkPlace->setWorkercapacity($workerCapacity);
+
+        $errors = $this->validator->validate($currentWorkPlace);
+
+        if (count($errors) > 0) {
+            throw new \Exception((string) $errors);
+        }
+        $entityManager->persist($currentWorkPlace);
+        $entityManager->flush();
+    }
+
+    public function findAllWorkPlaces(): array
     {
         $entityManager = $this->getEntityManager();
         $query = $entityManager->createQueryBuilder()
@@ -55,6 +66,12 @@ class WorkPlaceRepository extends ServiceEntityRepository
             ->getQuery();
 
         return $query->getArrayResult();
+    }
+    public function deleteWorkPlace(WorkPlace $workPlace): void
+    {
+        $entityManager = $this->getEntityManager();
+        $entityManager->remove($workPlace);
+        $entityManager->flush();
     }
 
     public function findOneByName(string $name): ?WorkPlace
