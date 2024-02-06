@@ -21,6 +21,37 @@ class CityRepository extends ServiceEntityRepository
         parent::__construct($registry, City::class);
     }
 
+    public function addCity(string $cityName): void
+    {
+        $entityManager = $this->getEntityManager();
+        $city = new City();
+        $city->setName($cityName);
+        $errors = $this->validator->validate($city);
+        if (count($errors) > 0) {
+            throw new \Exception((string)$errors);
+        }
+        $entityManager->persist($city);
+        $entityManager->flush();
+    }
+
+    public function updateCity(City $currentCity, string $cityName): void
+    {
+        $entityManager = $this->getEntityManager();
+        $currentCity->setName($cityName);
+        $errors = $this->validator->validate($currentCity);
+        if (count($errors) > 0) {
+            throw new \Exception((string)$errors);
+        }
+        $entityManager->persist($currentCity);
+        $entityManager->flush();
+    }
+    public function deleteCity(City $city): void
+    {
+        $entityManager = $this->getEntityManager();
+        $entityManager->remove($city);
+        $entityManager->flush();
+    }
+
     public function findOneByName(string $name): ?City
     {
         $entityManager = $this->getEntityManager();
@@ -35,7 +66,8 @@ class CityRepository extends ServiceEntityRepository
 
         return $query->getOneOrNullResult();
     }
-    public function findAllCities():array
+
+    public function findAllCities(): array
     {
         $entityManager = $this->getEntityManager();
         $query = $entityManager->createQueryBuilder()
@@ -45,6 +77,7 @@ class CityRepository extends ServiceEntityRepository
 
         return $query->getArrayResult();
     }
+
     public function findOneById(string $id): ?City
     {
         $entityManager = $this->getEntityManager();

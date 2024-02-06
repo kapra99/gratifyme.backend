@@ -7,9 +7,9 @@ use App\Dto\Api\V1\Response\ResponseDto;
 use App\Form\WorkPlace\WorkPlaceFormType;
 use App\Repository\WorkPlaceRepository;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use OpenApi\Attributes as OA;
@@ -106,5 +106,25 @@ class WorkPlaceController extends ApiController
         ]);
         $responseDto->getServer()->setHttpCode(200);
         return $this->json($responseDto);
+    }
+    #[OA\Get(
+        description: "This method returns all the Work Places",
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Work Places returned successfully',
+        content: new Model(type: ResponseDto::class, groups: ['BASE']),
+    )]
+    #[OA\Response(
+        response: 400,
+        description: 'Return the error message',
+        content: new Model(type: ResponseDto::class, groups: ['BASE']),
+    )]
+    #[OA\Tag(name: 'workplace')]
+    #[Route(path: '/api/workplaces', name: 'app_institution_show_all', methods: ['GET'])]
+    public function showAll(WorkPlaceRepository $workPlaceRepository): JsonResponse
+    {
+        $workPlace = $workPlaceRepository->findAllWorkPlaces();
+        return new JsonResponse(['workplace' => $workPlace]);
     }
 }
