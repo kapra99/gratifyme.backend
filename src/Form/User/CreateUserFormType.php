@@ -2,15 +2,14 @@
 
 namespace App\Form\User;
 
-use Symfony\Component\Form\AbstractType;
+use App\Form\BaseType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class CreateUserFormType extends AbstractType
+class CreateUserFormType extends BaseType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -35,10 +34,4 @@ class CreateUserFormType extends AbstractType
                 ],
             ]);
     }
-//    public function configureOptions(OptionsResolver $resolver)
-//    {
-//        $resolver->setDefaults([
-//            'data_class' => RegisterUsersDto::class,
-//        ]);
-//    }
 }

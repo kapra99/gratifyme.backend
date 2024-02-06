@@ -21,30 +21,6 @@ class WorkingPositionRepository extends ServiceEntityRepository
         parent::__construct($registry, WorkingPosition::class);
     }
 
-//    /**
-//     * @return WorkingPositions[] Returns an array of WorkingPositions objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('w')
-//            ->andWhere('w.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('w.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?WorkingPositions
-//    {
-//        return $this->createQueryBuilder('w')
-//            ->andWhere('w.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
     public function findAllWorkingPositions():array
     {
         $entityManager = $this->getEntityManager();

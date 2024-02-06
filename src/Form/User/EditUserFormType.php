@@ -3,16 +3,14 @@
 namespace App\Form\User;
 
 
-use App\Entity\User;
-use Symfony\Component\Form\AbstractType;
+use App\Form\BaseType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class EditUserFormType extends AbstractType
+class EditUserFormType extends BaseType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -25,14 +23,6 @@ class EditUserFormType extends AbstractType
                     new Length(max: 255),
                 ],
             ])
-//            ->add('password', PasswordType::class, [
-//                'required' => true,
-//                'trim' => true,
-//                'constraints' => [
-//                    new NotBlank(),
-//                    new Length(null, 6, 255),
-//                ],
-//            ])
             ->add('firstname', TextType::class, [
                 'required' => true,
                 'trim' => true,
@@ -96,10 +86,4 @@ class EditUserFormType extends AbstractType
             ]);
     }
 
-//    public function configureOptions(OptionsResolver $resolver)
-//    {
-//        $resolver->setDefaults([
-//            'data_class' => EditUsersDto::class,
-//        ]);
-//    }
 }

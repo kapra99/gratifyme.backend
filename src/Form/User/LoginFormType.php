@@ -2,19 +2,19 @@
 
 namespace App\Form\User;
 
-use Symfony\Component\Form\AbstractType;
+use App\Form\BaseType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class LoginFormType extends AbstractType
+class LoginFormType extends BaseType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('username',EmailType::class, [
+            ->add('username', EmailType::class, [
                 'required' => true,
                 'trim' => true,
                 'constraints' => [
@@ -22,7 +22,7 @@ class LoginFormType extends AbstractType
                     new Length(max: 255),
                 ],
             ])
-            ->add('password',PasswordType::class, [
+            ->add('password', PasswordType::class, [
                 'required' => true,
                 'trim' => true,
                 'constraints' => [
@@ -30,14 +30,6 @@ class LoginFormType extends AbstractType
                     new Length(null, 6, 255),
                 ],
             ]);
-//        ->add('submit', SubmitType::class);
 
     }
-
-//    public function configureOptions(OptionsResolver $resolver)
-//    {
-//        $resolver->setDefaults([
-//            'data_class' => LoginUsersDto::class,
-//        ]);
-//    }
 }

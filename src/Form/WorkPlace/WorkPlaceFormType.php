@@ -3,14 +3,14 @@
 namespace App\Form\WorkPlace;
 
 
+use App\Form\BaseType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class WorkPlaceFormType extends AbstractType
+class WorkPlaceFormType extends BaseType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Form\City;
+namespace App\Form\WorkingPosition;
 
 use App\Form\BaseType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Form\FormBuilderInterface;
 
-class CityFormType extends BaseType
+class WorkingPositionFormType extends BaseType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
