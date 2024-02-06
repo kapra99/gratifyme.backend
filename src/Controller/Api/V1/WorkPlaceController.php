@@ -5,6 +5,7 @@ namespace App\Controller\Api\V1;
 use App\Controller\Api\ApiController;
 use App\Dto\Api\V1\Response\ResponseDto;
 use App\Form\WorkPlace\WorkPlaceFormType;
+use App\Repository\CityRepository;
 use App\Repository\WorkPlaceRepository;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -34,7 +35,7 @@ class WorkPlaceController extends ApiController
         content: new Model(type: WorkPlaceFormType::class),
     )]
     #[Route(path: '/api/workplace/create', name: 'app_workplace_create', methods: ['POST'])]
-    public function createWorkPlace(Request $request, WorkPlaceRepository $workPlaceRepository): Response
+    public function createWorkPlace(Request $request, WorkPlaceRepository $workPlaceRepository, CityRepository $cityRepository): Response
     {
         $form = $this->createForm(WorkPlaceFormType::class);
         $data = json_decode($request->getContent(), true);
@@ -54,7 +55,12 @@ class WorkPlaceController extends ApiController
 
             $workPlaceName = $form->get('name')->getData();
             $workPlaceType = $form->get('type')->getData();
-            $workPlaceCity = $form->get('city')->getData();
+            $cityId = $form->get('city')->getData();
+            if ($cityId == null) {
+                $workPlaceCity = $existingWorkPlace->getCity();
+            } else {
+                $workPlaceCity = $cityRepository->findOneById($cityId);
+            }
             $workPlaceAddress = $form->get('address')->getData();
             $workPlaceWorkercapacity = $form->get('workercapacity')->getData();
 

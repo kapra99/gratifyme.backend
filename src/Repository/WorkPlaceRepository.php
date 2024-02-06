@@ -6,6 +6,7 @@ use App\Entity\City;
 use App\Entity\WorkPlace;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @extends ServiceEntityRepository<WorkPlace>
@@ -17,9 +18,11 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class WorkPlaceRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private ValidatorInterface $validator;
+    public function __construct(ManagerRegistry $registry, ValidatorInterface $validator)
     {
         parent::__construct($registry, WorkPlace::class);
+        $this->validator = $validator;
     }
 
     public function createWorkPlace(string $name, string $type, City|null $city, string $address, int $workercapacity): void

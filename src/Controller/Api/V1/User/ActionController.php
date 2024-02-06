@@ -61,7 +61,7 @@ class ActionController extends ApiController
             $workingPositionId = $form->get('workingposition')->getData();
             $tipMethodId = $form->get('tipmethod')->getData();
             if ($workPlaceId == null) {
-                $workPlace = $currentUser->getInstitution();
+                $workPlace = $currentUser->getWorkPlace();
             } else {
                 $workPlace = $workPlaceRepository->findOneById($workPlaceId);
             }
@@ -71,8 +71,8 @@ class ActionController extends ApiController
             } else {
                 $workingPosition = $workingPositionRepository->findOneById($workingPositionId);
             }
-            if ($tipMethodId == null){
-                $tipMethod = $currentUser->getdonationMethods();
+            if ($tipMethodId == null) {
+                $tipMethod = $currentUser->getTipMethod();
             } else {
                 $tipMethod = $tipMethodRepository->findOneById($tipMethodId);
             }

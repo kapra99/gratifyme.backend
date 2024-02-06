@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Uid\Uuid;
 
 
 #[ORM\Entity(repositoryClass: CityRepository::class)]
@@ -16,7 +17,7 @@ class City
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[Groups(['BASE'])]
-    private ?int $id = null;
+    private string $id;
     #[Groups(['city'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
@@ -27,6 +28,7 @@ class City
 
     public function __construct()
     {
+        $this->id = Uuid::v4();
         $this->workplace = new ArrayCollection();
     }
 
