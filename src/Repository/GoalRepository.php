@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Goal;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @extends ServiceEntityRepository<Goal>
@@ -16,35 +17,13 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class GoalRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private ValidatorInterface $validator;
+    public function __construct(ManagerRegistry $registry, ValidatorInterface $validator)
     {
         parent::__construct($registry, Goal::class);
+        $this->validator = $validator;
     }
 
-//    /**
-//     * @return Goals[] Returns an array of Goals objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('g')
-//            ->andWhere('g.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('g.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Goals
-//    {
-//        return $this->createQueryBuilder('g')
-//            ->andWhere('g.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
     public function findOneByName(string $name): ?Goal
     {
         $entityManager = $this->getEntityManager();
@@ -83,5 +62,23 @@ class GoalRepository extends ServiceEntityRepository
             ->getQuery();
 
         return $query->getArrayResult();
+    }
+
+    public function createGoal(string $goalName, string $endGoalSum, string $currentGoalSum, string $startDate, string $priority)
+    {
+        $entityManager = $this->getEntityManager();
+        $goal = new Goal();
+        $goal->setName($goalName);
+        $goal->setEndGoalSum($endGoalSum);
+        $goal->setcurrentGoalSum($currentGoalSum);
+        $goal->setStartDate($startDate);
+        $goal->setPriority($priority);
+        $errors = $this->validator->validate($goal);
+        if (count($errors) > 0) {
+            throw new \Exception((string)$errors);
+        }
+        $entityManager->persist($goal);
+        $entityManager->flush();
+
     }
 }
