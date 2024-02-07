@@ -1,28 +1,28 @@
 <?php
 
-namespace App\Controller\Api\V1;
+namespace App\Controller\Api\V1\TipMethod;
 
 use App\Controller\Api\ApiController;
 use App\Dto\Api\V1\Response\ResponseDto;
 use App\Form\TipMethod\TipMethodFormType;
 use App\Repository\TipMethodRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 use OpenApi\Attributes as OA;
 
-class TipMethodController extends ApiController
+class ActionController extends ApiController
 {
-    #[OA\Post(
-        description: "This method adds new Tip Method",
+    #[OA\Patch(
+        description: "This method updates a single Tip Method",
     )]
     #[OA\Response(
         response: 200,
-        description: 'Tip Method added successfully',
+        description: 'Tip Method updated successfully',
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Response(
@@ -34,19 +34,19 @@ class TipMethodController extends ApiController
     #[OA\RequestBody(
         content: new Model(type: TipMethodFormType::class),
     )]
-    #[Route(path: '/api/tip-method/create', name: 'app_tip_method_create', methods: ["POST"])]
-    public function create(Request $request, TipMethodRepository $tipMethodRepository, SerializerInterface $serializer): Response
+    #[Route(path: '/api/tip-method/edit/{id}', name: 'app_tip_method_edit', methods: ['PATCH'])]
+    public function update(EntityManagerInterface $entityManager, Request $request, ValidatorInterface $validator, TipMethodRepository $tipMethodRepository): Response
     {
         $form = $this->createForm(TipMethodFormType::class);
         $data = json_decode($request->getContent(), true);
         $form->submit($data);
+        $tipMethodId = $request->attributes->get("id");
         if ($form->isSubmitted() && $form->isValid()) {
-            $existingTipMethod = $tipMethodRepository->findOneByName($form->get('name')->getData());
-
-            if ($existingTipMethod) {
+            $tipMethod = $tipMethodRepository->findOneById($tipMethodId);
+            if (!$tipMethod) {
                 $responseDto = new ResponseDto();
                 $responseDto->setMessages([
-                    'Tip Method already added!',
+                    'Tip Method with this id was not found',
                 ]);
                 $responseDto->getServer()->setHttpCode(400);
                 return $this->json($responseDto);
@@ -54,12 +54,12 @@ class TipMethodController extends ApiController
             $tipMethodName = $form->get('name')->getData();
             $tipMethodUrl = $form->get('tipMethodUrl')->getData();
             $tipMethodStaticUrl = $form->get('tipMethodStaticUrl')->getData();
-            $tipMethodQrCodeImgPath = $form->get('qrCodeImgPath')->getData();
-            $tipMethodRepository->addTipMethod($tipMethodName, $tipMethodUrl,$tipMethodStaticUrl, $tipMethodQrCodeImgPath);
+            $tipQrCodeImgPath = $form->get('qrCodeImgPath')->getData();
+            $tipMethodRepository->updateTipMethod($tipMethod, $tipMethodName, $tipMethodUrl, $tipMethodStaticUrl, $tipQrCodeImgPath);
 
             $responseDto = new ResponseDto();
             $responseDto->setMessages([
-                'Tip Method added successfully!',
+                'Tip Method updated successfully!',
             ]);
             $responseDto->getServer()->setHttpCode(200);
             return $this->json($responseDto);
@@ -72,44 +72,12 @@ class TipMethodController extends ApiController
         return $this->json($responseDto);
     }
 
-    #[OA\Response(
-        response: 200,
-        description: "Returns the details of a single Tip Method",
-        content: new Model(type: ResponseDto::class, groups: ['BASE']),
-    )]
-    #[OA\Response(
-        response: 404,
-        description: 'Tip Method not found',
-        content: new Model(type: ResponseDto::class, groups: ['BASE']),
-    )]
-    #[OA\Tag(name: 'tip-method')]
-    #[Route(path: '/api/tip-method/{id}', name: 'app_tip_method_show', methods: ['GET'])]
-    public function show(TipMethodRepository $tipMethodRepository, Request $request, SerializerInterface $serializer): Response
-    {
-        $tipMethodId = $request->attributes->get("id");
-        $tipMethod = $tipMethodRepository->findOneById($tipMethodId);
-        if (!$tipMethod) {
-            $responseDto = new ResponseDto();
-            $responseDto->setMessages([
-                'Tip Method with this id was not found',
-            ]);
-            $responseDto->getServer()->setHttpCode(400);
-            return $this->json($responseDto);
-        }
-        $responseDto = new ResponseDto();
-        $responseDto->setMessages([
-            "Tip Method found successfully: " . $tipMethod->getName(),
-        ]);
-        $responseDto->getServer()->setHttpCode(200);
-        return $this->json($responseDto);
-    }
-
-    #[OA\Get(
-        description: "This method returns all the Tip Methods",
+    #[OA\Delete(
+        description: "This method deletes Tip Method",
     )]
     #[OA\Response(
         response: 200,
-        description: 'Tip Methods returned successfully',
+        description: 'Tip Method deleted successfully',
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Response(
@@ -118,10 +86,25 @@ class TipMethodController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'tip-method')]
-    #[Route(path: '/api/tip-methods', name: 'app_tip_methods_show_all', methods: ['GET'])]
-    public function showAll(TipMethodRepository $tipMethodRepository): JsonResponse
+    #[Route(path: '/api/tip-method/delete/{id}', name: 'app_tip_method_delete', methods: ['DELETE'])]
+    public function delete(EntityManagerInterface $entityManager, Request $request, TipMethodRepository $tipMethodRepository): Response
     {
-        $tipMethods = $tipMethodRepository->findAllTipsMethod();
-        return new JsonResponse(['tipMethods' => $tipMethods]);
+        $tipMethodId = $request->attributes->get("id");
+        $tipMethod = $tipMethodRepository->findOneById($tipMethodId);
+        if (!$tipMethod) {
+            $responseDto = new ResponseDto();
+            $responseDto->setMessages([
+                'Donation Method was not found',
+            ]);
+            $responseDto->getServer()->setHttpCode(400);
+            return $this->json($responseDto);
+        }
+        $tipMethodRepository->deleteTipMethod($tipMethod);
+        $responseDto = new ResponseDto();
+        $responseDto->setMessages([
+            'Tip Method deleted successfully!',
+        ]);
+        $responseDto->getServer()->setHttpCode(200);
+        return $this->json($responseDto);
     }
 }
