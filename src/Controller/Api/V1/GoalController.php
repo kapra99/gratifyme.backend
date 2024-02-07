@@ -4,17 +4,14 @@ namespace App\Controller\Api\V1;
 
 use App\Controller\Api\ApiController;
 use App\Dto\Api\V1\Response\ResponseDto;
-use App\Entity\Goal;
 use App\Form\Goal\GoalFormType;
 use App\Repository\GoalRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class GoalController extends ApiController
 {
@@ -74,4 +71,56 @@ class GoalController extends ApiController
         return $this->json($responseDto);
     }
 
+    #[OA\Response(
+        response: 200,
+        description: "Returns the details of a single Goal",
+        content: new Model(type: ResponseDto::class, groups: ['BASE']),
+    )]
+    #[OA\Response(
+        response: 404,
+        description: 'Goal not found',
+        content: new Model(type: ResponseDto::class, groups: ['BASE']),
+    )]
+    #[OA\Tag(name: 'goal')]
+    #[Route(path:'/api/goals/{id}', name: 'app_goals_show',methods: ['GET'])]
+    public function show(GoalRepository $goalRepository, Request $request): Response
+    {
+        $goalId = $request->attributes->get("id");
+        $goal = $goalRepository->findOneById($goalId);
+        if (!$goal) {
+            $responseDto = new ResponseDto();
+            $responseDto->setMessages([
+                'Goal with this id was not found',
+            ]);
+            $responseDto->getServer()->setHttpCode(400);
+            return $this->json($responseDto);
+        }
+        $responseDto = new ResponseDto();
+        $responseDto->setMessages([
+            "Donation Method found successfully: " . $goal->getName(),
+        ]);
+        $responseDto->getServer()->setHttpCode(200);
+        return $this->json($responseDto);
+    }
+
+    #[OA\Get(
+        description: "This method returns all the Goals",
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Goals returned successfully',
+        content: new Model(type: ResponseDto::class, groups: ['BASE']),
+    )]
+    #[OA\Response(
+        response: 400,
+        description: 'Return the error message',
+        content: new Model(type: ResponseDto::class, groups: ['BASE']),
+    )]
+    #[OA\Tag(name: 'goal')]
+    #[Route(path:'/api/goals', name: 'app_goals_show_all', methods: ['GET'])]
+    public function showAll(GoalRepository $goalsRepository): JsonResponse
+    {
+        $goals = $goalsRepository->findAllGoals();
+        return new JsonResponse(['goals' => $goals]);
+    }
 }
