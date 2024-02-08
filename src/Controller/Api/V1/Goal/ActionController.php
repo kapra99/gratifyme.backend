@@ -35,7 +35,7 @@ class ActionController extends ApiController
         content: new Model(type: GoalFormType::class),
     )]
     #[Route(path:'/api/goal/edit/{id}', name: 'app_goal_edit', methods: ['PATCH'])]
-    public function update(EntityManagerInterface $entityManager, Request $request, ValidatorInterface $validator,GoalRepository $goalRepository): Response
+    public function update(Request $request,GoalRepository $goalRepository): Response
     {
         $form = $this->createForm(GoalFormType::class);
         $data = json_decode($request->getContent(), true);
@@ -52,7 +52,13 @@ class ActionController extends ApiController
                 return $this->json($responseDto);
             }
 
-            //ToDo: Write an goalUpdate method
+            $goalName = $form->get('name')->getData();
+            $endGoalSum = $form->get('endGoalSum')->getData();
+            $currentGoalSum = $form->get('currentGoalSum')->getData();
+            $startDate = $form->get('startDate')->getData();
+            $priority = $form->get('priority')->getData();
+
+            $goalRepository->updateGoal($goal, $goalName, $endGoalSum, $currentGoalSum, $startDate, $priority);
 
             $responseDto = new ResponseDto();
             $responseDto->setMessages([
@@ -96,7 +102,7 @@ class ActionController extends ApiController
             $responseDto->getServer()->setHttpCode(400);
             return $this->json($responseDto);
         }
-        //ToDo: Write a deleteGoal method
+        $goalRepository->deleteCity($goal);
         $responseDto = new ResponseDto();
         $responseDto->setMessages([
             'Goal deleted successfully!',

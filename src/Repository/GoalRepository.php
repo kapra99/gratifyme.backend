@@ -64,10 +64,26 @@ class GoalRepository extends ServiceEntityRepository
         return $query->getArrayResult();
     }
 
-    public function createGoal(string $goalName, string $endGoalSum, string $currentGoalSum, string $startDate, string $priority)
+    public function createGoal(string $goalName, string $endGoalSum, string $currentGoalSum, string $startDate, string $priority):void
     {
         $entityManager = $this->getEntityManager();
         $goal = new Goal();
+        $goal->setName($goalName);
+        $goal->setEndGoalSum($endGoalSum);
+        $goal->setcurrentGoalSum($currentGoalSum);
+        $goal->setStartDate($startDate);
+        $goal->setPriority($priority);
+        $errors = $this->validator->validate($goal);
+        if (count($errors) > 0) {
+            throw new \Exception((string)$errors);
+        }
+        $entityManager->persist($goal);
+        $entityManager->flush();
+
+    }
+    public function updateGoal(Goal $goal, string $goalName, string $endGoalSum, string $currentGoalSum, string $startDate, string $priority):void
+    {
+        $entityManager = $this->getEntityManager();
         $goal->setName($goalName);
         $goal->setEndGoalSum($endGoalSum);
         $goal->setcurrentGoalSum($currentGoalSum);
