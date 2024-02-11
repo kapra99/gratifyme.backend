@@ -23,21 +23,18 @@ class Review
 
     #[ORM\Column(nullable: true)]
     private ?bool $subreview = null;
-    #[ORM\Column(nullable: true)]
-    private ?string $mainreviewId = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $reviewerId = null;
+    #[ORM\ManyToOne(inversedBy: 'review')]
+    private ?User $evaluatedUser = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $evaluatedUser = null;
-
+//    #[ORM\ManyToOne(inversedBy: 'review')]
+//    private ?User $user = null;
     public function __construct()
     {
         $this->id = Uuid::v4();
     }
 
-    public function getId(): ?string
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -78,27 +75,27 @@ class Review
         return $this;
     }
 
-    public function getreviewerId(): ?string
-    {
-        return $this->reviewerId;
-    }
-
-    public function setreviewerId(?string $reviewerId): static
-    {
-        $this->reviewerId = $reviewerId;
-
-        return $this;
-    }
-
-    public function getEvaluatedUser(): ?string
+    public function getEvaluatedUser(): ?User
     {
         return $this->evaluatedUser;
     }
 
-    public function setEvaluatedUser(?string $evaluatedUser): static
+    public function setEvaluatedUser(?User $evaluatedUser): static
     {
         $this->evaluatedUser = $evaluatedUser;
 
         return $this;
     }
+
+//    public function getUser(): ?User
+//    {
+//        return $this->user;
+//    }
+//
+//    public function setUser(?User $user): static
+//    {
+//        $this->user = $user;
+//
+//        return $this;
+//    }
 }

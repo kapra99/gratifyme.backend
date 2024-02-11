@@ -27,6 +27,9 @@ class TipMethod
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $qrCodeImgPath = null;
 
+    #[ORM\ManyToOne(inversedBy: 'tipMethod')]
+    private ?User $user = null;
+
     public function __construct()
     {
         $this->id = Uuid::v4();
@@ -82,6 +85,18 @@ class TipMethod
     public function setQrCodeImgPath(?string $qrCodeImgPath): static
     {
         $this->qrCodeImgPath = $qrCodeImgPath;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

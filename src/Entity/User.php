@@ -69,9 +69,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $avatarImgPath = null;
 
-    #[ORM\ManyToOne]
-    #[MaxDepth(1)]
-    private ?TipMethod $tipMethod = null;
+//    #[ORM\ManyToOne]
+//    #[MaxDepth(1)]
+//    private ?TipMethod $tipMethod = null;
 
     #[ORM\ManyToOne(inversedBy: 'user')]
     #[MaxDepth(1)]
@@ -81,9 +81,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
     #[MaxDepth(1)]
     private ?WorkingPosition $workingPosition = null;
 
+    #[ORM\OneToMany(mappedBy: 'evaluatedUser', targetEntity: Review::class)]
+    private Collection $reviews;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: TipMethod::class)]
+    private Collection $tipMethod;
     public function __construct()
     {
         $this->id = Uuid::v4();
+        $this->reviews = new ArrayCollection();
+        $this->tipMethod = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -240,26 +247,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
         return $this;
     }
 
-    public function getTipMethod(): ?TipMethod
-    {
-        return $this->tipMethod;
-    }
-    #[Groups(["user"])]
-    public function getTipMethodId(): ?string
-    {
-        if ($this->tipMethod !== null) {
-            return $this->tipMethod->getId();
-        }
-        return null;
-    }
-
-    public function setTipMethod(?TipMethod $tipMethod): static
-    {
-        $this->tipMethod = $tipMethod;
-
-        return $this;
-    }
-
     public function getWorkPlace(): ?WorkPlace
     {
         return $this->workPlace;
@@ -301,4 +288,63 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
         return $this;
     }
 
+    /**
+     * @return Collection<int, Review>
+     */
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(Review $review): static
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews->add($review);
+            $review->setEvaluatedUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReview(Review $review): static
+    {
+        if ($this->reviews->removeElement($review)) {
+            // set the owning side to null (unless already changed)
+            if ($review->getEvaluatedUser() === $this) {
+                $review->setEvaluatedUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TipMethod>
+     */
+    public function getTipMethod(): Collection
+    {
+        return $this->tipMethod;
+    }
+
+    public function addTipMethod(TipMethod $tipMethod): static
+    {
+        if (!$this->tipMethod->contains($tipMethod)) {
+            $this->tipMethod->add($tipMethod);
+            $tipMethod->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTipMethod(TipMethod $tipMethod): static
+    {
+        if ($this->tipMethod->removeElement($tipMethod)) {
+            // set the owning side to null (unless already changed)
+            if ($tipMethod->getUser() === $this) {
+                $tipMethod->setUser(null);
+            }
+        }
+
+        return $this;
+    }
 }
