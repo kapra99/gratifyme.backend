@@ -6,6 +6,7 @@ use App\Controller\Api\ApiController;
 use App\Dto\Api\V1\Response\ResponseDto;
 use App\Form\Goal\GoalFormType;
 use App\Repository\GoalRepository;
+use App\Repository\UserRepository;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -33,7 +34,7 @@ class GoalController extends ApiController
         content: new Model(type: GoalFormType::class),
     )]
     #[Route(path: '/api/goal/create', name: 'app_goal_create', methods: ['POST'])]
-    public function create(Request $request, GoalRepository $goalRepository): Response
+    public function create(Request $request, GoalRepository $goalRepository, UserRepository $userRepository): Response
     {
         $form = $this->createForm(GoalFormType::class);
         $data = json_decode($request->getContent(), true);
@@ -54,7 +55,13 @@ class GoalController extends ApiController
             $currentGoalSum = $form->get('currentGoalSum')->getData();
             $startDate = $form->get('startDate')->getData();
             $priority = $form->get('priority')->getData();
-            $goalRepository->createGoal($goalName, $endGoalSum, $currentGoalSum, $startDate, $priority);
+            $userId = $form->get('userId')->getData();
+            if ($userId == null) {
+                $user = $existingGoal->getuser();
+            } else {
+                $user = $userRepository->findOneById($userId);
+            }
+            $goalRepository->createGoal($user,$goalName, $endGoalSum, $currentGoalSum, $startDate, $priority);
 
             $responseDto = new ResponseDto();
             $responseDto->setMessages([

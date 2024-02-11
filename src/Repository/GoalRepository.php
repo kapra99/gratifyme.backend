@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Goal;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -64,10 +65,11 @@ class GoalRepository extends ServiceEntityRepository
         return $query->getArrayResult();
     }
 
-    public function createGoal(string $goalName, string $endGoalSum, string $currentGoalSum, string $startDate, string $priority):void
+    public function createGoal(User $userId, string $goalName, string $endGoalSum, string $currentGoalSum, string $startDate, string $priority):void
     {
         $entityManager = $this->getEntityManager();
         $goal = new Goal();
+        $goal->setuser($userId);
         $goal->setName($goalName);
         $goal->setEndGoalSum($endGoalSum);
         $goal->setcurrentGoalSum($currentGoalSum);
@@ -81,7 +83,7 @@ class GoalRepository extends ServiceEntityRepository
         $entityManager->flush();
 
     }
-    public function updateGoal(Goal $goal, string $goalName, string $endGoalSum, string $currentGoalSum, string $startDate, string $priority):void
+    public function updateGoal(User|null $user, Goal $goal, string $goalName, string $endGoalSum, string $currentGoalSum, string $startDate, string $priority):void
     {
         $entityManager = $this->getEntityManager();
         $goal->setName($goalName);
@@ -89,6 +91,7 @@ class GoalRepository extends ServiceEntityRepository
         $goal->setcurrentGoalSum($currentGoalSum);
         $goal->setStartDate($startDate);
         $goal->setPriority($priority);
+        $goal->setuser($user);
         $errors = $this->validator->validate($goal);
         if (count($errors) > 0) {
             throw new \Exception((string)$errors);

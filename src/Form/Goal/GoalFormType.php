@@ -2,6 +2,7 @@
 
 namespace App\Form\Goal;
 
+use App\Entity\User;
 use App\Form\BaseType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -48,6 +49,14 @@ class GoalFormType extends BaseType
                 ],
             ])
             ->add('priority', IntegerType::class, [
+                'required' => true,
+                'trim' => true,
+                'constraints' => [
+                    new NotBlank(),
+                    new Length(max: 255),
+                ],
+            ])
+            ->add('userId', TextType::class, [
                 'required' => true,
                 'trim' => true,
                 'constraints' => [

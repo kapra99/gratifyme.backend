@@ -6,6 +6,7 @@ use App\Controller\Api\ApiController;
 use App\Dto\Api\V1\Response\ResponseDto;
 use App\Form\TipMethod\TipMethodFormType;
 use App\Repository\TipMethodRepository;
+use App\Repository\UserRepository;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,7 +36,7 @@ class TipMethodController extends ApiController
         content: new Model(type: TipMethodFormType::class),
     )]
     #[Route(path: '/api/tip-method/create', name: 'app_tip_method_create', methods: ["POST"])]
-    public function create(Request $request, TipMethodRepository $tipMethodRepository, SerializerInterface $serializer): Response
+    public function create(Request $request, TipMethodRepository $tipMethodRepository, UserRepository $userRepository, SerializerInterface $serializer): Response
     {
         $form = $this->createForm(TipMethodFormType::class);
         $data = json_decode($request->getContent(), true);
@@ -55,7 +56,13 @@ class TipMethodController extends ApiController
             $tipMethodUrl = $form->get('tipMethodUrl')->getData();
             $tipMethodStaticUrl = $form->get('tipMethodStaticUrl')->getData();
             $tipMethodQrCodeImgPath = $form->get('qrCodeImgPath')->getData();
-            $tipMethodRepository->addTipMethod($tipMethodName, $tipMethodUrl,$tipMethodStaticUrl, $tipMethodQrCodeImgPath);
+            $userId = $form->get('userId')->getData();
+            if ($userId == null) {
+                $user = $existingTipMethod->getuser();
+            } else {
+                $user = $userRepository->findOneById($userId);
+            }
+            $tipMethodRepository->addTipMethod($user,$tipMethodName, $tipMethodUrl,$tipMethodStaticUrl, $tipMethodQrCodeImgPath);
 
             $responseDto = new ResponseDto();
             $responseDto->setMessages([

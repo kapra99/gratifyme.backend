@@ -6,6 +6,7 @@ use App\Controller\Api\ApiController;
 use App\Dto\Api\V1\Response\ResponseDto;
 use App\Form\Goal\GoalFormType;
 use App\Repository\GoalRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,7 +36,7 @@ class ActionController extends ApiController
         content: new Model(type: GoalFormType::class),
     )]
     #[Route(path:'/api/goal/edit/{id}', name: 'app_goal_edit', methods: ['PATCH'])]
-    public function update(Request $request,GoalRepository $goalRepository): Response
+    public function update(Request $request,GoalRepository $goalRepository, UserRepository $userRepository): Response
     {
         $form = $this->createForm(GoalFormType::class);
         $data = json_decode($request->getContent(), true);
@@ -57,8 +58,14 @@ class ActionController extends ApiController
             $currentGoalSum = $form->get('currentGoalSum')->getData();
             $startDate = $form->get('startDate')->getData();
             $priority = $form->get('priority')->getData();
+            $userId = $form->get('userId')->getData();
+            if ($userId == null) {
+                $user = $goal->getuser();
+            } else {
+                $user = $userRepository->findOneById($userId);
+            }
 
-            $goalRepository->updateGoal($goal, $goalName, $endGoalSum, $currentGoalSum, $startDate, $priority);
+            $goalRepository->updateGoal($user,$goal, $goalName, $endGoalSum, $currentGoalSum, $startDate, $priority);
 
             $responseDto = new ResponseDto();
             $responseDto->setMessages([

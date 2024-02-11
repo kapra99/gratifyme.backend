@@ -44,6 +44,15 @@ class TipMethodFormType extends BaseType
                     new NotBlank(),
                     new Length(max: 255),
                 ],
+            ])
+            ->add('userId', TextType::class, [
+                'required' => true,
+                'trim' => true,
+                'constraints' => [
+                    new NotBlank(),
+                    new Length(max: 255),
+                ],
             ]);
+
     }
 }

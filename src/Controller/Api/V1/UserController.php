@@ -25,7 +25,7 @@ use Symfony\Component\Serializer\SerializerInterface;
     }
 
     #[OA\Post(
-        description: "This method creates new users",
+        description: "This method creates a new User",
     )]
     #[OA\Response(
         response: 200,
@@ -37,11 +37,11 @@ use Symfony\Component\Serializer\SerializerInterface;
         description: 'Return the error message',
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
-    #[OA\Tag(name: 'users')]
+    #[OA\Tag(name: 'user')]
     #[OA\RequestBody(
         content: new Model(type: CreateUserFormType::class),
     )]
-    #[Route(path: '/api/user/create', name: 'app_users_create', methods: ['POST'])]
+    #[Route(path: '/api/user/create', name: 'app_user_create', methods: ['POST'])]
     public function createUser(Request $request, UserRepository $userRepository): Response
     {
         $form = $this->createForm(CreateUserFormType::class);
@@ -80,7 +80,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
     #[OA\Response(
         response: 200,
-        description: "Returns the details of a user",
+        description: "Returns the details of a single User",
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Response(
@@ -88,8 +88,8 @@ use Symfony\Component\Serializer\SerializerInterface;
         description: 'User not found',
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
-    #[OA\Tag(name: 'users')]
-    #[Route(path: '/api/user/{id}', name: 'app_users_show', methods: ['GET'])]
+    #[OA\Tag(name: 'user')]
+    #[Route(path: '/api/user/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(UserRepository $userRepository, Request $request, SerializerInterface $serializer): Response
     {
         $userId = $request->attributes->get("id");
@@ -113,7 +113,7 @@ use Symfony\Component\Serializer\SerializerInterface;
     }
 
     #[OA\Get(
-        description: "This method returns all the users",
+        description: "This method returns details of all Users",
     )]
     #[OA\Response(
         response: 200,
@@ -125,7 +125,7 @@ use Symfony\Component\Serializer\SerializerInterface;
         description: 'Return the error message',
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
-    #[OA\Tag(name: 'users')]
+    #[OA\Tag(name: 'user')]
     #[Route(path: '/api/users', name: 'app_users_show_all', methods: ['GET'])]
     public function showAll(UserRepository $userRepository): JsonResponse
     {

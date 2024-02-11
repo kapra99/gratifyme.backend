@@ -6,6 +6,7 @@ use App\Controller\Api\ApiController;
 use App\Dto\Api\V1\Response\ResponseDto;
 use App\Form\TipMethod\TipMethodFormType;
 use App\Repository\TipMethodRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,7 +36,7 @@ class ActionController extends ApiController
         content: new Model(type: TipMethodFormType::class),
     )]
     #[Route(path: '/api/tip-method/edit/{id}', name: 'app_tip_method_edit', methods: ['PATCH'])]
-    public function update(EntityManagerInterface $entityManager, Request $request, ValidatorInterface $validator, TipMethodRepository $tipMethodRepository): Response
+    public function update(Request $request, TipMethodRepository $tipMethodRepository, UserRepository $userRepository): Response
     {
         $form = $this->createForm(TipMethodFormType::class);
         $data = json_decode($request->getContent(), true);
@@ -55,7 +56,13 @@ class ActionController extends ApiController
             $tipMethodUrl = $form->get('tipMethodUrl')->getData();
             $tipMethodStaticUrl = $form->get('tipMethodStaticUrl')->getData();
             $tipQrCodeImgPath = $form->get('qrCodeImgPath')->getData();
-            $tipMethodRepository->updateTipMethod($tipMethod, $tipMethodName, $tipMethodUrl, $tipMethodStaticUrl, $tipQrCodeImgPath);
+            $userId = $form->get('userId')->getData();
+            if ($userId == null) {
+                $user = $tipMethod->getuser();
+            } else {
+                $user = $userRepository->findOneById($userId);
+            }
+            $tipMethodRepository->updateTipMethod($user,$tipMethod, $tipMethodName, $tipMethodUrl, $tipMethodStaticUrl, $tipQrCodeImgPath);
 
             $responseDto = new ResponseDto();
             $responseDto->setMessages([
