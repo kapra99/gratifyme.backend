@@ -11,6 +11,7 @@ class ResponseDto
      */
     #[Groups(['BASE'])]
     protected $messages = [];
+    protected $response = [];
 
     /**
      * @var ServerDto
@@ -86,6 +87,12 @@ class ResponseDto
     public function setTrace(array $trace)
     {
         $this->trace = $trace;
+
+        return $this;
+    }
+    public function setResponse(array $response)
+    {
+        $this->response = $response;
 
         return $this;
     }

@@ -7,6 +7,7 @@ use App\Dto\Api\V1\Response\ResponseDto;
 use App\Entity\Review;
 use App\Form\Review\ReviewFormType;
 use App\Repository\ReviewRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -36,7 +37,7 @@ class ReviewController extends ApiController
         content: new Model(type: ReviewFormType::class),
     )]
     #[Route(path: '/api/review/create', name: 'app_review_create', methods: ['POST'])]
-    public function create(Request $request, ReviewRepository $reviewRepository): Response
+    public function create(Request $request, ReviewRepository $reviewRepository, UserRepository $userRepository): Response
     {
         $form = $this->createForm(ReviewFormType::class);
         $data = json_decode($request->getContent(), true);
@@ -53,7 +54,13 @@ class ReviewController extends ApiController
             }
             $reviewMessage = $form->get('message')->getData();
             $reviewRating = $form->get('rating')->getData();
-            $reviewRepository->addReview($reviewMessage, $reviewRating);
+            $userId = $form->get('userId')->getData();
+            if ($userId == null) {
+                $user = $existingReview->getEvaluatedUser();
+            } else {
+                $user = $userRepository->findOneById($userId);
+            }
+            $reviewRepository->addReview($user,$reviewMessage, $reviewRating);
             $responseDto = new ResponseDto();
             $responseDto->setMessages([
                 'Review added successfully!',

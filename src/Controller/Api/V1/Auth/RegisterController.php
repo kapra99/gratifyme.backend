@@ -4,22 +4,29 @@ namespace App\Controller\Api\V1\Auth;
 
 use App\Controller\Api\ApiController;
 use App\Dto\Api\V1\Response\ResponseDto;
-use App\Entity\User;
+use App\Entity\UserToken;
 use App\Form\Auth\RegisterType;
 use App\Repository\UserRepository;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class RegisterController extends ApiController
 {
+    private $tokenManager;
+    public function __construct(JWTTokenManagerInterface $tokenManager)
+    {
+        $this->tokenManager = $tokenManager;
+    }
     #[OA\Response(
         response: 200,
-        description: '',
+        description: 'This method registers a new User',
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Response(
@@ -32,41 +39,53 @@ class RegisterController extends ApiController
     )]
     #[OA\Tag(name: 'Auth')]
     #[Security(name: null)]
-    #[Route(path: '/api/v1/register', name: 'auth.register', methods: ['POST'])]
-    public function index(
-        Request $request,
-        UserRepository $userRepository,
-        UserPasswordHasherInterface $userPasswordHasherInterface): Response
+    #[Route(path: '/api/register', name: 'auth.register', methods: ['POST'])]
+    public function registerUser(Request $request, UserRepository $userRepository, ValidatorInterface $validator): Response
     {
         $form = $this->createForm(RegisterType::class);
-        $form->handleRequest($request);
+        $data = json_decode($request->getContent(), true);
+        $form->submit($data);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $existingUser = $userRepository->findOneByEmail($form->get('email')->getData());
 
-        if ($userRepository->findOneBy(['email' => $form->get('email')->getNormData()])) {
-            return $this->json(['message' => 'Имейлът вече съществува'], Response::HTTP_BAD_REQUEST);
+            if ($existingUser) {
+                $responseDto = new ResponseDto();
+                $responseDto->setMessages([
+                    'User already registered!',
+                ]);
+                $responseDto->getServer()->setHttpCode(400);
+                return $this->json($responseDto);
+            }
+
+            $email = $form->get('email')->getData();
+            $plainPassword = $form->get('password')->getData();
+            $errors = $validator->validate($userRepository);
+            if (count($errors) > 0) {
+                return new JsonResponse((string)$errors, 400);
+            }
+
+            $userRepository->createUser($email, $plainPassword);
+            $newUser = $userRepository->findOneByEmail($email);
+
+            $jwtToken = $this->tokenManager->create($newUser);
+
+            $userTokenEntity = new UserToken();
+            $userTokenEntity->setUser($newUser);
+            $userTokenEntity->setToken($jwtToken);
+
+            $responseDto = new ResponseDto();
+            $responseDto->setMessages([
+                'User created successfully!',
+            ]);
+            $responseDto->getServer()->setHttpCode(200);
+            return $this->json($responseDto);
+
         }
-
-        $password = $form->get('password')->getNormData();
-        $passwordConfirm = $form->get('passwordConfirm')->getNormData();
-
-        if ($password != $passwordConfirm) {
-            throw new \ErrorException('Паролите не съвпадат.');
-        }
-
-        $user = new User();
-        $user->setFirstName($form->get('firstName')->getNormData());
-        $user->setLastName($form->get('lastName')->getNormData());
-        $user->setUsername($form->get('username')->getNormData());
-        $user->setEmail($form->get('email')->getNormData());
-        $user->setPassword($userPasswordHasherInterface->hashPassword($user, $password));
-        $user->setType(UserRepository::TYPE_USER);
-        $user->setStatus(UserRepository::STATUS_INACTICE);
-        $user->setWhitelabel($this->getCurrentWhitelabel());
-
-        $userRepository->create($user, true);
-
         $responseDto = new ResponseDto();
-        $responseDto->setMessages(['Успешна регистрация']);
-
+        $responseDto->setMessages([
+            'Something went wrong',
+        ]);
+        $responseDto->getServer()->setHttpCode(400);
         return $this->json($responseDto);
     }
 }

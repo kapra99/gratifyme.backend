@@ -6,6 +6,7 @@ use App\Controller\Api\ApiController;
 use App\Dto\Api\V1\Response\ResponseDto;
 use App\Form\Review\ReviewFormType;
 use App\Repository\ReviewRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,7 +35,7 @@ class ActionController extends ApiController
         content: new Model(type: ReviewFormType::class),
     )]
     #[Route(path: '/api/review/edit/{id}', name: 'app_review_edit', methods: ['PATCH'])]
-    public function edit(Request $request, ReviewRepository $reviewRepository): Response
+    public function edit(Request $request, ReviewRepository $reviewRepository, UserRepository $userRepository): Response
     {
         $form = $this->createForm(ReviewFormType::class);
         $data = json_decode($request->getContent(), true);
@@ -52,7 +53,13 @@ class ActionController extends ApiController
             }
             $reviewMessage = $form->get('message')->getData();
             $reviewRating = $form->get('rating')->getData();
-            $reviewRepository->updateReview($currentReview, $reviewMessage, $reviewRating);
+            $userId = $form->get('userId')->getData();
+            if ($userId == null) {
+                $user = $currentReview->getEvaluatedUser();
+            } else {
+                $user = $userRepository->findOneById($userId);
+            }
+            $reviewRepository->updateReview($user,$currentReview, $reviewMessage, $reviewRating);
             $responseDto = new ResponseDto();
             $responseDto->setMessages([
                 'Review updated successfully!',

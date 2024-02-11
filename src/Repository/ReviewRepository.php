@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Review;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -64,12 +65,13 @@ class ReviewRepository extends ServiceEntityRepository
         return $query->getOneOrNullResult();
     }
 
-    public function addReview(string $reviewMessage, string $reviewRating)
+    public function addReview(User|null $user, string $reviewMessage, string $reviewRating)
     {
         $entityManager = $this->getEntityManager();
         $review = new Review();
         $review->setMessage($reviewMessage);
         $review->setRating($reviewRating);
+        $review->setEvaluatedUser($user);
 
         $errors = $this->validator->validate($review);
         if (count($errors) > 0) {
@@ -79,11 +81,12 @@ class ReviewRepository extends ServiceEntityRepository
         $entityManager->flush();
     }
 
-    public function updateReview(Review $currentReview, string $reviewMessage, string $reviewRating)
+    public function updateReview(User|null $user,Review $currentReview, string $reviewMessage, string $reviewRating)
     {
         $entityManager = $this->getEntityManager();
         $currentReview->setMessage($reviewMessage);
         $currentReview->setRating($reviewRating);
+        $currentReview->setEvaluatedUser($user);
 
         $errors = $this->validator->validate($currentReview);
         if (count($errors) > 0) {

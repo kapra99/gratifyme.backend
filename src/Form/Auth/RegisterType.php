@@ -17,30 +17,6 @@ class RegisterType extends BaseType
         parent::buildForm($builder, $options);
 
         $builder
-            ->add('firstName', TextType::class, [
-                'required' => true,
-                'trim' => true,
-                'constraints' => [
-                    new NotBlank(),
-                    new Length(max: 255),
-                ],
-            ])
-            ->add('lastName', TextType::class, [
-                'required' => true,
-                'trim' => true,
-                'constraints' => [
-                    new NotBlank(),
-                    new Length(max: 255),
-                ],
-            ])
-            ->add('username', TextType::class, [
-                'required' => true,
-                'trim' => false,
-                'constraints' => [
-                    new NotBlank(),
-                    new Length(max: 255),
-                ],
-            ])
             ->add('email', EmailType::class, [
                 'required' => true,
                 'trim' => true,
@@ -50,14 +26,6 @@ class RegisterType extends BaseType
                 ],
             ])
             ->add('password', PasswordType::class, [
-                'required' => true,
-                'trim' => true,
-                'constraints' => [
-                    new NotBlank(),
-                    new Length(null, 6, 255),
-                ],
-            ])
-            ->add('passwordConfirm', PasswordType::class, [
                 'required' => true,
                 'trim' => true,
                 'constraints' => [

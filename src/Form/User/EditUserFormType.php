@@ -76,13 +76,6 @@ class EditUserFormType extends BaseType
                 'constraints' => [
                     new Length(null, 2, 255),
                 ],
-            ])
-            ->add('tipmethod', TextType::class, [
-                'required' => true,
-                'trim' => true,
-                'constraints' => [
-                    new Length(null, 2, 255),
-                ],
             ]);
     }
 

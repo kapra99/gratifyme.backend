@@ -31,6 +31,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
 
     #[ORM\Column(length: 180, unique: true)]
     #[Groups(["user"])]
+    #[Assert\NotBlank]
+    #[Assert\Email(message: 'The email {{ value }} is not a valid email.')]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -68,10 +70,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $avatarImgPath = null;
-
-//    #[ORM\ManyToOne]
-//    #[MaxDepth(1)]
-//    private ?TipMethod $tipMethod = null;
 
     #[ORM\ManyToOne(inversedBy: 'user')]
     #[MaxDepth(1)]

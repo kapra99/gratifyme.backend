@@ -21,7 +21,7 @@ class LoginController extends ApiController
 {
     #[OA\Response(
         response: 200,
-        description: '',
+        description: 'This method handles user login',
         content: new Model(type: LoginDto::class, groups: ['BASE']),
     )]
     #[OA\Response(
@@ -34,36 +34,32 @@ class LoginController extends ApiController
     )]
     #[OA\Tag(name: 'Auth')]
     #[Security(name: null)]
-    #[Route(path: '/api/v1/login', name: 'auth.login', methods: ['POST'])]
-    public function normal(
-        Request $request,
-        UserRepository $userRepository,
-        UserPasswordHasherInterface $userPasswordHasherInterface,
-        JWTTokenManagerInterface $jwtManager
-    ): Response {
+    #[Route(path: '/api/login', name: 'auth.login', methods: ['POST'])]
+    public function normal(Request $request, UserRepository $userRepository, UserPasswordHasherInterface $userPasswordHasherInterface, JWTTokenManagerInterface $jwtManager): Response {
         $form = $this->createForm(LoginType::class);
-        $form->handleRequest($request);
-
-        $userEntity = $userRepository->findOneBy([
-            'email' => $form->get('email')->getNormData(),
-//            'whitelabel' => $this->getCurrentWhitelabel()->getId(),
-        ]);
-
-        if (empty($userEntity)) {
-            throw new \ErrorException('Невалиден имейл или парола !');
+        $data = json_decode($request->getContent(), true);
+        $form->submit($data);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $userName = $form->get('username')->getData();
+            $password = $form->get('password')->getData();
+            if (empty($userName) || empty($password)) {
+                return $this->json(['message' => 'Invalid credentials'], Response::HTTP_UNAUTHORIZED);
+            }
+            $user = $userRepository->findOneByEmail($userName);
+            if (!$user || !$userPasswordHasherInterface->isPasswordValid($user, $password)) {
+                $responseDto = new ResponseDto();
+                $responseDto->setMessages([
+                    'Invalid credentials',
+                ]);
+                $responseDto->getServer()->setHttpCode(401);
+                return $this->json($responseDto, Response::HTTP_UNAUTHORIZED);
+            }
         }
-        if (!$userPasswordHasherInterface->isPasswordValid($userEntity, $form->get('password')->getNormData())) {
-            throw new \ErrorException('Невалидена парола');
-        }
 
-//        if (UserRepository::STATUS_INACTIVE === $userEntity->getStatus()) {
-//            throw new \ErrorException('Акаунтът не е активен');
-//        }
-
-        $jwtToken = $jwtManager->create($userEntity);
+        $jwtToken = $jwtManager->create($user);
 
         $userTokenEntity = new UserToken();
-        $userTokenEntity->setUser($userEntity);
+        $userTokenEntity->setUser($user);
         $userTokenEntity->setToken($jwtToken);
 
         $loginDto = new LoginDto();
