@@ -18,7 +18,7 @@ use OpenApi\Attributes as OA;
 class ActionController extends ApiController
 {
     #[OA\Patch(
-        description: "This method updated users",
+        description: "This method updates a single User",
     )]
     #[OA\Response(
         response: 200,
@@ -30,11 +30,11 @@ class ActionController extends ApiController
         description: 'Return the error message',
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
-    #[OA\Tag(name: 'users')]
+    #[OA\Tag(name: 'user')]
     #[OA\RequestBody(
         content: new Model(type: EditUserFormType::class),
     )]
-    #[Route(path: '/api/users/edit/{id}', name: 'app_users_edit', methods: ['PATCH'])]
+    #[Route(path: '/api/user/edit/{id}', name: 'app_users_edit', methods: ['PATCH'])]
     public function update(Request $request, UserRepository $userRepository, WorkPlaceRepository $workPlaceRepository, WorkingPositionRepository $workingPositionRepository, TipMethodRepository $tipMethodRepository): Response
     {
         $form = $this->createForm(EditUserFormType::class);
@@ -93,7 +93,7 @@ class ActionController extends ApiController
     }
 
     #[OA\Delete(
-        description: "This method deletes users",
+        description: "This method deletes a single User",
     )]
     #[OA\Response(
         response: 200,
@@ -105,8 +105,8 @@ class ActionController extends ApiController
         description: 'Return the error message',
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
-    #[OA\Tag(name: 'users')]
-    #[Route(path: 'api/user/delete/{id}', methods: ['DELETE'], name: 'app_users_delete')]
+    #[OA\Tag(name: 'user')]
+    #[Route(path: 'api/user/delete/{id}', name: 'app_use_delete', methods: ['DELETE'])]
     public function delete(Request $request, UserRepository $userRepository): Response
     {
         $userId = $request->attributes->get("id");
