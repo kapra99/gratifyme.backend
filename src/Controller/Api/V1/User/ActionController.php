@@ -59,7 +59,7 @@ class ActionController extends ApiController
             $dateOfBirth = $form->get('dateofbirth')->getData();
             $workPlaceId = $form->get('workplace')->getData();
             $workingPositionId = $form->get('workingposition')->getData();
-            $tipMethodId = $form->get('tipmethod')->getData();
+//            $tipMethodId = $form->get('tipmethod')->getData();
             if ($workPlaceId == null) {
                 $workPlace = $currentUser->getWorkPlace();
             } else {
@@ -71,12 +71,12 @@ class ActionController extends ApiController
             } else {
                 $workingPosition = $workingPositionRepository->findOneById($workingPositionId);
             }
-            if ($tipMethodId == null) {
-                $tipMethod = $currentUser->getTipMethod();
-            } else {
-                $tipMethod = $tipMethodRepository->findOneById($tipMethodId);
-            }
-            $userRepository->updateUser($currentUser, $email, $firstName, $surName, $lastName, $nickName, $dateOfBirth, $workPlace, $workingPosition, $tipMethod);
+//            if ($tipMethodId == null) {
+//                $tipMethod = $currentUser->getTipMethod();
+//            } else {
+//                $tipMethod = $tipMethodRepository->findOneById($tipMethodId);
+//            }
+            $userRepository->updateUser($currentUser, $email, $firstName, $surName, $lastName, $nickName, $dateOfBirth, $workPlace, $workingPosition);
             $responseDto = new ResponseDto();
             $responseDto->setMessages([
                 'User updated successfully!',

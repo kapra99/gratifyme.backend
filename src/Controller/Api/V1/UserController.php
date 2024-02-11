@@ -53,7 +53,7 @@ use Symfony\Component\Serializer\SerializerInterface;
             if ($existingUser) {
                 $responseDto = new ResponseDto();
                 $responseDto->setMessages([
-                    'Email already in use!',
+                    'User already exists!',
                 ]);
                 $responseDto->getServer()->setHttpCode(400);
                 return $this->json($responseDto);
@@ -94,7 +94,7 @@ use Symfony\Component\Serializer\SerializerInterface;
     {
         $userId = $request->attributes->get("id");
         $currentUser = $userRepository->findOneById($userId);
-        if(!$currentUser) {
+        if (!$currentUser) {
             $responseDto = new ResponseDto();
             $responseDto->setMessages([
                 'User with this id was not found',
