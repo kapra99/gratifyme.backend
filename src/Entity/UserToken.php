@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
+use App\Repository\UserTokenRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Embeddable]
+#[ORM\Entity(repositoryClass: UserTokenRepository::class)]
 class UserToken
 {
     #[ORM\Id]

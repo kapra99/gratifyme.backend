@@ -3,10 +3,12 @@
 namespace App\Controller\Api\V1\Auth;
 
 use App\Controller\Api\ApiController;
+use App\Dto\Api\V1\Response\Auth\LoginDto;
 use App\Dto\Api\V1\Response\ResponseDto;
 use App\Entity\UserToken;
 use App\Form\Auth\RegisterType;
 use App\Repository\UserRepository;
+use App\Repository\UserTokenRepository;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
@@ -40,7 +42,7 @@ class RegisterController extends ApiController
     #[OA\Tag(name: 'Auth')]
     #[Security(name: null)]
     #[Route(path: '/api/register', name: 'auth.register', methods: ['POST'])]
-    public function registerUser(Request $request, UserRepository $userRepository, ValidatorInterface $validator): Response
+    public function registerUser(Request $request, UserRepository $userRepository, ValidatorInterface $validator, UserTokenRepository $userTokenRepository): Response
     {
         $form = $this->createForm(RegisterType::class);
         $data = json_decode($request->getContent(), true);
@@ -68,17 +70,32 @@ class RegisterController extends ApiController
             $newUser = $userRepository->findOneByEmail($email);
 
             $jwtToken = $this->tokenManager->create($newUser);
-
             $userTokenEntity = new UserToken();
             $userTokenEntity->setUser($newUser);
-            $userTokenEntity->setToken($jwtToken);
+//            $userTokenEntity->setType(UserTokenRepository::TYPE_LOGIN);
+//            $userTokenEntity->setCreateDate(new \DateTime());
+//            $userTokenEntity->setIsActive(true);
+            $userTokenEntity->setToken(sha1(uniqid($jwtToken)));
+//            $userTokenEntity->setExpireDate(new \DateTime('now +180 days'));
 
-            $responseDto = new ResponseDto();
-            $responseDto->setMessages([
-                'User created successfully!',
-            ]);
-            $responseDto->getServer()->setHttpCode(200);
-            return $this->json($responseDto);
+            $userTokenRepository->save($userTokenEntity, true);
+
+            $loginDto = new LoginDto();
+            $loginDto->setDetails($userTokenEntity);
+
+            return $this->json($loginDto);
+
+
+//            $userTokenEntity = new UserToken();
+//            $userTokenEntity->setUser($newUser);
+//            $userTokenEntity->setToken($jwtToken);
+
+//            $responseDto = new ResponseDto();
+//            $responseDto->setMessages([
+//                'User created successfully!',
+//            ]);
+//            $responseDto->getServer()->setHttpCode(200);
+//            return $this->json($responseDto);
 
         }
         $responseDto = new ResponseDto();
