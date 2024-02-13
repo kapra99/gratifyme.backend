@@ -72,30 +72,13 @@ class RegisterController extends ApiController
             $jwtToken = $this->tokenManager->create($newUser);
             $userTokenEntity = new UserToken();
             $userTokenEntity->setUser($newUser);
-//            $userTokenEntity->setType(UserTokenRepository::TYPE_LOGIN);
-//            $userTokenEntity->setCreateDate(new \DateTime());
-//            $userTokenEntity->setIsActive(true);
-            $userTokenEntity->setToken(sha1(uniqid($jwtToken)));
-//            $userTokenEntity->setExpireDate(new \DateTime('now +180 days'));
+            $userTokenEntity->setToken($jwtToken);
 
-            $userTokenRepository->save($userTokenEntity, true);
 
             $loginDto = new LoginDto();
             $loginDto->setDetails($userTokenEntity);
 
             return $this->json($loginDto);
-
-
-//            $userTokenEntity = new UserToken();
-//            $userTokenEntity->setUser($newUser);
-//            $userTokenEntity->setToken($jwtToken);
-
-//            $responseDto = new ResponseDto();
-//            $responseDto->setMessages([
-//                'User created successfully!',
-//            ]);
-//            $responseDto->getServer()->setHttpCode(200);
-//            return $this->json($responseDto);
 
         }
         $responseDto = new ResponseDto();
