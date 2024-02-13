@@ -18,11 +18,11 @@ class City
     #[ORM\Column(type: 'uuid', unique: true)]
     #[Groups(['BASE'])]
     private string $id;
-    #[Groups(['city'])]
+    #[Groups(['BASE'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
-//    #[Groups(['city'])]
+    #[Groups(['BASE'])]
     #[ORM\OneToMany(mappedBy: 'city', targetEntity: WorkPlace::class)]
     private Collection $workplace;
 

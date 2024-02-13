@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api\V1;
 use App\Controller\Api\ApiController;
+use App\Dto\Api\V1\Response\City\GetCityDto;
 use App\Dto\Api\V1\Response\ResponseDto;
 use App\Form\City\CityFormType;
 use App\Repository\CityRepository;
@@ -91,12 +92,14 @@ class CityController extends ApiController
             $responseDto->getServer()->setHttpCode(400);
             return $this->json($responseDto);
         }
-        $responseDto = new ResponseDto();
-        $responseDto->setMessages([
-            "City found successfully: " . $city->getName(),
+        $getCityDto = new GetCityDto();
+        $getCityDto->setMessages([
+            "Cities found successfully!"
         ]);
-        $responseDto->getServer()->setHttpCode(200);
-        return $this->json($responseDto);
+        $getCityDto->getServer()->setHttpCode(200);
+//        $getCityDto->setCount(1);
+//        $getCityDto->setCities($city);
+        return $this->json($getCityDto);
     }
     #[OA\Get(
         description:"This method returns all the Cities",
@@ -113,9 +116,17 @@ class CityController extends ApiController
     )]
     #[OA\Tag(name: 'city')]
     #[Route(path:'/api/cities', name: 'app_cities_all', methods: ['GET'])]
-    public function showAllCities(CityRepository $cityRepository): JsonResponse
+    public function showAllCities(CityRepository $cityRepository): Response
     {
         $cities = $cityRepository->findAllCities();
-        return new JsonResponse(['cities' => $cities]);
+//        return new JsonResponse(['cities' => $cities]);
+        $getCityDto = new GetCityDto();
+        $getCityDto->setMessages([
+            "City found successfully!"
+        ]);
+        $getCityDto->getServer()->setHttpCode(200);
+//        $getCityDto->setCity($cities);
+        $getCityDto->setCities($cities);
+        return $this->json($getCityDto);
     }
 }

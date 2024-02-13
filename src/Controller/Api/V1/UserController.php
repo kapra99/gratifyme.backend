@@ -5,6 +5,7 @@ namespace App\Controller\Api\V1;
 use AllowDynamicProperties;
 use App\Controller\Api\ApiController;
 use App\Dto\Api\V1\Response\ResponseDto;
+use App\Dto\Api\V1\Response\User\GetUserDto;
 use App\Form\User\CreateUserFormType;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -81,16 +82,16 @@ use Symfony\Component\Serializer\SerializerInterface;
     #[OA\Response(
         response: 200,
         description: "Returns the details of a single User",
-        content: new Model(type: ResponseDto::class, groups: ['BASE']),
+        content: new Model(type: GetUserDto::class, groups: ['BASE']),
     )]
     #[OA\Response(
         response: 404,
         description: 'User not found',
-        content: new Model(type: ResponseDto::class, groups: ['BASE']),
+        content: new Model(type: GetUserDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'user')]
     #[Route(path: '/api/user/{id}', name: 'app_user_show', methods: ['GET'])]
-    public function show(UserRepository $userRepository, Request $request, SerializerInterface $serializer): Response
+    public function show(UserRepository $userRepository, Request $request): Response
     {
         $userId = $request->attributes->get("id");
         $currentUser = $userRepository->findOneById($userId);
@@ -102,14 +103,14 @@ use Symfony\Component\Serializer\SerializerInterface;
             $responseDto->getServer()->setHttpCode(400);
             return $this->json($responseDto);
         }
-        $responseDto = new ResponseDto();
-        $responseDto->setMessages([
-            "User found successfully:"
+        $getUserDto = new GetUserDto();
+        $getUserDto->setMessages([
+            "User found successfully!"
         ]);
 
-        $json = $serializer->serialize($currentUser, 'json', ['groups' => 'user']);
-        $responseDto->getServer()->setHttpCode(200);
-        return new Response($json);
+        $getUserDto->getServer()->setHttpCode(200);
+        $getUserDto->setUser($currentUser);
+        return $this->json($getUserDto);
     }
 
     #[OA\Get(

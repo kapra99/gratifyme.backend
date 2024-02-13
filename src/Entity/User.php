@@ -25,12 +25,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
-//    #[Groups(['BASE'])]
-    #[Groups(["user"])]
+    #[Groups(["BASE"])]
     private string $id;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(["user"])]
+    #[Groups(["BASE"])]
     #[Assert\NotBlank]
     #[Assert\Email(message: 'The email {{ value }} is not a valid email.')]
     private ?string $email = null;
@@ -46,23 +45,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
     private ?string $password = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["user"])]
+    #[Groups(["BASE"])]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["user"])]
+    #[Groups(["BASE"])]
     private ?string $surName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["user"])]
+    #[Groups(["BASE"])]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255, nullable:true)]
-    #[Groups(["user"])]
+    #[Groups(["BASE"])]
     private ?string $nickName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["user"])]
+    #[Groups(["BASE"])]
     private ?string $dateOfBirth = null;
 
     #[ORM\Column(nullable: true)]
@@ -249,7 +248,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
     {
         return $this->workPlace;
     }
-    #[Groups(["user"])]
+    #[Groups(["BASE"])]
     public function getWorkPlaceId(): ?string
     {
         if ($this->workPlace !== null) {
@@ -270,7 +269,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
     {
         return $this->workingPosition;
     }
-    #[Groups(["user"])]
+    #[Groups(["BASE"])]
     public function getWorkingPositionId (): ?string
     {
         if($this->workingPosition !== null){
