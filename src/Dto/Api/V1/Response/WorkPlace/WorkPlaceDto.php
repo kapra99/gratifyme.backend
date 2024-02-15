@@ -1,46 +1,42 @@
 <?php
 
-namespace App\Dto\Api\V1\Response\City;
+namespace App\Dto\Api\V1\Response\WorkPlace;
 
-use AllowDynamicProperties;
 use App\Dto\Api\V1\Response\ResponseDto;
-use App\Entity\City;
-use Symfony\Component\Serializer\Annotation\Groups;
+use App\Entity\WorkPlace;
+use Symfony\Component\Serializer\Attribute\Groups;
 
-#[AllowDynamicProperties] class GetCityDto extends ResponseDto
+class WorkPlaceDto extends ResponseDto
 {
-
     /**
-     * @var City[]
+     * @var WorkPlace[]
      */
     #[Groups(['BASE'])]
-    protected $cities;
-    protected $city;
+    protected $items;
 
     /**
      * Get the value of items.
      *
-     * @return City[]
+     * @return WorkPlace[]
      */
-    public function getCities()
+    public function getItems()
     {
-        return $this->cities;
+        return $this->items;
     }
 
     /**
      * Set the value of items.
      *
-     * @param City[] $cities
+     * @param WorkPlace[] $items
      *
      * @return self
      */
-    public function setCities(array $cities)
+    public function setItems(array $items)
     {
-        $this->cities = $cities;
+        $this->items = $items;
 
         return $this;
     }
-
 
     /**
      * Get the value of count.

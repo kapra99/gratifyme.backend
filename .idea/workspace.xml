@@ -4,22 +4,126 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1b0f7e52-0144-4257-a17d-6ef6a5cba952" name="Changes" comment="" />
+    <list default="true" id="1b0f7e52-0144-4257-a17d-6ef6a5cba952" name="Changes" comment="Added some new structure, according to the modern conventions. Reworked User entity and UserRepository">
+      <change afterPath="$PROJECT_DIR$/src/Dto/Api/V1/Response/WorkPlace/WorkPlaceDto.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gratifyme.backend.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gratifyme.backend.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/Api/V1/CityController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/Api/V1/CityController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/Api/V1/WorkPlaceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/Api/V1/WorkPlaceController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Dto/Api/V1/Response/City/GetCityDto.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Dto/Api/V1/Response/City/GetCityDto.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/City.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/City.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/CityRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/CityRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/WorkPlaceRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/WorkPlaceRepository.php" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ComposerSettings">
-    <execution />
+  <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
+    <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
+    <execution>
+      <executable path="composer" />
+    </execution>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="PHP 8.2" />
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 5
-}]]></component>
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="PHP 8.2">
+    <include_path>
+      <path value="$PROJECT_DIR$/vendor/symfony/deprecation-contracts" />
+      <path value="$PROJECT_DIR$/vendor/symfony/service-contracts" />
+      <path value="$PROJECT_DIR$/vendor/symfony/var-dumper" />
+      <path value="$PROJECT_DIR$/vendor/symfony/flex" />
+      <path value="$PROJECT_DIR$/vendor/symfony/dependency-injection" />
+      <path value="$PROJECT_DIR$/vendor/symfony/string" />
+      <path value="$PROJECT_DIR$/vendor/symfony/error-handler" />
+      <path value="$PROJECT_DIR$/vendor/symfony/event-dispatcher" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php83" />
+      <path value="$PROJECT_DIR$/vendor/symfony/routing" />
+      <path value="$PROJECT_DIR$/vendor/symfony/event-dispatcher-contracts" />
+      <path value="$PROJECT_DIR$/vendor/symfony/yaml" />
+      <path value="$PROJECT_DIR$/vendor/symfony/cache-contracts" />
+      <path value="$PROJECT_DIR$/vendor/composer" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-intl-grapheme" />
+      <path value="$PROJECT_DIR$/vendor/symfony/framework-bundle" />
+      <path value="$PROJECT_DIR$/vendor/symfony/runtime" />
+      <path value="$PROJECT_DIR$/vendor/symfony/console" />
+      <path value="$PROJECT_DIR$/vendor/symfony/cache" />
+      <path value="$PROJECT_DIR$/vendor/symfony/filesystem" />
+      <path value="$PROJECT_DIR$/vendor/symfony/finder" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-intl-normalizer" />
+      <path value="$PROJECT_DIR$/vendor/symfony/http-kernel" />
+      <path value="$PROJECT_DIR$/vendor/symfony/config" />
+      <path value="$PROJECT_DIR$/vendor/symfony/http-foundation" />
+      <path value="$PROJECT_DIR$/vendor/symfony/dotenv" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-mbstring" />
+      <path value="$PROJECT_DIR$/vendor/symfony/var-exporter" />
+      <path value="$PROJECT_DIR$/vendor/psr/cache" />
+      <path value="$PROJECT_DIR$/vendor/psr/log" />
+      <path value="$PROJECT_DIR$/vendor/psr/container" />
+      <path value="$PROJECT_DIR$/vendor/psr/event-dispatcher" />
+      <path value="$PROJECT_DIR$/vendor/symfony/doctrine-bridge" />
+      <path value="$PROJECT_DIR$/vendor/symfony/stopwatch" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/cache" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/dbal" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/deprecations" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/collections" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/common" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/event-manager" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/inflector" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/doctrine-bundle" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/doctrine-migrations-bundle" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/migrations" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/orm" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/instantiator" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/lexer" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/persistence" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/sql-formatter" />
+      <path value="$PROJECT_DIR$/vendor/nikic/php-parser" />
+      <path value="$PROJECT_DIR$/vendor/symfony/process" />
+      <path value="$PROJECT_DIR$/vendor/symfony/maker-bundle" />
+      <path value="$PROJECT_DIR$/vendor/webmozart/assert" />
+      <path value="$PROJECT_DIR$/vendor/zircote/swagger-php" />
+      <path value="$PROJECT_DIR$/vendor/nelmio/api-doc-bundle" />
+      <path value="$PROJECT_DIR$/vendor/phpdocumentor/reflection-docblock" />
+      <path value="$PROJECT_DIR$/vendor/phpdocumentor/type-resolver" />
+      <path value="$PROJECT_DIR$/vendor/phpdocumentor/reflection-common" />
+      <path value="$PROJECT_DIR$/vendor/phpstan/phpdoc-parser" />
+      <path value="$PROJECT_DIR$/vendor/symfony/property-info" />
+      <path value="$PROJECT_DIR$/vendor/symfony/options-resolver" />
+      <path value="$PROJECT_DIR$/vendor/symfony/password-hasher" />
+      <path value="$PROJECT_DIR$/vendor/symfony/clock" />
+      <path value="$PROJECT_DIR$/vendor/symfony/security-bundle" />
+      <path value="$PROJECT_DIR$/vendor/symfony/property-access" />
+      <path value="$PROJECT_DIR$/vendor/symfony/security-http" />
+      <path value="$PROJECT_DIR$/vendor/symfony/security-csrf" />
+      <path value="$PROJECT_DIR$/vendor/symfony/security-core" />
+      <path value="$PROJECT_DIR$/vendor/psr/clock" />
+      <path value="$PROJECT_DIR$/vendor/symfony/validator" />
+      <path value="$PROJECT_DIR$/vendor/symfony/translation-contracts" />
+      <path value="$PROJECT_DIR$/vendor/twig/twig" />
+      <path value="$PROJECT_DIR$/vendor/symfony/web-profiler-bundle" />
+      <path value="$PROJECT_DIR$/vendor/symfony/twig-bundle" />
+      <path value="$PROJECT_DIR$/vendor/symfony/twig-bridge" />
+      <path value="$PROJECT_DIR$/vendor/symfony/serializer" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-intl-icu" />
+      <path value="$PROJECT_DIR$/vendor/symfony/form" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-uuid" />
+      <path value="$PROJECT_DIR$/vendor/symfony/uid" />
+      <path value="$PROJECT_DIR$/vendor/lcobucci/clock" />
+      <path value="$PROJECT_DIR$/vendor/lcobucci/jwt" />
+      <path value="$PROJECT_DIR$/vendor/namshi/jose" />
+      <path value="$PROJECT_DIR$/vendor/lexik/jwt-authentication-bundle" />
+      <path value="$PROJECT_DIR$/vendor/nelmio/cors-bundle" />
+      <path value="$PROJECT_DIR$/vendor/symfony/webpack-encore-bundle" />
+      <path value="$PROJECT_DIR$/vendor/symfony/asset" />
+    </include_path>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="2bgkiQ2yzD4kcYL9PPQg6BafZK7" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -29,19 +133,48 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "D:/PhpstormProjects",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "D:/gratifyme.backend/src",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "npm.dev.executor": "Run",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\gratifyme.backend\src" />
+      <recent name="D:\gratifyme.backend\config\packages" />
+      <recent name="D:\gratifyme.backend\src\Form\User" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\gratifyme.backend\src\Form\User" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="dev" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.dev" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-php-predefined-ba97393d7c68-6f8e3395a2b4-com.jetbrains.php.sharedIndexes-PS-233.14015.96" />
+        <option value="bundled-php-predefined-ba97393d7c68-6f8e3395a2b4-com.jetbrains.php.sharedIndexes-PS-233.14475.35" />
       </set>
     </attachedChunks>
   </component>
@@ -53,8 +186,186 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1706644235830</updated>
-      <workItem from="1706644236884" duration="1081000" />
+      <workItem from="1706644236884" duration="1457000" />
+      <workItem from="1706724127215" duration="9798000" />
+      <workItem from="1706811183675" duration="9132000" />
+      <workItem from="1706983671636" duration="5505000" />
+      <workItem from="1706989224434" duration="2806000" />
+      <workItem from="1707155960292" duration="10482000" />
+      <workItem from="1707246733304" duration="4983000" />
+      <workItem from="1707328960995" duration="6734000" />
+      <workItem from="1707335783496" duration="25000" />
+      <workItem from="1707416856814" duration="5818000" />
+      <workItem from="1707649430961" duration="7644000" />
+      <workItem from="1707669549617" duration="9641000" />
+      <workItem from="1707761822368" duration="6985000" />
+      <workItem from="1707846611696" duration="8317000" />
+      <workItem from="1707994388679" duration="804000" />
+      <workItem from="1707995222199" duration="243000" />
+      <workItem from="1708005507431" duration="3559000" />
+      <workItem from="1708013303343" duration="9128000" />
     </task>
+    <task id="LOCAL-00001" summary="Added some new structure, according to the modern conventions. Reworked User entity and UserRepository">
+      <option name="closed" value="true" />
+      <created>1706733971876</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1706733971876</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Added LoginController and RegisterController, jwt token installed and configured, added LoginDto. Added new entities.">
+      <option name="closed" value="true" />
+      <created>1706820316972</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1706820316972</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Added missing entities">
+      <option name="closed" value="true" />
+      <created>1706990692432</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1706990692432</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Updated User entity">
+      <option name="closed" value="true" />
+      <created>1706991982373</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1706991982373</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Open Api and Uuid and Database are set up">
+      <option name="closed" value="true" />
+      <created>1707166392860</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1707166392860</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Uploading assets and twigs">
+      <option name="closed" value="true" />
+      <created>1707246891563</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1707246891563</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Added and Refactored methods from Working Position Controller, started refactoring TipMethodController">
+      <option name="closed" value="true" />
+      <created>1707251712042</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1707251712042</updated>
+    </task>
+    <task id="LOCAL-00008" summary="TipMethodController reworked and divided">
+      <option name="closed" value="true" />
+      <created>1707333844709</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1707333844709</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Started reformatting goal controller">
+      <option name="closed" value="true" />
+      <created>1707335108258</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1707335108258</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Prepared some code for refactoring">
+      <option name="closed" value="true" />
+      <created>1707335576925</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1707335576925</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Updated Goal Controller">
+      <option name="closed" value="true" />
+      <created>1707424010899</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1707424010899</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Updated database structure">
+      <option name="closed" value="true" />
+      <created>1707652643585</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1707652643585</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Added Review entity and ReviewController">
+      <option name="closed" value="true" />
+      <created>1707660655759</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1707660655759</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Updated some logic of the goal an tipmethod controllers">
+      <option name="closed" value="true" />
+      <created>1707674910391</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1707674910391</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Updated logic in Review controller and RegisterController and LoginController set up and working">
+      <option name="closed" value="true" />
+      <created>1707678464204</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1707678464204</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Minor changes applied to UserController">
+      <option name="closed" value="true" />
+      <created>1707679866681</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1707679866681</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Removed unused code">
+      <option name="closed" value="true" />
+      <created>1707679888490</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1707679888490</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Jwt token set up the right way">
+      <option name="closed" value="true" />
+      <created>1707769629471</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1707769629471</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Some work done">
+      <option name="closed" value="true" />
+      <created>1707857452665</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1707857452665</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Changed name of a method">
+      <option name="closed" value="true" />
+      <created>1708012370197</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1708012370197</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -70,5 +381,30 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
+    <MESSAGE value="Added LoginController and RegisterController, jwt token installed and configured, added LoginDto. Added new entities." />
+    <MESSAGE value="Added missing entities" />
+    <MESSAGE value="Updated User entity" />
+    <MESSAGE value="Open Api and Uuid and Database are set up" />
+    <MESSAGE value="Uploading assets and twigs" />
+    <MESSAGE value="Added and Refactored methods from Working Position Controller, started refactoring TipMethodController" />
+    <MESSAGE value="TipMethodController reworked and divided" />
+    <MESSAGE value="Started reformatting goal controller" />
+    <MESSAGE value="Prepared some code for refactoring" />
+    <MESSAGE value="Updated Goal Controller" />
+    <MESSAGE value="Updated database structure" />
+    <MESSAGE value="Added Review entity and ReviewController" />
+    <MESSAGE value="Updated some logic of the goal an tipmethod controllers" />
+    <MESSAGE value="Updated logic in Review controller and RegisterController and LoginController set up and working" />
+    <MESSAGE value="Minor changes applied to UserController" />
+    <MESSAGE value="Removed unused code" />
+    <MESSAGE value="Jwt token set up the right way" />
+    <MESSAGE value="Some work done" />
+    <MESSAGE value="Added some new structure, according to the modern conventions. Reworked User entity and UserRepository" />
+    <MESSAGE value="Changed name of a method" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed name of a method" />
   </component>
 </project>

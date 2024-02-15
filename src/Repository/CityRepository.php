@@ -81,18 +81,16 @@ class CityRepository extends ServiceEntityRepository
         return $query->getArrayResult();
     }
 
-    public function findOneById(string $id): ?City
+    public function findOneById(string $cityId)
     {
         $entityManager = $this->getEntityManager();
-
         $query = $entityManager->createQueryBuilder()
-            ->select("city")
+            ->select('city')
             ->from('App:City', 'city')
             ->where('city.id = :id')
-            ->setParameter('id', $id)
+            ->setParameter('id', $cityId)
             ->getQuery();
 
         return $query->getOneOrNullResult();
-
     }
 }

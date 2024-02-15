@@ -94,11 +94,10 @@ class CityController extends ApiController
         }
         $getCityDto = new GetCityDto();
         $getCityDto->setMessages([
-            "Cities found successfully!"
+            "City found successfully!"
         ]);
         $getCityDto->getServer()->setHttpCode(200);
-//        $getCityDto->setCount(1);
-//        $getCityDto->setCities($city);
+        $getCityDto->setCities([$city]);
         return $this->json($getCityDto);
     }
     #[OA\Get(

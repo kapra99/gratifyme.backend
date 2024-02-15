@@ -5,6 +5,7 @@ namespace App\Controller\Api\V1;
 use App\Controller\Api\ApiController;
 use App\Dto\Api\V1\Response\ResponseDto;
 use App\Form\WorkPlace\WorkPlaceFormType;
+use App\Dto\Api\V1\Response\WorkPlace\WorkPlaceDto;
 use App\Repository\CityRepository;
 use App\Repository\WorkPlaceRepository;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -113,6 +114,7 @@ class WorkPlaceController extends ApiController
         $responseDto->getServer()->setHttpCode(200);
         return $this->json($responseDto);
     }
+
     #[OA\Get(
         description: "This method returns all the Work Places",
     )]
@@ -132,5 +134,42 @@ class WorkPlaceController extends ApiController
     {
         $workPlace = $workPlaceRepository->findAllWorkPlaces();
         return new JsonResponse(['workplace' => $workPlace]);
+    }
+    #[OA\Get(
+        description: "This method returns Work Places based on the selected city",
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Work Places returned successfully',
+        content: new Model(type: ResponseDto::class, groups: ['BASE']),
+    )]
+    #[OA\Response(
+        response: 400,
+        description: 'Return the error message',
+        content: new Model(type: ResponseDto::class, groups: ['BASE']),
+    )]
+    #[OA\Tag(name: 'workplace')]
+    #[Route(path: '/api/workplace/city/{id}', name: 'app_workplacebycity_show', methods: ['GET'])]
+    public function showByCity(WorkPlaceRepository $workPlaceRepository, Request $request, CityRepository $cityRepository): Response
+    {
+        $cityId = $request->attributes->get("id");
+        $city = $cityRepository->findOneById($cityId);
+
+        if (!$city) {
+            $workPlaceDto = new WorkPlaceDto();
+            $workPlaceDto->setMessages([
+                'City not found!',
+            ]);
+            $workPlaceDto->getServer()->setHttpCode(400);
+            return $this->json($workPlaceDto);
+        }
+        $workPlaces = $workPlaceRepository->findWorkPlacesByCity($city);
+        $workPlaceDto = new WorkPlaceDto();
+        $workPlaceDto->setMessages([
+            "City found successfully: " . $city->getName(),
+        ]);
+        $workPlaceDto->setItems([$workPlaces]);
+        $workPlaceDto->getServer()->setHttpCode(200);
+        return $this->json($workPlaceDto);
     }
 }

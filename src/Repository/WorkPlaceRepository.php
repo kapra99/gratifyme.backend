@@ -106,4 +106,16 @@ class WorkPlaceRepository extends ServiceEntityRepository
         return $query->getOneOrNullResult();
 
     }
+    public function findWorkPlacesByCity(City $city): array
+    {
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQueryBuilder()
+            ->select('workplace')
+            ->from('App:WorkPlace', 'workplace')
+            ->where('workplace.city = :city')
+            ->setParameter('city', $city)
+            ->getQuery();
+
+        return $query->getArrayResult();
+    }
 }
