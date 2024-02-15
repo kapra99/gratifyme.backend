@@ -127,7 +127,7 @@ class WorkPlaceController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'workplace')]
-    #[Route(path: '/api/workplaces', name: 'app_institution_show_all', methods: ['GET'])]
+    #[Route(path: '/api/workplaces', name: 'app_workplace_show_all', methods: ['GET'])]
     public function showAll(WorkPlaceRepository $workPlaceRepository): JsonResponse
     {
         $workPlace = $workPlaceRepository->findAllWorkPlaces();
