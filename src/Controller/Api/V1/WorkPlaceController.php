@@ -100,19 +100,20 @@ class WorkPlaceController extends ApiController
         $workPlace = $workPlaceRepository->findOneById($workPlaceId);
 
         if (!$workPlace) {
-            $responseDto = new ResponseDto();
-            $responseDto->setMessages([
+            $workPlaceDto = new WorkPlaceDto();
+            $workPlaceDto->setMessages([
                 'Work Place with this id was not found',
             ]);
-            $responseDto->getServer()->setHttpCode(400);
-            return $this->json($responseDto);
+            $workPlaceDto->getServer()->setHttpCode(400);
+            return $this->json($workPlaceDto);
         }
-        $responseDto = new ResponseDto();
-        $responseDto->setMessages([
-            "Work Place found successfully: " . $workPlace->getName(),
+        $workPlaceDto = new WorkPlaceDto();
+        $workPlaceDto->setMessages([
+            "Work Place found successfully:"
         ]);
-        $responseDto->getServer()->setHttpCode(200);
-        return $this->json($responseDto);
+        $workPlaceDto->getServer()->setHttpCode(200);
+        $workPlaceDto->setItems([$workPlace]);
+        return $this->json($workPlaceDto);
     }
 
     #[OA\Get(

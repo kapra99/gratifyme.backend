@@ -2,11 +2,12 @@
 
 namespace App\Dto\Api\V1\Response\WorkPlace;
 
+use AllowDynamicProperties;
 use App\Dto\Api\V1\Response\ResponseDto;
 use App\Entity\WorkPlace;
 use Symfony\Component\Serializer\Attribute\Groups;
 
-class WorkPlaceDto extends ResponseDto
+#[AllowDynamicProperties] class WorkPlaceDto extends ResponseDto
 {
     /**
      * @var WorkPlace[]
