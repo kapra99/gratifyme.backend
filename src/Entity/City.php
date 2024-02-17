@@ -22,14 +22,13 @@ class City
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
-    #[Groups(['BASE'])]
     #[ORM\OneToMany(mappedBy: 'city', targetEntity: WorkPlace::class)]
-    private Collection $workplace;
+    private Collection $workPlaces;
 
     public function __construct()
     {
         $this->id = Uuid::v4();
-        $this->workplace = new ArrayCollection();
+        $this->workPlaces = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -52,27 +51,27 @@ class City
     /**
      * @return Collection<int, WorkPlace>
      */
-    public function getWorkPlace(): Collection
+    public function getWorkPlaces(): Collection
     {
-        return $this->workplace;
+        return $this->workPlaces;
     }
 
-    public function addWorkPlace(WorkPlace $workplace): static
+    public function addWorkPlace(WorkPlace $workPlace): static
     {
-        if (!$this->workplace->contains($workplace)) {
-            $this->workplace->add($workplace);
-            $workplace->setCity($this);
+        if (!$this->workPlaces->contains($workPlace)) {
+            $this->workPlaces->add($workPlace);
+            $workPlace->setCity($this);
         }
 
         return $this;
     }
 
-    public function removeWorkPlace(WorkPlace $workplace): static
+    public function removeWorkPlace(WorkPlace $workPlace): static
     {
-        if ($this->workplace->removeElement($workplace)) {
+        if ($this->workPlaces->removeElement($workPlace)) {
             // set the owning side to null (unless already changed)
-            if ($workplace->getCity() === $this) {
-                $workplace->setCity(null);
+            if ($workPlace->getCity() === $this) {
+                $workPlace->setCity(null);
             }
         }
 

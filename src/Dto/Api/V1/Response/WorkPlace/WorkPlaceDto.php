@@ -5,6 +5,7 @@ namespace App\Dto\Api\V1\Response\WorkPlace;
 use AllowDynamicProperties;
 use App\Dto\Api\V1\Response\ResponseDto;
 use App\Entity\WorkPlace;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[AllowDynamicProperties] class WorkPlaceDto extends ResponseDto
@@ -12,7 +13,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     /**
      * @var WorkPlace[]
      */
-    #[Groups(['workplace'])]
+    #[Groups(['BASE'])]
     protected $items;
 
     /**

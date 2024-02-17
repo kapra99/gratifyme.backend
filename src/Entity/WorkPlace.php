@@ -16,24 +16,25 @@ class WorkPlace
 {
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
-    #[Groups(['workplace'])]
+    #[Groups(['BASE'])]
     private string $id;
-    #[Groups(['workplace'])]
+    #[Groups(['BASE'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
-    #[Groups(['workplace'])]
+    #[Groups(['BASE'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $type = null;
-    #[Groups(['workplace'])]
+    #[Groups(['BASE'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $address = null;
-    #[Groups(['workplace'])]
+    #[Groups(['BASE'])]
     #[ORM\Column(nullable: true)]
     private ?int $workerCapacity = null;
     #[ORM\OneToMany(mappedBy: 'WorkPlace', targetEntity: User::class)]
     private Collection $user;
-    #[Groups(['workplace'])]
-    #[ORM\ManyToOne(inversedBy: 'workplace')]
+
+    #[ORM\ManyToOne(inversedBy: 'workPlaces')]
+    #[Groups(['BASE'])]
     private ?City $city = null;
 
 
