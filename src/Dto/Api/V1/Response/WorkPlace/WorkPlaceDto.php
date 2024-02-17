@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     /**
      * @var WorkPlace[]
      */
-    #[Groups(['BASE'])]
+    #[Groups(['workplace'])]
     protected $items;
 
     /**

@@ -112,8 +112,10 @@ class WorkPlaceController extends ApiController
             "Work Place found successfully:"
         ]);
         $workPlaceDto->getServer()->setHttpCode(200);
-        $workPlaceDto->setItems([$workPlace]);
-        return $this->json($workPlaceDto);
+       $test =  $serializer->serialize($workPlace, 'json', ['groups' => 'workplace']);
+        return new Response($test);
+//        $workPlaceDto->setItems([$workPlace]);
+//        return $this->json($workPlaceDto);
     }
 
     #[OA\Get(

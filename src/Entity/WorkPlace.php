@@ -6,32 +6,33 @@ use App\Repository\WorkPlaceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Ignore;
+use Symfony\Component\Serializer\Attribute\MaxDepth;
 use Symfony\Component\Uid\Uuid;
 use Doctrine\Common\Collections\Collection;
-#[ORM\Entity(repositoryClass: WorkPlaceRepository::class)]
 
+#[ORM\Entity(repositoryClass: WorkPlaceRepository::class)]
 class WorkPlace
 {
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
-    #[Groups(['BASE'])]
+    #[Groups(['workplace'])]
     private string $id;
-
+    #[Groups(['workplace'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
-
+    #[Groups(['workplace'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $type = null;
-
+    #[Groups(['workplace'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $address = null;
-
+    #[Groups(['workplace'])]
     #[ORM\Column(nullable: true)]
     private ?int $workerCapacity = null;
-
     #[ORM\OneToMany(mappedBy: 'WorkPlace', targetEntity: User::class)]
     private Collection $user;
-
+    #[Groups(['workplace'])]
     #[ORM\ManyToOne(inversedBy: 'workplace')]
     private ?City $city = null;
 
