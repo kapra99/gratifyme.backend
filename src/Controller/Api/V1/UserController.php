@@ -8,6 +8,7 @@ use App\Dto\Api\V1\Response\ResponseDto;
 use App\Dto\Api\V1\Response\User\GetUserDto;
 use App\Form\User\CreateUserFormType;
 use App\Repository\UserRepository;
+use Nelmio\ApiDocBundle\Annotation\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,6 +40,7 @@ use Symfony\Component\Serializer\SerializerInterface;
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'user')]
+    #[Security(name: 'Bearer')]
     #[OA\RequestBody(
         content: new Model(type: CreateUserFormType::class),
     )]
@@ -90,6 +92,7 @@ use Symfony\Component\Serializer\SerializerInterface;
         content: new Model(type: GetUserDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'user')]
+    #[Security(name: 'Bearer')]
     #[Route(path: '/api/user/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(UserRepository $userRepository, Request $request): Response
     {
@@ -127,6 +130,7 @@ use Symfony\Component\Serializer\SerializerInterface;
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'user')]
+    #[Security(name: 'Bearer')]
     #[Route(path: '/api/users', name: 'app_users_show_all', methods: ['GET'])]
     public function showAll(UserRepository $userRepository): JsonResponse
     {
