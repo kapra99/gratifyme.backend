@@ -115,6 +115,7 @@ class CityController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['city']),
     )]
     #[OA\Tag(name: 'city')]
+    #[Security(name:null)]
     #[Route(path:'/api/cities', name: 'app_cities_all', methods: ['GET'])]
     public function showAllCities(CityRepository $cityRepository): Response
     {

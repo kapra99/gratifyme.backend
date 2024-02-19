@@ -32,7 +32,7 @@ class JWTCreatedListener
             // Add user data to the JWT payload
             $payload = $event->getData();
             $payload['id'] = $user->getId();
-            $payload['type'] = $user->getType();
+//            $payload['type'] = $user->getType();
             // You can add any other user-related data you need
 
             $event->setData($payload);

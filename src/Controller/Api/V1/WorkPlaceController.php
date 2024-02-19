@@ -95,6 +95,7 @@ class WorkPlaceController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'workplace')]
+    #[Security(name:null)]
     #[Route(path: '/api/workplace/{id}', name: 'app_workplace_show', methods: ['GET'])]
     public function show(WorkPlaceRepository $workPlaceRepository, Request $request, SerializerInterface $serializer): Response
     {
@@ -132,6 +133,7 @@ class WorkPlaceController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'workplace')]
+    #[Security(name:null)]
     #[Route(path: '/api/workplaces', name: 'app_workplace_show_all', methods: ['GET'])]
     public function showAll(WorkPlaceRepository $workPlaceRepository): JsonResponse
     {
@@ -152,6 +154,7 @@ class WorkPlaceController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'workplace')]
+    #[Security(name:null)]
     #[Route(path: '/api/workplace/city/{id}', name: 'app_workplacebycity_show', methods: ['GET'])]
     public function showByCity(WorkPlaceRepository $workPlaceRepository, Request $request, CityRepository $cityRepository): Response
     {

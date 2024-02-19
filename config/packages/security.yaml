@@ -16,6 +16,7 @@ security:
             pattern: ^/api/login
             stateless: true
             json_login:
+                username_path: email
                 check_path: /api/login_check
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
@@ -43,8 +44,24 @@ security:
         # - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/api/login, roles: PUBLIC_ACCESS },
         - { path: ^/api/register, roles: PUBLIC_ACCESS },
-        - { path: ^/api/doc, roles: PUBLIC_ACCESS }
-        - { path: ^/api/*,       roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/doc, roles: PUBLIC_ACCESS },
+        - { path: ^/api/cities, roles: PUBLIC_ACCESS },
+        - { path: ^/api/city/*, roles: PUBLIC_ACCESS },
+        - { path: ^/api/cities, roles: PUBLIC_ACCESS },
+        - { path: ^/api/goals/*, roles: PUBLIC_ACCESS },
+        - { path: ^/api/goals, roles: PUBLIC_ACCESS },
+        - { path: ^/api/review/*, roles: PUBLIC_ACCESS },
+        - { path: ^/api/reviews, roles: PUBLIC_ACCESS },
+        - { path: ^/api/tip-method/*, roles: PUBLIC_ACCESS },
+        - { path: ^/api/tip-methods, roles: PUBLIC_ACCESS },
+        - { path: ^/api/user/*, roles: PUBLIC_ACCESS },
+        - { path: ^/api/users, roles: PUBLIC_ACCESS },
+        - { path: ^/api/workplace/*, roles: PUBLIC_ACCESS },
+        - { path: ^/api/workplaces, roles: PUBLIC_ACCESS },
+        - { path: ^/api/workplace/city/*, roles: PUBLIC_ACCESS },
+        - { path: ^/api/working-position/*, roles: PUBLIC_ACCESS },
+        - { path: ^/api/working-positions, roles: PUBLIC_ACCESS },
+        - { path: ^/api/,       roles: IS_AUTHENTICATED_FULLY }
 
 when@test:
     security:
