@@ -92,7 +92,6 @@ use Symfony\Component\Serializer\SerializerInterface;
         content: new Model(type: GetUserDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'user')]
-    #[Security(name: 'Bearer')]
     #[Route(path: '/api/user/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(UserRepository $userRepository, Request $request): Response
     {
@@ -130,7 +129,6 @@ use Symfony\Component\Serializer\SerializerInterface;
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'user')]
-    #[Security(name: 'Bearer')]
     #[Route(path: '/api/users', name: 'app_users_show_all', methods: ['GET'])]
     public function showAll(UserRepository $userRepository): JsonResponse
     {

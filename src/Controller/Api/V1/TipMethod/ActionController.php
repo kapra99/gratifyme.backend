@@ -9,6 +9,7 @@ use App\Repository\TipMethodRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -32,6 +33,7 @@ class ActionController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'tip-method')]
+    #[Security(name: 'Bearer')]
     #[OA\RequestBody(
         content: new Model(type: TipMethodFormType::class),
     )]
@@ -93,6 +95,7 @@ class ActionController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'tip-method')]
+    #[Security(name: 'Bearer')]
     #[Route(path: '/api/tip-method/delete/{id}', name: 'app_tip_method_delete', methods: ['DELETE'])]
     public function delete(EntityManagerInterface $entityManager, Request $request, TipMethodRepository $tipMethodRepository): Response
     {

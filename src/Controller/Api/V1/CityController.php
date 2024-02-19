@@ -7,7 +7,7 @@ use App\Dto\Api\V1\Response\ResponseDto;
 use App\Form\City\CityFormType;
 use App\Repository\CityRepository;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Nelmio\ApiDocBundle\Annotation\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -29,6 +29,7 @@ class CityController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['city']),
     )]
     #[OA\Tag(name: 'city')]
+    #[Security(name: 'Bearer')]
     #[OA\RequestBody(
         content: new Model(type: CityFormType::class),
     )]
@@ -118,13 +119,11 @@ class CityController extends ApiController
     public function showAllCities(CityRepository $cityRepository): Response
     {
         $cities = $cityRepository->findAllCities();
-//        return new JsonResponse(['cities' => $cities]);
         $getCityDto = new GetCityDto();
         $getCityDto->setMessages([
             "City found successfully!"
         ]);
         $getCityDto->getServer()->setHttpCode(200);
-//        $getCityDto->setCity($cities);
         $getCityDto->setCities($cities);
         return $this->json($getCityDto);
     }

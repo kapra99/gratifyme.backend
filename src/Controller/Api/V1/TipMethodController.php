@@ -8,6 +8,7 @@ use App\Form\TipMethod\TipMethodFormType;
 use App\Repository\TipMethodRepository;
 use App\Repository\UserRepository;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,6 +33,7 @@ class TipMethodController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'tip-method')]
+    #[Security(name: 'Bearer')]
     #[OA\RequestBody(
         content: new Model(type: TipMethodFormType::class),
     )]

@@ -6,6 +6,7 @@ use App\Controller\Api\ApiController;
 use App\Dto\Api\V1\Response\ResponseDto;
 use App\Form\WorkingPosition\WorkingPositionFormType;
 use App\Repository\WorkingPositionRepository;
+use Nelmio\ApiDocBundle\Annotation\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,6 +30,7 @@ class WorkingPositionController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'working-position')]
+    #[Security(name: 'Bearer')]
     #[OA\RequestBody(
         content: new Model(type: WorkingPositionFormType::class),
     )]

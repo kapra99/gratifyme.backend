@@ -9,6 +9,7 @@ use App\Dto\Api\V1\Response\WorkPlace\WorkPlaceDto;
 use App\Repository\CityRepository;
 use App\Repository\WorkPlaceRepository;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,6 +33,7 @@ class WorkPlaceController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'workplace')]
+    #[Security(name: 'Bearer')]
     #[OA\RequestBody(
         content: new Model(type: WorkPlaceFormType::class),
     )]
@@ -112,8 +114,6 @@ class WorkPlaceController extends ApiController
             "Work Place found successfully:"
         ]);
         $workPlaceDto->getServer()->setHttpCode(200);
-//       $test =  $serializer->serialize($workPlace, 'json', ['groups' => 'workplace']);
-//        return new Response($test);
         $workPlaceDto->setItems([$workPlace]);
         return $this->json($workPlaceDto);
     }

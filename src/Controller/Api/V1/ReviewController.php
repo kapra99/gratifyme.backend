@@ -10,6 +10,7 @@ use App\Repository\ReviewRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,6 +34,7 @@ class ReviewController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'review')]
+    #[Security(name: 'Bearer')]
     #[OA\RequestBody(
         content: new Model(type: ReviewFormType::class),
     )]
@@ -122,7 +124,7 @@ class ReviewController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'review')]
-    #[Route(path: '/api/review', name: 'app_review_show_all', methods: ['GET'])]
+    #[Route(path: '/api/reviews', name: 'app_review_show_all', methods: ['GET'])]
     public function showAll(ReviewRepository $reviewRepository): JsonResponse
     {
         $reviews = $reviewRepository->findAllReviews();

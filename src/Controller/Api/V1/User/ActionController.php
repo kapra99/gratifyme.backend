@@ -10,6 +10,7 @@ use App\Repository\UserRepository;
 use App\Repository\WorkingPositionRepository;
 use App\Repository\WorkPlaceRepository;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,6 +32,7 @@ class ActionController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'user')]
+    #[Security(name: 'Bearer')]
     #[OA\RequestBody(
         content: new Model(type: EditUserFormType::class),
     )]
@@ -100,6 +102,7 @@ class ActionController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'user')]
+    #[Security(name: 'Bearer')]
     #[Route(path: 'api/user/delete/{id}', name: 'app_use_delete', methods: ['DELETE'])]
     public function delete(Request $request, UserRepository $userRepository): Response
     {

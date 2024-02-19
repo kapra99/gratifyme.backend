@@ -8,6 +8,7 @@ use App\Form\WorkingPosition\WorkingPositionFormType;
 use App\Repository\WorkingPositionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,6 +31,7 @@ class ActionController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'working-position')]
+    #[Security(name: 'Bearer')]
     #[OA\RequestBody(
         content: new Model(type: WorkingPositionFormType::class),
     )]
@@ -82,6 +84,7 @@ class ActionController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'working-position')]
+    #[Security(name: 'Bearer')]
     #[Route(path: '/api/working-position/delete/{id}', name: 'app_working_position_delete', methods: ['DELETE'])]
     public function delete(Request $request, WorkingPositionRepository $workingPositionRepository): Response
     {

@@ -8,6 +8,7 @@ use App\Form\Goal\GoalFormType;
 use App\Repository\GoalRepository;
 use App\Repository\UserRepository;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,6 +31,7 @@ class GoalController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'goal')]
+    #[Security(name: 'Bearer')]
     #[OA\RequestBody(
         content: new Model(type: GoalFormType::class),
     )]

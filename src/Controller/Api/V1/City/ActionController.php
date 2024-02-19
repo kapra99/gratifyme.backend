@@ -7,6 +7,7 @@ use App\Dto\Api\V1\Response\ResponseDto;
 use App\Form\City\CityFormType;
 use App\Repository\CityRepository;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -28,6 +29,7 @@ class ActionController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'city')]
+    #[Security(name: 'Bearer')]
     #[OA\RequestBody(
         content: new Model(type: CityFormType::class),
     )]
@@ -80,6 +82,7 @@ class ActionController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'city')]
+    #[Security(name: 'Bearer')]
     #[Route(path: '/api/city/delete/{id}', name: 'app_city_delete', methods: ['DELETE'])]
     public function delete(Request $request, CityRepository $cityRepository): Response
     {

@@ -9,6 +9,7 @@ use App\Repository\CityRepository;
 use App\Repository\WorkPlaceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,6 +32,7 @@ class ActionController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'workplace')]
+    #[Security(name: 'Bearer')]
     #[OA\RequestBody(
         content: new Model(type: WorkPlaceFormType::class),
     )]
@@ -92,6 +94,7 @@ class ActionController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'workplace')]
+    #[Security(name: 'Bearer')]
     #[Route(path: '/api/workplace/delete/{id}', name: 'app_workplace_delete', methods: ['DELETE'])]
     public function delete(Request $request, WorkPlaceRepository $workPlaceRepository): Response
     {
