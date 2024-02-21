@@ -40,7 +40,7 @@ class LoginController extends ApiController
         $data = json_decode($request->getContent(), true);
         $form->submit($data);
         if ($form->isSubmitted() && $form->isValid()) {
-            $userName = $form->get('username')->getData();
+            $userName = $form->get('email')->getData();
             $password = $form->get('password')->getData();
             if (empty($userName) || empty($password)) {
                 return $this->json(['message' => 'Invalid credentials'], Response::HTTP_UNAUTHORIZED);

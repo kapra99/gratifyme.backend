@@ -16,7 +16,7 @@ class LoginType extends BaseType
         parent::buildForm($builder, $options);
 
         $builder
-            ->add('username', EmailType::class, [
+            ->add('email', EmailType::class, [
                 'required' => true,
                 'trim' => true,
                 'constraints' => [
