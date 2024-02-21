@@ -63,7 +63,7 @@ class GoalController extends ApiController
             } else {
                 $user = $userRepository->findOneById($userId);
             }
-            $goalRepository->createGoal($user,$goalName, $endGoalSum, $currentGoalSum, $startDate, $priority);
+            $goalRepository->createGoal($user, $goalName, $endGoalSum, $currentGoalSum, $startDate, $priority);
 
             $responseDto = new ResponseDto();
             $responseDto->setMessages([
@@ -91,7 +91,8 @@ class GoalController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'goal')]
-    #[Route(path:'/api/goals/{id}', name: 'app_goals_show',methods: ['GET'])]
+    #[Security(name: null)]
+    #[Route(path: '/api/goals/{id}', name: 'app_goals_show', methods: ['GET'])]
     public function show(GoalRepository $goalRepository, Request $request): Response
     {
         $goalId = $request->attributes->get("id");
@@ -126,7 +127,8 @@ class GoalController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'goal')]
-    #[Route(path:'/api/goals', name: 'app_goals_show_all', methods: ['GET'])]
+    #[Security(name: null)]
+    #[Route(path: '/api/goals', name: 'app_goals_show_all', methods: ['GET'])]
     public function showAll(GoalRepository $goalsRepository): JsonResponse
     {
         $goals = $goalsRepository->findAllGoals();

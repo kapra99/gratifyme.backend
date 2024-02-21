@@ -89,6 +89,7 @@ class ReviewController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'review')]
+    #[Security(name: null)]
     #[Route(path: '/api/review/{id}', name: 'app_review_show', methods: ['GET'])]
     public function show(Request $request, ReviewRepository $reviewRepository): Response
     {
@@ -124,6 +125,7 @@ class ReviewController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'review')]
+    #[Security(name: null)]
     #[Route(path: '/api/reviews', name: 'app_review_show_all', methods: ['GET'])]
     public function showAll(ReviewRepository $reviewRepository): JsonResponse
     {

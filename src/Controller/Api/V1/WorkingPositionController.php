@@ -82,6 +82,7 @@ class WorkingPositionController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'working-position')]
+    #[Security(name: null)]
     #[Route(path:'/api/working-position/{id}', name: 'app_working_position_show', methods: ['GET'])]
     public function show(WorkingPositionRepository $workingPositionRepository, Request $request): Response
     {
@@ -117,6 +118,7 @@ class WorkingPositionController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'working-position')]
+    #[Security(name: null)]
     #[Route(path:'/api/working-positions', name: 'app_working_position_show_all', methods: ['GET'])]
     public function showAll(WorkingPositionRepository $workingPositionRepository): JsonResponse
     {

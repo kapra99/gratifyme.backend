@@ -92,6 +92,7 @@ class TipMethodController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'tip-method')]
+    #[Security(name: null)]
     #[Route(path: '/api/tip-method/{id}', name: 'app_tip_method_show', methods: ['GET'])]
     public function show(TipMethodRepository $tipMethodRepository, Request $request, SerializerInterface $serializer): Response
     {
@@ -127,6 +128,7 @@ class TipMethodController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'tip-method')]
+    #[Security(name: null)]
     #[Route(path: '/api/tip-methods', name: 'app_tip_methods_show_all', methods: ['GET'])]
     public function showAll(TipMethodRepository $tipMethodRepository): JsonResponse
     {

@@ -26,7 +26,7 @@ class JWTCreatedListener
         $request = $this->requestStack->getCurrentRequest();
         $decoded = json_decode($request->getContent());
 
-        $user = $this->em->getRepository(User::class)->findOneBy(['email' => $decoded->email]);
+        $user = $this->em->getRepository(User::class)->findOneBy(['email' => $decoded->username]);
 
         if ($user) {
             // Add user data to the JWT payload

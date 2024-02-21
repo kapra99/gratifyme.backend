@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controller\Api\V1;
+
 use App\Controller\Api\ApiController;
 use App\Dto\Api\V1\Response\City\GetCityDto;
 use App\Dto\Api\V1\Response\ResponseDto;
@@ -16,7 +17,7 @@ use OpenApi\Attributes as OA;
 class CityController extends ApiController
 {
     #[OA\Post(
-        description:"This method adds a new city",
+        description: "This method adds a new city",
     )]
     #[OA\Response(
         response: 200,
@@ -33,16 +34,16 @@ class CityController extends ApiController
     #[OA\RequestBody(
         content: new Model(type: CityFormType::class),
     )]
-    #[Route(path:'/api/city/add', name: 'app_city_add', methods: ['POST'])]
+    #[Route(path: '/api/city/add', name: 'app_city_add', methods: ['POST'])]
     public function addCity(Request $request, CityRepository $cityRepository): Response
     {
         $form = $this->createForm(CityFormType::class);
-        $data = json_decode($request->getContent(),true);
+        $data = json_decode($request->getContent(), true);
         $form->submit($data);
 
-        if ($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             $existingCity = $cityRepository->findOneByName($form->get('name')->getData());
-            if($existingCity) {
+            if ($existingCity) {
                 $responseDto = new ResponseDto();
                 $responseDto->setMessages([
                     'City already added',
@@ -68,6 +69,7 @@ class CityController extends ApiController
         return $this->json($responseDto);
 
     }
+
     #[OA\Response(
         response: 200,
         description: "Return а single city",
@@ -79,7 +81,8 @@ class CityController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['city']),
     )]
     #[OA\Tag(name: 'city')]
-    #[Route(path:'/api/city/{id}', name: 'app_city_show', methods: ['GET'])]
+    #[Security(name: null)]
+    #[Route(path: '/api/city/{id}', name: 'app_city_show', methods: ['GET'])]
     public function showCity(CityRepository $cityRepository, Request $request): Response
     {
         $cityId = $request->attributes->get("id");
@@ -101,8 +104,9 @@ class CityController extends ApiController
         $getCityDto->setCities([$city]);
         return $this->json($getCityDto);
     }
+
     #[OA\Get(
-        description:"This method returns all the Cities",
+        description: "This method returns all the Cities",
     )]
     #[OA\Response(
         response: 200,
@@ -115,8 +119,8 @@ class CityController extends ApiController
         content: new Model(type: ResponseDto::class, groups: ['city']),
     )]
     #[OA\Tag(name: 'city')]
-    #[Security(name:null)]
-    #[Route(path:'/api/cities', name: 'app_cities_all', methods: ['GET'])]
+    #[Security(name: null)]
+    #[Route(path: '/api/cities', name: 'app_cities_all', methods: ['GET'])]
     public function showAllCities(CityRepository $cityRepository): Response
     {
         $cities = $cityRepository->findAllCities();
