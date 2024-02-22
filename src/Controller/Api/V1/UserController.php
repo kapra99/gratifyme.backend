@@ -6,6 +6,7 @@ use AllowDynamicProperties;
 use App\Controller\Api\ApiController;
 use App\Dto\Api\V1\Response\ResponseDto;
 use App\Dto\Api\V1\Response\User\GetUserDto;
+use App\Dto\Api\V1\Response\User\GetUsersDto;
 use App\Form\User\CreateUserFormType;
 use App\Repository\UserRepository;
 use Nelmio\ApiDocBundle\Annotation\Security;
@@ -32,7 +33,7 @@ use Symfony\Component\Serializer\SerializerInterface;
     #[OA\Response(
         response: 200,
         description: 'User created successfully',
-        content: new Model(type: ResponseDto::class, groups: ['BASE']),
+        content: new Model(type: GetUserDto::class, groups: ['BASE']),
     )]
     #[OA\Response(
         response: 400,
@@ -54,23 +55,23 @@ use Symfony\Component\Serializer\SerializerInterface;
         if ($form->isSubmitted() && $form->isValid()) {
             $existingUser = $userRepository->findOneByEmail($form->get('email')->getData());
             if ($existingUser) {
-                $responseDto = new ResponseDto();
-                $responseDto->setMessages([
+                $getUserDto = new GetUserDto();
+                $getUserDto->setMessages([
                     'User already exists!',
                 ]);
-                $responseDto->getServer()->setHttpCode(400);
-                return $this->json($responseDto);
+                $getUserDto->getServer()->setHttpCode(400);
+                return $this->json($getUserDto);
             }
 
             $email = $form->get('email')->getData();
             $plainPassword = $form->get('password')->getData();
             $userRepository->createUser($email, $plainPassword);
-            $responseDto = new ResponseDto();
-            $responseDto->setMessages([
+            $getUserDto = new ResponseDto();
+            $getUserDto->setMessages([
                 'User created successfully!',
             ]);
-            $responseDto->getServer()->setHttpCode(200);
-            return $this->json($responseDto);
+            $getUserDto->getServer()->setHttpCode(200);
+            return $this->json($getUserDto);
 
         }
         $responseDto = new ResponseDto();
@@ -89,7 +90,7 @@ use Symfony\Component\Serializer\SerializerInterface;
     #[OA\Response(
         response: 404,
         description: 'User not found',
-        content: new Model(type: GetUserDto::class, groups: ['BASE']),
+        content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
     #[OA\Tag(name: 'user')]
     #[Security(name: null)]
@@ -99,12 +100,12 @@ use Symfony\Component\Serializer\SerializerInterface;
         $userId = $request->attributes->get("id");
         $currentUser = $userRepository->findOneById($userId);
         if (!$currentUser) {
-            $responseDto = new ResponseDto();
-            $responseDto->setMessages([
+            $getUserDto = new GetUserDto();
+            $getUserDto->setMessages([
                 'User with this id was not found',
             ]);
-            $responseDto->getServer()->setHttpCode(400);
-            return $this->json($responseDto);
+            $getUserDto->getServer()->setHttpCode(400);
+            return $this->json($getUserDto);
         }
         $getUserDto = new GetUserDto();
         $getUserDto->setMessages([
@@ -122,7 +123,7 @@ use Symfony\Component\Serializer\SerializerInterface;
     #[OA\Response(
         response: 200,
         description: 'Users returned successfully',
-        content: new Model(type: ResponseDto::class, groups: ['BASE']),
+        content: new Model(type: GetUsersDto::class, groups: ['BASE']),
     )]
     #[OA\Response(
         response: 400,
@@ -135,6 +136,22 @@ use Symfony\Component\Serializer\SerializerInterface;
     public function showAll(UserRepository $userRepository): JsonResponse
     {
         $users = $userRepository->findAllUsers();
-        return new JsonResponse(['users' => $users]);
+//        return new JsonResponse(['users' => $users]);
+        if (!$users) {
+            $getUsersDto = new GetUsersDto();
+            $getUsersDto->setMessages([
+                'Users not found!',
+            ]);
+            $getUsersDto->getServer()->setHttpCode(400);
+            return $this->json($getUsersDto);
+        }
+        $getUserDto = new GetUsersDto();
+        $getUserDto->setMessages([
+            "Users found successfully!"
+        ]);
+        $getUsersDto = new GetUsersDto();
+        $getUsersDto->getServer()->setHttpCode(200);
+        $getUsersDto->setUsers($users);
+        return $this->json($getUsersDto);
     }
 }

@@ -24,4 +24,5 @@ class GetUserDto extends ResponseDto
         $this->user = $user;
     }
 
+
 }

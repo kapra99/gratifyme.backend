@@ -1,41 +1,40 @@
 <?php
 
-namespace App\Dto\Api\V1\Response\City;
+namespace App\Dto\Api\V1\Response\WorkingPosition;
 
 use AllowDynamicProperties;
 use App\Dto\Api\V1\Response\ResponseDto;
-use App\Entity\City;
+use App\Entity\WorkingPosition;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[AllowDynamicProperties] class GetCityDto extends ResponseDto
+#[AllowDynamicProperties] class GetWorkingPositionDto extends ResponseDto
 {
-
     /**
-     * @var City[]
+     * @var WorkingPosition[]
      */
     #[Groups(['BASE'])]
-    protected $cities;
+    protected $workingPositions;
 
     /**
-     * Get the value of cities.
+     * Get the value of workingPositions.
      *
-     * @return City[]
+     * @return WorkingPosition[]
      */
-    public function getCities()
+    public function getWorkingPositions()
     {
-        return $this->cities;
+        return $this->workingPositions;
     }
 
     /**
-     * Set the value of cities.
+     * Set the value of workingPositions.
      *
-     * @param City[] $cities
+     * @param WorkingPosition[] $workingPositions
      *
      * @return self
      */
-    public function setCities(array $cities)
+    public function setWorkingPosition(array $workingPositions)
     {
-        $this->cities = $cities;
+        $this->workingPositions = $workingPositions;
 
         return $this;
     }
@@ -59,5 +58,4 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
         return $this;
     }
-
 }

@@ -4,6 +4,7 @@ namespace App\Controller\Api\V1;
 
 use App\Controller\Api\ApiController;
 use App\Dto\Api\V1\Response\ResponseDto;
+use App\Dto\Api\V1\Response\WorkingPosition\GetWorkingPositionDto;
 use App\Form\WorkingPosition\WorkingPositionFormType;
 use App\Repository\WorkingPositionRepository;
 use Nelmio\ApiDocBundle\Annotation\Security;
@@ -22,7 +23,7 @@ class WorkingPositionController extends ApiController
     #[OA\Response(
         response: 200,
         description: 'Working Position added successfully',
-        content: new Model(type: ResponseDto::class, groups: ['BASE']),
+        content: new Model(type: GetWorkingPositionDto::class, groups: ['BASE']),
     )]
     #[OA\Response(
         response: 400,
@@ -45,36 +46,36 @@ class WorkingPositionController extends ApiController
             $existingWorkingPosition = $workingPositionRepository->findOneByName($form->get('name')->getData());
 
             if ($existingWorkingPosition) {
-                $responseDto = new ResponseDto();
-                $responseDto->setMessages([
+                $workingPositionDto = new GetWorkingPositionDto();
+                $workingPositionDto->setMessages([
                     'Working Position already exists',
                 ]);
-                $responseDto->getServer()->setHttpCode(400);
-                return $this->json($responseDto);
+                $workingPositionDto->getServer()->setHttpCode(400);
+                return $this->json($workingPositionDto);
             }
             $workingPositionName = $form->get('name')->getData();
             $workingPositionRepository->addWorkingPosition($workingPositionName);
 
-            $responseDto = new ResponseDto();
-            $responseDto->setMessages([
+            $workingPositionDto = new GetWorkingPositionDto();
+            $workingPositionDto->setMessages([
                 'Working Position added successfully!',
             ]);
-            $responseDto->getServer()->setHttpCode(200);
-            return $this->json($responseDto);
+            $workingPositionDto->getServer()->setHttpCode(200);
+            return $this->json($workingPositionDto);
 
         }
-        $responseDto = new ResponseDto();
-        $responseDto->setMessages([
+        $workingPositionDto = new GetWorkingPositionDto();
+        $workingPositionDto->setMessages([
             'Something went wrong',
         ]);
-        $responseDto->getServer()->setHttpCode(400);
-        return $this->json($responseDto);
+        $workingPositionDto->getServer()->setHttpCode(400);
+        return $this->json($workingPositionDto);
     }
 
     #[OA\Response(
         response: 200,
         description: "Returns the details of a single Working Position",
-        content: new Model(type: ResponseDto::class, groups: ['BASE']),
+        content: new Model(type: GetWorkingPositionDto::class, groups: ['BASE']),
     )]
     #[OA\Response(
         response: 404,
@@ -90,19 +91,19 @@ class WorkingPositionController extends ApiController
         $workingPosition = $workingPositionRepository->findOneById($workingPositionId);
 
         if(!$workingPosition) {
-            $responseDto = new ResponseDto();
-            $responseDto->setMessages([
+            $workingPositionDto = new GetWorkingPositionDto();
+            $workingPositionDto->setMessages([
                 'Working position with this id was not found',
             ]);
-            $responseDto->getServer()->setHttpCode(400);
-            return $this->json($responseDto);
+            $workingPositionDto->getServer()->setHttpCode(400);
+            return $this->json($workingPositionDto);
         }
-        $responseDto = new ResponseDto();
-        $responseDto->setMessages([
-            "Working position found successfully: " . $workingPosition->getName(),
+        $workingPositionDto = new GetWorkingPositionDto();
+        $workingPositionDto->setMessages([
+            "Working position found successfully!"
         ]);
-        $responseDto->getServer()->setHttpCode(200);
-        return $this->json($responseDto);
+        $workingPositionDto->getServer()->setHttpCode(200);
+        return $this->json($workingPositionDto);
     }
     #[OA\Get(
         description:"This method returns all the Working Positions",
@@ -110,7 +111,7 @@ class WorkingPositionController extends ApiController
     #[OA\Response(
         response: 200,
         description: 'Working Positions returned successfully',
-        content: new Model(type: ResponseDto::class, groups: ['BASE']),
+        content: new Model(type: GetWorkingPositionDto::class, groups: ['BASE']),
     )]
     #[OA\Response(
         response: 400,
@@ -123,6 +124,19 @@ class WorkingPositionController extends ApiController
     public function showAll(WorkingPositionRepository $workingPositionRepository): JsonResponse
     {
         $workingPosition = $workingPositionRepository->findAllWorkingPositions();
-        return new JsonResponse(['workingPositions' => $workingPosition]);
+        if(!$workingPosition) {
+            $workingPositionDto = new GetWorkingPositionDto();
+            $workingPositionDto->setMessages([
+                'Working position with this id was not found',
+            ]);
+            $workingPositionDto->getServer()->setHttpCode(400);
+            return $this->json($workingPositionDto);
+        }
+        $workingPositionDto = new GetWorkingPositionDto();
+        $workingPositionDto->setMessages([
+            "Working position found successfully!"
+        ]);
+        $workingPositionDto->getServer()->setHttpCode(200);
+        return $this->json($workingPositionDto);
     }
 }

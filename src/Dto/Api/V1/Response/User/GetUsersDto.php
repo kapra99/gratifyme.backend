@@ -1,41 +1,41 @@
 <?php
 
-namespace App\Dto\Api\V1\Response\WorkPlace;
+namespace App\Dto\Api\V1\Response\User;
 
 use AllowDynamicProperties;
 use App\Dto\Api\V1\Response\ResponseDto;
-use App\Entity\WorkPlace;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
-use Symfony\Component\Serializer\Attribute\Groups;
+use App\Entity\User;
+use Symfony\Component\Serializer\Annotation\Groups;
 
-#[AllowDynamicProperties] class WorkPlaceDto extends ResponseDto
+#[AllowDynamicProperties] class GetUsersDto extends ResponseDto
 {
+
     /**
-     * @var WorkPlace[]
+     * @var User[]
      */
     #[Groups(['BASE'])]
-    protected $items;
+    protected $users;
 
     /**
      * Get the value of items.
      *
-     * @return WorkPlace[]
+     * @return User[]
      */
-    public function getItems()
+    public function getUsers()
     {
-        return $this->items;
+        return $this->users;
     }
 
     /**
      * Set the value of items.
      *
-     * @param WorkPlace[] $items
+     * @param User[] $users
      *
      * @return self
      */
-    public function setItems(array $items)
+    public function setUsers(array $users)
     {
-        $this->items = $items;
+        $this->users = $users;
 
         return $this;
     }
@@ -59,5 +59,4 @@ use Symfony\Component\Serializer\Attribute\Groups;
 
         return $this;
     }
-
 }
