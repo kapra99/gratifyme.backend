@@ -102,6 +102,7 @@ class WorkingPositionController extends ApiController
         $workingPositionDto->setMessages([
             "Working position found successfully!"
         ]);
+        $workingPositionDto->setWorkingPosition([$workingPosition]);
         $workingPositionDto->getServer()->setHttpCode(200);
         return $this->json($workingPositionDto);
     }
@@ -134,8 +135,9 @@ class WorkingPositionController extends ApiController
         }
         $workingPositionDto = new GetWorkingPositionDto();
         $workingPositionDto->setMessages([
-            "Working position found successfully!"
+            "Working positions found successfully!"
         ]);
+        $workingPositionDto->setWorkingPosition([$workingPosition]);
         $workingPositionDto->getServer()->setHttpCode(200);
         return $this->json($workingPositionDto);
     }

@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Attributes as OA;
-use Symfony\Component\Serializer\SerializerInterface;
 
 #[AllowDynamicProperties] class UserController extends ApiController
 {
@@ -136,7 +135,6 @@ use Symfony\Component\Serializer\SerializerInterface;
     public function showAll(UserRepository $userRepository): JsonResponse
     {
         $users = $userRepository->findAllUsers();
-//        return new JsonResponse(['users' => $users]);
         if (!$users) {
             $getUsersDto = new GetUsersDto();
             $getUsersDto->setMessages([

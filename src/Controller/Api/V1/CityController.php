@@ -22,7 +22,7 @@ class CityController extends ApiController
     #[OA\Response(
         response: 200,
         description: 'City added successfully',
-        content: new Model(type: ResponseDto::class, groups: ['city']),
+        content: new Model(type: GetCityDto::class, groups: ['city']),
     )]
     #[OA\Response(
         response: 400,
@@ -44,29 +44,29 @@ class CityController extends ApiController
         if ($form->isSubmitted() && $form->isValid()) {
             $existingCity = $cityRepository->findOneByName($form->get('name')->getData());
             if ($existingCity) {
-                $responseDto = new ResponseDto();
-                $responseDto->setMessages([
+                $getCityDto = new GetCityDto();
+                $getCityDto->setMessages([
                     'City already added',
                 ]);
-                $responseDto->getServer()->setHttpCode(400);
-                return $this->json($responseDto);
+                $getCityDto->getServer()->setHttpCode(400);
+                return $this->json($getCityDto);
             }
             $cityName = $form->get('name')->getData();
             $cityRepository->addCity($cityName);
 
-            $responseDto = new ResponseDto();
-            $responseDto->setMessages([
+            $getCityDto = new GetCityDto();
+            $getCityDto->setMessages([
                 'City added successfully!',
             ]);
-            $responseDto->getServer()->setHttpCode(200);
-            return $this->json($responseDto);
+            $getCityDto->getServer()->setHttpCode(200);
+            return $this->json($getCityDto);
         }
-        $responseDto = new ResponseDto();
-        $responseDto->setMessages([
+        $getCityDto = new ResponseDto();
+        $getCityDto->setMessages([
             'Something went wrong',
         ]);
-        $responseDto->getServer()->setHttpCode(400);
-        return $this->json($responseDto);
+        $getCityDto->getServer()->setHttpCode(400);
+        return $this->json($getCityDto);
 
     }
 
