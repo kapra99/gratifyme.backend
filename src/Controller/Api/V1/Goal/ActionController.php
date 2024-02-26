@@ -3,6 +3,7 @@
 namespace App\Controller\Api\V1\Goal;
 
 use App\Controller\Api\ApiController;
+use App\Dto\Api\V1\Response\Goal\GetGoalDto;
 use App\Dto\Api\V1\Response\ResponseDto;
 use App\Form\Goal\GoalFormType;
 use App\Repository\GoalRepository;
@@ -25,7 +26,7 @@ class ActionController extends ApiController
     #[OA\Response(
         response: 200,
         description: 'Goal updated successfully',
-        content: new Model(type: ResponseDto::class, groups: ['BASE']),
+        content: new Model(type: GetGoalDto::class, groups: ['BASE']),
     )]
     #[OA\Response(
         response: 400,
@@ -47,12 +48,12 @@ class ActionController extends ApiController
         if($form->isSubmitted() && $form->isValid()){
             $goal = $goalRepository->findOneById($goalId);
             if (!$goal) {
-                $responseDto = new ResponseDto();
-                $responseDto->setMessages([
+                $getGoalDto = new GetGoalDto();
+                $getGoalDto->setMessages([
                     'Goal with this id was not found',
                 ]);
-                $responseDto->getServer()->setHttpCode(400);
-                return $this->json($responseDto);
+                $getGoalDto->getServer()->setHttpCode(400);
+                return $this->json($getGoalDto);
             }
 
             $goalName = $form->get('name')->getData();
@@ -69,19 +70,19 @@ class ActionController extends ApiController
 
             $goalRepository->updateGoal($user,$goal, $goalName, $endGoalSum, $currentGoalSum, $startDate, $priority);
 
-            $responseDto = new ResponseDto();
-            $responseDto->setMessages([
+            $getGoalDto = new GetGoalDto();
+            $getGoalDto->setMessages([
                 'Goal updated successfully!',
             ]);
-            $responseDto->getServer()->setHttpCode(200);
-            return $this->json($responseDto);
+            $getGoalDto->getServer()->setHttpCode(200);
+            return $this->json($getGoalDto);
         }
-        $responseDto = new ResponseDto();
-        $responseDto->setMessages([
+        $getGoalDto = new GetGoalDto();
+        $getGoalDto->setMessages([
             'Something went wrong',
         ]);
-        $responseDto->getServer()->setHttpCode(400);
-        return $this->json($responseDto);
+        $getGoalDto->getServer()->setHttpCode(400);
+        return $this->json($getGoalDto);
     }
 
     #[OA\Delete(
@@ -90,7 +91,7 @@ class ActionController extends ApiController
     #[OA\Response(
         response: 200,
         description: 'Goal deleted successfully',
-        content: new Model(type: ResponseDto::class, groups: ['BASE']),
+        content: new Model(type: GetGoalDto::class, groups: ['BASE']),
     )]
     #[OA\Response(
         response: 400,
@@ -105,19 +106,19 @@ class ActionController extends ApiController
         $goalId = $request->attributes->get("id");
         $goal = $goalRepository->findOneById($goalId);
         if (!$goal) {
-            $responseDto = new ResponseDto();
-            $responseDto->setMessages([
+            $getGoalDto = new GetGoalDto();
+            $getGoalDto->setMessages([
                 'Goal was not found',
             ]);
-            $responseDto->getServer()->setHttpCode(400);
-            return $this->json($responseDto);
+            $getGoalDto->getServer()->setHttpCode(400);
+            return $this->json($getGoalDto);
         }
         $goalRepository->deleteCity($goal);
-        $responseDto = new ResponseDto();
-        $responseDto->setMessages([
+        $getGoalDto = new GetGoalDto();
+        $getGoalDto->setMessages([
             'Goal deleted successfully!',
         ]);
-        $responseDto->getServer()->setHttpCode(200);
-        return $this->json($responseDto);
+        $getGoalDto->getServer()->setHttpCode(200);
+        return $this->json($getGoalDto);
     }
 }

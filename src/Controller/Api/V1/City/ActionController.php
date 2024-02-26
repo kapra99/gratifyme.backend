@@ -3,6 +3,7 @@
 namespace App\Controller\Api\V1\City;
 
 use App\Controller\Api\ApiController;
+use App\Dto\Api\V1\Response\City\GetCityDto;
 use App\Dto\Api\V1\Response\ResponseDto;
 use App\Form\City\CityFormType;
 use App\Repository\CityRepository;
@@ -21,7 +22,7 @@ class ActionController extends ApiController
     #[OA\Response(
         response: 200,
         description: 'City updated successfully',
-        content: new Model(type: ResponseDto::class, groups: ['BASE']),
+        content: new Model(type: GetCityDto::class, groups: ['BASE']),
     )]
     #[OA\Response(
         response: 400,
@@ -43,38 +44,38 @@ class ActionController extends ApiController
         if ($form->isSubmitted() && $form->isValid()) {
             $currentCity = $cityRepository->findOneById($cityId);
             if (!$currentCity) {
-                $responseDto = new ResponseDto();
-                $responseDto->setMessages([
+                $getCityDto = new GetCityDto();
+                $getCityDto->setMessages([
                     'City with this id was not found',
                 ]);
-                $responseDto->getServer()->setHttpCode(400);
-                return $this->json($responseDto);
+                $getCityDto->getServer()->setHttpCode(400);
+                return $this->json($getCityDto);
             }
             $cityName = $form->get('name')->getData();
             $cityRepository->updateCity($currentCity, $cityName);
 
-            $responseDto = new ResponseDto();
-            $responseDto->setMessages([
+            $getCityDto = new GetCityDto();
+            $getCityDto->setMessages([
                 'City updated successfully!',
             ]);
-            $responseDto->getServer()->setHttpCode(200);
-            return $this->json($responseDto);
+            $getCityDto->getServer()->setHttpCode(200);
+            return $this->json($getCityDto);
         }
-        $responseDto = new ResponseDto();
-        $responseDto->setMessages([
+        $getCityDto = new GetCityDto();
+        $getCityDto->setMessages([
             'Something went wrong!',
         ]);
-        $responseDto->getServer()->setHttpCode(400);
-        return $this->json($responseDto);
+        $getCityDto->getServer()->setHttpCode(400);
+        return $this->json($getCityDto);
     }
 
     #[OA\Delete(
-        description: "This method deletes Work Place",
+        description: "This method deletes a City",
     )]
     #[OA\Response(
         response: 200,
-        description: 'Work Place deleted successfully',
-        content: new Model(type: ResponseDto::class, groups: ['BASE']),
+        description: 'City deleted successfully',
+        content: new Model(type: GetCityDto::class, groups: ['BASE']),
     )]
     #[OA\Response(
         response: 400,
@@ -89,19 +90,19 @@ class ActionController extends ApiController
         $cityId = $request->attributes->get("id");
         $city = $cityRepository->findOneById($cityId);
         if (!$city) {
-            $responseDto = new ResponseDto();
-            $responseDto->setMessages([
+            $getCityDto = new ResponseDto();
+            $getCityDto->setMessages([
                 'City with this id was not found',
             ]);
-            $responseDto->getServer()->setHttpCode(400);
-            return $this->json($responseDto);
+            $getCityDto->getServer()->setHttpCode(400);
+            return $this->json($getCityDto);
         }
         $cityRepository->deleteCity($city);
-        $responseDto = new ResponseDto();
-        $responseDto->setMessages([
+        $getCityDto = new GetCityDto();
+        $getCityDto->setMessages([
             'City removed successfully!',
         ]);
-        $responseDto->getServer()->setHttpCode(200);
-        return $this->json($responseDto);
+        $getCityDto->getServer()->setHttpCode(200);
+        return $this->json($getCityDto);
     }
 }

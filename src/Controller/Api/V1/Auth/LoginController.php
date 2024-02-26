@@ -47,12 +47,12 @@ class LoginController extends ApiController
             }
             $user = $userRepository->findOneByEmail($userName);
             if (!$user || !$userPasswordHasherInterface->isPasswordValid($user, $password)) {
-                $responseDto = new ResponseDto();
-                $responseDto->setMessages([
+                $loginDto = new LoginDto();
+                $loginDto->setMessages([
                     'Invalid credentials',
                 ]);
-                $responseDto->getServer()->setHttpCode(401);
-                return $this->json($responseDto, Response::HTTP_UNAUTHORIZED);
+                $loginDto->getServer()->setHttpCode(401);
+                return $this->json($loginDto, Response::HTTP_UNAUTHORIZED);
             }
         }
 

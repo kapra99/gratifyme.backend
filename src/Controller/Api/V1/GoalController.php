@@ -3,6 +3,7 @@
 namespace App\Controller\Api\V1;
 
 use App\Controller\Api\ApiController;
+use App\Dto\Api\V1\Response\Goal\GetGoalDto;
 use App\Dto\Api\V1\Response\ResponseDto;
 use App\Form\Goal\GoalFormType;
 use App\Repository\GoalRepository;
@@ -23,7 +24,7 @@ class GoalController extends ApiController
     #[OA\Response(
         response: 200,
         description: 'Goal created successfully',
-        content: new Model(type: ResponseDto::class, groups: ['BASE']),
+        content: new Model(type: GetGoalDto::class, groups: ['BASE']),
     )]
     #[OA\Response(
         response: 400,
@@ -45,12 +46,12 @@ class GoalController extends ApiController
             $existingGoal = $goalRepository->findOneByName($form->get('name')->getData());
 
             if ($existingGoal) {
-                $responseDto = new ResponseDto();
-                $responseDto->setMessages([
+                $getGoalDto = new GetGoalDto();
+                $getGoalDto->setMessages([
                     'Goal already added!',
                 ]);
-                $responseDto->getServer()->setHttpCode(400);
-                return $this->json($responseDto);
+                $getGoalDto->getServer()->setHttpCode(400);
+                return $this->json($getGoalDto);
             }
             $goalName = $form->get('name')->getData();
             $endGoalSum = $form->get('endGoalSum')->getData();
@@ -65,25 +66,25 @@ class GoalController extends ApiController
             }
             $goalRepository->createGoal($user, $goalName, $endGoalSum, $currentGoalSum, $startDate, $priority);
 
-            $responseDto = new ResponseDto();
-            $responseDto->setMessages([
+            $getGoalDto = new GetGoalDto();
+            $getGoalDto->setMessages([
                 'Goal added successfully!',
             ]);
-            $responseDto->getServer()->setHttpCode(200);
-            return $this->json($responseDto);
+            $getGoalDto->getServer()->setHttpCode(200);
+            return $this->json($getGoalDto);
         }
-        $responseDto = new ResponseDto();
-        $responseDto->setMessages([
+        $getGoalDto = new GetGoalDto();
+        $getGoalDto->setMessages([
             'Something went wrong',
         ]);
-        $responseDto->getServer()->setHttpCode(400);
-        return $this->json($responseDto);
+        $getGoalDto->getServer()->setHttpCode(400);
+        return $this->json($getGoalDto);
     }
 
     #[OA\Response(
         response: 200,
         description: "Returns the details of a single Goal",
-        content: new Model(type: ResponseDto::class, groups: ['BASE']),
+        content: new Model(type: GetGoalDto::class, groups: ['BASE']),
     )]
     #[OA\Response(
         response: 404,
@@ -98,19 +99,19 @@ class GoalController extends ApiController
         $goalId = $request->attributes->get("id");
         $goal = $goalRepository->findOneById($goalId);
         if (!$goal) {
-            $responseDto = new ResponseDto();
-            $responseDto->setMessages([
+            $getGoalDto = new GetGoalDto();
+            $getGoalDto->setMessages([
                 'Goal with this id was not found',
             ]);
-            $responseDto->getServer()->setHttpCode(400);
-            return $this->json($responseDto);
+            $getGoalDto->getServer()->setHttpCode(400);
+            return $this->json($getGoalDto);
         }
-        $responseDto = new ResponseDto();
-        $responseDto->setMessages([
-            "Donation Method found successfully: " . $goal->getName(),
+        $getGoalDto = new GetGoalDto();
+        $getGoalDto->setMessages([
+            "Goal found successfully: " . $goal->getName(),
         ]);
-        $responseDto->getServer()->setHttpCode(200);
-        return $this->json($responseDto);
+        $getGoalDto->getServer()->setHttpCode(200);
+        return $this->json($getGoalDto);
     }
 
     #[OA\Get(
@@ -119,7 +120,7 @@ class GoalController extends ApiController
     #[OA\Response(
         response: 200,
         description: 'Goals returned successfully',
-        content: new Model(type: ResponseDto::class, groups: ['BASE']),
+        content: new Model(type: GetGoalDto::class, groups: ['BASE']),
     )]
     #[OA\Response(
         response: 400,
@@ -129,9 +130,15 @@ class GoalController extends ApiController
     #[OA\Tag(name: 'goal')]
     #[Security(name: null)]
     #[Route(path: '/api/goals', name: 'app_goals_show_all', methods: ['GET'])]
-    public function showAll(GoalRepository $goalsRepository): JsonResponse
+    public function showAll(GoalRepository $goalsRepository): Response
     {
         $goals = $goalsRepository->findAllGoals();
-        return new JsonResponse(['goals' => $goals]);
+        $getGoalDto = new GetGoalDto();
+        $getGoalDto->setMessages([
+            "Goals found successfully!",
+        ]);
+        $getGoalDto->getServer()->setHttpCode(200);
+        $getGoalDto->setGoals($goals);
+        return $this->json($getGoalDto);
     }
 }
