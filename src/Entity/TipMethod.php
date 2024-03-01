@@ -14,19 +14,18 @@ class TipMethod
     #[ORM\Column(type: 'uuid', unique: true)]
     #[Groups(['BASE'])]
     private string $id;
-
+    #[Groups(['BASE'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
-
+    #[Groups(['BASE'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $tipMethodUrl = null;
-
+    #[Groups(['BASE'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $tipMethodStaticUrl = null;
-
+    #[Groups(['BASE'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $qrCodeImgPath = null;
-
     #[ORM\ManyToOne(inversedBy: 'tipMethod')]
     private ?User $user = null;
 

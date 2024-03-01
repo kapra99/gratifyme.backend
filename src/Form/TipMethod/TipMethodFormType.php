@@ -22,7 +22,7 @@ class TipMethodFormType extends BaseType
                 ],
             ])
             ->add('tipMethodUrl', TextType::class, [
-                'required' => true,
+                'required' => false,
                 'trim' => true,
                 'constraints' => [
                     new NotBlank(),
@@ -30,7 +30,7 @@ class TipMethodFormType extends BaseType
                 ],
             ])
             ->add('tipMethodStaticUrl', TextType::class, [
-                'required' => true,
+                'required' => false,
                 'trim' => true,
                 'constraints' => [
                     new NotBlank(),
@@ -38,7 +38,7 @@ class TipMethodFormType extends BaseType
                 ],
             ])
             ->add('qrCodeImgPath', TextType::class, [
-                'required' => true,
+                'required' => false,
                 'trim' => true,
                 'constraints' => [
                     new NotBlank(),

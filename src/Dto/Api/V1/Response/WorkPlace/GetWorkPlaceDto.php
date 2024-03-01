@@ -10,7 +10,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[AllowDynamicProperties] class GetWorkPlaceDto extends ResponseDto
 {
     /**
-     * @var WorkPlace[]
+     * @var WorkPlace
      */
     #[Groups(['BASE'])]
     protected $items;
@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     /**
      * Get the value of items.
      *
-     * @return WorkPlace[]
+     * @return WorkPlace
      */
     public function getItems()
     {
@@ -28,11 +28,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
     /**
      * Set the value of items.
      *
-     * @param WorkPlace[] $items
+     * @param WorkPlace $items
      *
      * @return self
      */
-    public function setItems(array $items)
+    public function setItems(WorkPlace $items)
     {
         $this->items = $items;
 

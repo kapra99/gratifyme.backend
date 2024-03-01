@@ -25,7 +25,8 @@ class TipMethodRepository extends ServiceEntityRepository
         $this->validator = $validator;
     }
 
-    public function addTipMethod(User|null $user, string $tipMethodName, string $tipMethodUrl, string $tipMethodStaticUrl, string $tipMethodQrCodeImgPath): void
+//    public function addTipMethod(User|null $user, string $tipMethodName, string $tipMethodUrl, string $tipMethodStaticUrl, string $tipMethodQrCodeImgPath): void
+    public function addTipMethod(string $tipMethodName, string $tipMethodUrl, string $tipMethodStaticUrl, string $tipMethodQrCodeImgPath): void
     {
         $entityManager = $this->getEntityManager();
         $tipMethod = new TipMethod();
@@ -33,7 +34,7 @@ class TipMethodRepository extends ServiceEntityRepository
         $tipMethod->setTipMethodUrl($tipMethodUrl);
         $tipMethod->setTipMethodStaticUrl($tipMethodStaticUrl);
         $tipMethod->setQrCodeImgPath($tipMethodQrCodeImgPath);
-        $tipMethod->setUser($user);
+//        $tipMethod->setUser($user);
         $errors = $this->validator->validate($tipMethod);
         if (count($errors) > 0) {
             throw new \Exception((string)$errors);

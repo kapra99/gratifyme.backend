@@ -314,7 +314,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
 
         return $this;
     }
-
+    #[Groups(["BASE"])]
     /**
      * @return Collection<int, TipMethod>
      */

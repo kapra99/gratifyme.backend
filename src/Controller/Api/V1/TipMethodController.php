@@ -58,13 +58,14 @@ class TipMethodController extends ApiController
             $tipMethodUrl = $form->get('tipMethodUrl')->getData();
             $tipMethodStaticUrl = $form->get('tipMethodStaticUrl')->getData();
             $tipMethodQrCodeImgPath = $form->get('qrCodeImgPath')->getData();
-            $userId = $form->get('userId')->getData();
-            if ($userId == null) {
-                $user = $existingTipMethod->getuser();
-            } else {
-                $user = $userRepository->findOneById($userId);
-            }
-            $tipMethodRepository->addTipMethod($user,$tipMethodName, $tipMethodUrl,$tipMethodStaticUrl, $tipMethodQrCodeImgPath);
+//            $userId = $form->get('userId')->getData();
+//            if ($userId == null) {
+//                $user = $existingTipMethod->getuser();
+//            } else {
+//                $user = $userRepository->findOneById($userId);
+//            }
+//            $tipMethodRepository->addTipMethod($user,$tipMethodName, $tipMethodUrl,$tipMethodStaticUrl, $tipMethodQrCodeImgPath);
+            $tipMethodRepository->addTipMethod($tipMethodName, $tipMethodUrl,$tipMethodStaticUrl, $tipMethodQrCodeImgPath);
 
             $getTipMethodDto = new GetTipMethodDto();
             $getTipMethodDto->setMessages([

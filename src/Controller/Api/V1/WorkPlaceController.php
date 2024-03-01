@@ -115,7 +115,7 @@ class WorkPlaceController extends ApiController
             "Work Place found successfully:"
         ]);
         $workPlaceDto->getServer()->setHttpCode(200);
-        $workPlaceDto->setItems([$workPlace]);
+        $workPlaceDto->setItems($workPlace);
         return $this->json($workPlaceDto);
     }
 
