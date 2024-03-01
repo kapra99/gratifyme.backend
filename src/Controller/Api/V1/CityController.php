@@ -126,7 +126,7 @@ class CityController extends ApiController
         $cities = $cityRepository->findAllCities();
         $getCityDto = new GetCityDto();
         $getCityDto->setMessages([
-            "City found successfully!"
+            "Cities found successfully!"
         ]);
         $getCityDto->getServer()->setHttpCode(200);
         $getCityDto->setCities($cities);

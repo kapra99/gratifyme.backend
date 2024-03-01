@@ -1,40 +1,40 @@
 <?php
 
-namespace App\Dto\Api\V1\Response\TipMethod;
+namespace App\Dto\Api\V1\Review;
 
 use AllowDynamicProperties;
 use App\Dto\Api\V1\Response\ResponseDto;
-use App\Entity\TipMethod;
+use App\Entity\Review;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[AllowDynamicProperties] class GetTipMethodDto extends ResponseDto
+#[AllowDynamicProperties] class GetReviewDto extends ResponseDto
 {
     /**
-     * @var TipMethod[]
+     * @var Review[]
      */
     #[Groups(['BASE'])]
-    protected $tipMethods;
+    protected $reviews;
 
     /**
-     * Get the value of tipmethods.
+     * Get the value of reviews.
      *
-     * @return TipMethod[]
+     * @return Review[]
      */
-    public function getTipMethods()
+    public function getReviews()
     {
-        return $this->tipMethods;
+        return $this->reviews;
     }
 
     /**
-     * Set the value of tipmethods.
+     * Set the value of reviews.
      *
-     * @param TipMethod[] $tipMethods
+     * @param Review[] $reviews
      *
      * @return self
      */
-    public function setTipMethods(array $tipMethods)
+    public function setReviews(array $reviews)
     {
-        $this->tipMethods = $tipMethods;
+        $this->reviews = $reviews;
 
         return $this;
     }
@@ -58,4 +58,5 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
         return $this;
     }
+
 }

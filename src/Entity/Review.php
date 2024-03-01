@@ -14,27 +14,25 @@ class Review
     #[ORM\Column(type: 'uuid', unique: true)]
     #[Groups(['BASE'])]
     private string $id;
-
+    #[Groups(['BASE'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $message = null;
-
+    #[Groups(['BASE'])]
     #[ORM\Column(nullable: true)]
     private ?float $rating = null;
-
+    #[Groups(['BASE'])]
     #[ORM\Column(nullable: true)]
     private ?bool $subreview = null;
-
+    #[Groups(['BASE'])]
     #[ORM\ManyToOne(inversedBy: 'review')]
     private ?User $evaluatedUser = null;
 
-//    #[ORM\ManyToOne(inversedBy: 'review')]
-//    private ?User $user = null;
     public function __construct()
     {
         $this->id = Uuid::v4();
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }
@@ -86,16 +84,4 @@ class Review
 
         return $this;
     }
-
-//    public function getUser(): ?User
-//    {
-//        return $this->user;
-//    }
-//
-//    public function setUser(?User $user): static
-//    {
-//        $this->user = $user;
-//
-//        return $this;
-//    }
 }

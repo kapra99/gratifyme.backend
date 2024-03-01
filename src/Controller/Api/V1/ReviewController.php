@@ -4,18 +4,16 @@ namespace App\Controller\Api\V1;
 
 use App\Controller\Api\ApiController;
 use App\Dto\Api\V1\Response\ResponseDto;
-use App\Entity\Review;
+use App\Dto\Api\V1\Review\GetReviewDto;
 use App\Form\Review\ReviewFormType;
 use App\Repository\ReviewRepository;
 use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use OpenApi\Attributes as OA;
 
 class ReviewController extends ApiController
@@ -26,7 +24,7 @@ class ReviewController extends ApiController
     #[OA\Response(
         response: 200,
         description: 'Review created successfully',
-        content: new Model(type: ResponseDto::class, groups: ['BASE']),
+        content: new Model(type: GetReviewDto::class, groups: ['BASE']),
     )]
     #[OA\Response(
         response: 400,
@@ -47,12 +45,12 @@ class ReviewController extends ApiController
         if ($form->isSubmitted() && $form->isValid()) {
             $existingReview = $reviewRepository->findOneByMessage($form->get('message')->getData());
             if($existingReview){
-                $responseDto = new ResponseDto();
-                $responseDto->setMessages([
-                    'Review already added',
+                $getReviewDto = new GetReviewDto();
+                $getReviewDto->setMessages([
+                    'Review already created!',
                 ]);
-                $responseDto->getServer()->setHttpCode(400);
-                return $this->json($responseDto);
+                $getReviewDto->getServer()->setHttpCode(400);
+                return $this->json($getReviewDto);
             }
             $reviewMessage = $form->get('message')->getData();
             $reviewRating = $form->get('rating')->getData();
@@ -63,25 +61,25 @@ class ReviewController extends ApiController
                 $user = $userRepository->findOneById($userId);
             }
             $reviewRepository->addReview($user,$reviewMessage, $reviewRating);
-            $responseDto = new ResponseDto();
-            $responseDto->setMessages([
+            $getReviewDto = new GetReviewDto();
+            $getReviewDto->setMessages([
                 'Review added successfully!',
             ]);
-            $responseDto->getServer()->setHttpCode(200);
-            return $this->json($responseDto);
+            $getReviewDto->getServer()->setHttpCode(200);
+            return $this->json($getReviewDto);
         }
-        $responseDto = new ResponseDto();
-        $responseDto->setMessages([
+        $getReviewDto = new GetReviewDto();
+        $getReviewDto->setMessages([
             'Something went wrong',
         ]);
-        $responseDto->getServer()->setHttpCode(400);
-        return $this->json($responseDto);
+        $getReviewDto->getServer()->setHttpCode(400);
+        return $this->json($getReviewDto);
     }
 
     #[OA\Response(
         response: 200,
         description: "Returns the details of a single Review",
-        content: new Model(type: ResponseDto::class, groups: ['BASE']),
+        content: new Model(type: GetReviewDto::class, groups: ['BASE']),
     )]
     #[OA\Response(
         response: 404,
@@ -94,21 +92,22 @@ class ReviewController extends ApiController
     public function show(Request $request, ReviewRepository $reviewRepository): Response
     {
         $reviewId = $request->attributes->get("id");
-        $reviews = $reviewRepository->findOneById($reviewId);
-        if (!$reviews) {
-            $responseDto = new ResponseDto();
-            $responseDto->setMessages([
-                'Review this id was not found',
+        $review = $reviewRepository->findOneById($reviewId);
+        if (!$review) {
+            $getReviewDto = new GetReviewDto();
+            $getReviewDto->setMessages([
+                'Review this id was not found!',
             ]);
-            $responseDto->getServer()->setHttpCode(400);
-            return $this->json($responseDto);
+            $getReviewDto->getServer()->setHttpCode(400);
+            return $this->json($getReviewDto);
         }
-        $responseDto = new ResponseDto();
-        $responseDto->setMessages([
-            "Review found successfully: " . $reviews->getMessage(),
+        $getReviewDto = new GetReviewDto();
+        $getReviewDto->setMessages([
+            "Review found successfully!",
         ]);
-        $responseDto->getServer()->setHttpCode(200);
-        return $this->json($responseDto);
+        $getReviewDto->getServer()->setHttpCode(200);
+        $getReviewDto->setReviews([$review]);
+        return $this->json($getReviewDto);
     }
 
     #[OA\Get(
@@ -117,7 +116,7 @@ class ReviewController extends ApiController
     #[OA\Response(
         response: 200,
         description: 'Reviews returned successfully',
-        content: new Model(type: ResponseDto::class, groups: ['BASE']),
+        content: new Model(type: GetReviewDto::class, groups: ['BASE']),
     )]
     #[OA\Response(
         response: 400,
@@ -130,6 +129,12 @@ class ReviewController extends ApiController
     public function showAll(ReviewRepository $reviewRepository): JsonResponse
     {
         $reviews = $reviewRepository->findAllReviews();
-        return new JsonResponse(['goals' => $reviews]);
+        $getReviewDto = new GetReviewDto();
+        $getReviewDto->setMessages([
+            "Reviews found successfully!"
+        ]);
+        $getReviewDto->getServer()->setHttpCode(200);
+        $getReviewDto->setReviews($reviews);
+        return $this->json($getReviewDto);
     }
 }

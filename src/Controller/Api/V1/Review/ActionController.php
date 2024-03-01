@@ -4,17 +4,16 @@ namespace App\Controller\Api\V1\Review;
 
 use App\Controller\Api\ApiController;
 use App\Dto\Api\V1\Response\ResponseDto;
+use App\Dto\Api\V1\Review\GetReviewDto;
 use App\Form\Review\ReviewFormType;
 use App\Repository\ReviewRepository;
 use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Attributes as OA;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ActionController extends ApiController
 {
@@ -24,7 +23,7 @@ class ActionController extends ApiController
     #[OA\Response(
         response: 200,
         description: 'Review updated successfully',
-        content: new Model(type: ResponseDto::class, groups: ['BASE']),
+        content: new Model(type: GetReviewDto::class, groups: ['BASE']),
     )]
     #[OA\Response(
         response: 400,
@@ -46,12 +45,12 @@ class ActionController extends ApiController
         if ($form->isSubmitted() && $form->isValid()) {
             $currentReview = $reviewRepository->findOneById($reviewId);
             if (!$currentReview) {
-                $responseDto = new ResponseDto();
-                $responseDto->setMessages([
+                $getReviewDto = new GetReviewDto();
+                $getReviewDto->setMessages([
                     'Review with this id was not found',
                 ]);
-                $responseDto->getServer()->setHttpCode(400);
-                return $this->json($responseDto);
+                $getReviewDto->getServer()->setHttpCode(400);
+                return $this->json($getReviewDto);
             }
             $reviewMessage = $form->get('message')->getData();
             $reviewRating = $form->get('rating')->getData();
@@ -62,19 +61,19 @@ class ActionController extends ApiController
                 $user = $userRepository->findOneById($userId);
             }
             $reviewRepository->updateReview($user,$currentReview, $reviewMessage, $reviewRating);
-            $responseDto = new ResponseDto();
-            $responseDto->setMessages([
+            $getReviewDto = new GetReviewDto();
+            $getReviewDto->setMessages([
                 'Review updated successfully!',
             ]);
-            $responseDto->getServer()->setHttpCode(200);
-            return $this->json($responseDto);
+            $getReviewDto->getServer()->setHttpCode(200);
+            return $this->json($getReviewDto);
         }
-        $responseDto = new ResponseDto();
-        $responseDto->setMessages([
+        $getReviewDto = new GetReviewDto();
+        $getReviewDto->setMessages([
             'Something went wrong!',
         ]);
-        $responseDto->getServer()->setHttpCode(400);
-        return $this->json($responseDto);
+        $getReviewDto->getServer()->setHttpCode(400);
+        return $this->json($getReviewDto);
     }
 
     #[OA\Delete(
@@ -83,7 +82,7 @@ class ActionController extends ApiController
     #[OA\Response(
         response: 200,
         description: 'Review deleted successfully',
-        content: new Model(type: ResponseDto::class, groups: ['BASE']),
+        content: new Model(type: GetReviewDto::class, groups: ['BASE']),
     )]
     #[OA\Response(
         response: 400,
@@ -98,19 +97,19 @@ class ActionController extends ApiController
         $reviewId = $request->attributes->get("id");
         $review = $reviewRepository->findOneById($reviewId);
         if (!$reviewId) {
-            $responseDto = new ResponseDto();
-            $responseDto->setMessages([
+            $getReviewDto = new GetReviewDto();
+            $getReviewDto->setMessages([
                 'Review was not found',
             ]);
-            $responseDto->getServer()->setHttpCode(400);
-            return $this->json($responseDto);
+            $getReviewDto->getServer()->setHttpCode(400);
+            return $this->json($getReviewDto);
         }
         $reviewRepository->deleteReview($review);
-        $responseDto = new ResponseDto();
-        $responseDto->setMessages([
+        $getReviewDto = new GetReviewDto();
+        $getReviewDto->setMessages([
             'Review deleted successfully!',
         ]);
-        $responseDto->getServer()->setHttpCode(200);
-        return $this->json($responseDto);
+        $getReviewDto->getServer()->setHttpCode(200);
+        return $this->json($getReviewDto);
     }
 }
