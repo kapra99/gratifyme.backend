@@ -4,6 +4,7 @@ namespace App\Controller\Api\V1;
 
 use App\Controller\Api\ApiController;
 use App\Dto\Api\V1\Response\ResponseDto;
+use App\Dto\Api\V1\Response\WorkPlace\GetWorkPlacesDto;
 use App\Form\WorkPlace\WorkPlaceFormType;
 use App\Dto\Api\V1\Response\WorkPlace\GetWorkPlaceDto;
 use App\Repository\CityRepository;
@@ -115,7 +116,7 @@ class WorkPlaceController extends ApiController
             "Work Place found successfully:"
         ]);
         $workPlaceDto->getServer()->setHttpCode(200);
-        $workPlaceDto->setItems($workPlace);
+        $workPlaceDto->setWorkPlace($workPlace);
         return $this->json($workPlaceDto);
     }
 
@@ -139,19 +140,19 @@ class WorkPlaceController extends ApiController
     {
         $workPlace = $workPlaceRepository->findAllWorkPlaces();
         if (!$workPlace) {
-            $workPlaceDto = new GetWorkPlaceDto();
+            $workPlaceDto = new GetWorkPlacesDto();
             $workPlaceDto->setMessages([
                 'Work Places not found!',
             ]);
             $workPlaceDto->getServer()->setHttpCode(400);
             return $this->json($workPlaceDto);
         }
-        $workPlaceDto = new GetWorkPlaceDto();
+        $workPlaceDto = new GetWorkPlacesDto();
         $workPlaceDto->setMessages([
             "Work Places found successfully!"
         ]);
         $workPlaceDto->getServer()->setHttpCode(200);
-        $workPlaceDto->setItems([$workPlace]);
+        $workPlaceDto->setWorkPlaces($workPlace);
         return $this->json($workPlaceDto);
     }
     #[OA\Get(
@@ -176,7 +177,7 @@ class WorkPlaceController extends ApiController
         $city = $cityRepository->findOneById($cityId);
 
         if (!$city) {
-            $workPlaceDto = new GetWorkPlaceDto();
+            $workPlaceDto = new GetWorkPlacesDto();
             $workPlaceDto->setMessages([
                 'City not found!',
             ]);
@@ -184,11 +185,11 @@ class WorkPlaceController extends ApiController
             return $this->json($workPlaceDto);
         }
         $workPlaces = $workPlaceRepository->findWorkPlacesByCity($city);
-        $workPlaceDto = new GetWorkPlaceDto();
+        $workPlaceDto = new GetWorkPlacesDto();
         $workPlaceDto->setMessages([
             "City found successfully: " . $city->getName(),
         ]);
-        $workPlaceDto->setItems($workPlaces);
+        $workPlaceDto->setWorkPlaces($workPlaces);
         $workPlaceDto->getServer()->setHttpCode(200);
         return $this->json($workPlaceDto);
     }

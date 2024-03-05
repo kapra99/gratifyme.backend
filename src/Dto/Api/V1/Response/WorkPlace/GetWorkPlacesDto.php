@@ -7,34 +7,34 @@ use App\Dto\Api\V1\Response\ResponseDto;
 use App\Entity\WorkPlace;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[AllowDynamicProperties] class GetWorkPlaceDto extends ResponseDto
+#[AllowDynamicProperties] class GetWorkPlacesDto extends ResponseDto
 {
     /**
      * @var WorkPlace
      */
     #[Groups(['BASE'])]
-    protected $workPlace;
+    protected $workPlaces;
 
     /**
-     * Get the value of workPlace.
+     * Get the value of workPlaces.
      *
      * @return WorkPlace
      */
-    public function getWorkPlace()
+    public function getWorkPlaces()
     {
-        return $this->workPlace;
+        return $this->workPlaces;
     }
 
     /**
-     * Set the value of workPlace.
+     * Set the value of workPlaces.
      *
-     * @param WorkPlace $workPlace
+     * @param WorkPlace $workPlaces
      *
      * @return self
      */
-    public function setWorkPlace(WorkPlace $workPlace)
+    public function setWorkPlaces(array $workPlaces)
     {
-        $this->workPlace = $workPlace;
+        $this->workPlaces = $workPlaces;
 
         return $this;
     }
