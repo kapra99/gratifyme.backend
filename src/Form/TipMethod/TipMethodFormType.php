@@ -53,6 +53,5 @@ class TipMethodFormType extends BaseType
                     new Length(max: 255),
                 ],
             ]);
-
     }
 }

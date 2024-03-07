@@ -25,8 +25,8 @@ class TipMethodRepository extends ServiceEntityRepository
         $this->validator = $validator;
     }
 
-//    public function addTipMethod(User|null $user, string $tipMethodName, string $tipMethodUrl, string $tipMethodStaticUrl, string $tipMethodQrCodeImgPath): void
-    public function addTipMethod(string $tipMethodName, string $tipMethodUrl, string $tipMethodStaticUrl, string $tipMethodQrCodeImgPath): void
+    public function addTipMethod(User|null $user, string $tipMethodName, string $tipMethodUrl, string $tipMethodStaticUrl, string $tipMethodQrCodeImgPath): void
+//    public function addTipMethod(string $tipMethodName, string $tipMethodUrl, string $tipMethodStaticUrl, string $tipMethodQrCodeImgPath): void
     {
         $entityManager = $this->getEntityManager();
         $tipMethod = new TipMethod();
@@ -34,7 +34,7 @@ class TipMethodRepository extends ServiceEntityRepository
         $tipMethod->setTipMethodUrl($tipMethodUrl);
         $tipMethod->setTipMethodStaticUrl($tipMethodStaticUrl);
         $tipMethod->setQrCodeImgPath($tipMethodQrCodeImgPath);
-//        $tipMethod->setUser($user);
+        $tipMethod->setUser($user);
         $errors = $this->validator->validate($tipMethod);
         if (count($errors) > 0) {
             throw new \Exception((string)$errors);
@@ -54,22 +54,22 @@ class TipMethodRepository extends ServiceEntityRepository
         return $query->getArrayResult();
     }
 
-    public function findOneByName(string $name): ?TipMethod
+    public function findOneByTipMethodUrl(string $tipMethodUrl): ?TipMethod
     {
         $entityManager = $this->getEntityManager();
 
         $query = $entityManager->createQueryBuilder()
-            ->select("tp")
-            ->from('App:TipMethod', 'tp')
-            ->where('tp.name = :name')
-            ->setParameter('name', $name)
+            ->select("tpurl")
+            ->from('App:TipMethod', 'tpurl')
+            ->where('tpurl.tipMethodUrl = :tipMethodUrl')
+            ->setParameter('tipMethodUrl', $tipMethodUrl)
             ->setMaxResults(1)  // Set maximum number of results to 1
             ->getQuery();
 
         return $query->getOneOrNullResult();
     }
 
-    public function findOneById(string $id): ?TipMethod
+    public function findOneById(string|null $id): ?TipMethod
     {
         $entityManager = $this->getEntityManager();
 
