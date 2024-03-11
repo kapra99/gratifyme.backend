@@ -16,7 +16,7 @@ class WorkingPosition
     #[ORM\Column(type: 'uuid', unique: true)]
     #[Groups(['BASE'])]
     private string $id;
-
+    #[Groups(['BASE'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 

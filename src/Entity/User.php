@@ -264,7 +264,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
 
         return $this;
     }
-
+    #[Groups(["BASE"])]
     public function getWorkingPosition(): ?WorkingPosition
     {
         return $this->workingPosition;
