@@ -13,6 +13,13 @@ class TipMethodFormType extends BaseType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('id', TextType::class, [
+                'required' => false,
+                'trim' => false,
+                'constraints' => [
+                    new Length(max: 255),
+                ],
+            ])
             ->add('name', TextType::class, [
                 'required' => true,
                 'trim' => true,

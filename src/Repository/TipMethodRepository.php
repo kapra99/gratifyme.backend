@@ -53,6 +53,17 @@ class TipMethodRepository extends ServiceEntityRepository
 
         return $query->getArrayResult();
     }
+    public function findAllUniqueTipsMethod(): array
+    {
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQueryBuilder()
+            ->select('tipMethod')
+            ->from('App:TipMethod', 'tipMethod')
+            ->groupBy('tipMethod.name') // Assuming 'name' is the field representing the tip method
+            ->getQuery();
+
+        return $query->getResult();
+    }
 
     public function findOneByTipMethodUrl(string $tipMethodUrl): ?TipMethod
     {
