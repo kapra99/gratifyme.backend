@@ -6,6 +6,7 @@ namespace App\Form\User;
 use App\Form\BaseType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -77,6 +78,9 @@ class EditUserFormType extends BaseType
                     new Length(null, 2, 255),
                 ],
             ]);
+//            ->add('avatarImagePath', FileType::class, [
+//                'required' => false,
+//            ]);
     }
 
 }

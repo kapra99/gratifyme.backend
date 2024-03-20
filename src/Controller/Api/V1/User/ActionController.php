@@ -61,6 +61,9 @@ class ActionController extends ApiController
             $dateOfBirth = $form->get('dateofbirth')->getData();
             $workPlaceId = $form->get('workplace')->getData();
             $workingPositionId = $form->get('workingposition')->getData();
+//            $avatarImagePath = $form->get('avatarImagePath')->getData();
+            var_dump($email);
+            die();
             if ($workPlaceId == null) {
                 $workPlace = $currentUser->getWorkPlace();
             } else {
@@ -72,6 +75,8 @@ class ActionController extends ApiController
             } else {
                 $workingPosition = $workingPositionRepository->findOneById($workingPositionId);
             }
+
+//            $userRepository->updateUser($currentUser, $email, $firstName, $surName, $lastName, $nickName, $dateOfBirth, $workPlace, $workingPosition, $avatarImagePath);
             $userRepository->updateUser($currentUser, $email, $firstName, $surName, $lastName, $nickName, $dateOfBirth, $workPlace, $workingPosition);
             $responseDto = new ResponseDto();
             $responseDto->setMessages([
