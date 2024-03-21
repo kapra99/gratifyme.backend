@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\File;
 
 class EditUserFormType extends BaseType
 {
@@ -77,10 +78,21 @@ class EditUserFormType extends BaseType
                 'constraints' => [
                     new Length(null, 2, 255),
                 ],
+            ])
+            ->add('avatarImagePath', FileType::class, [
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '1024k',
+                        'mimeTypes' => [
+                            'application/image/jpeg',
+                            'application/png',
+                        ],
+                        'mimeTypesMessage' => 'Please upload a valid Image',
+                    ])
+                ],
             ]);
-//            ->add('avatarImagePath', FileType::class, [
-//                'required' => false,
-//            ]);
     }
 
 }

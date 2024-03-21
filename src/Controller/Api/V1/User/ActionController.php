@@ -11,10 +11,12 @@ use App\Repository\WorkingPositionRepository;
 use App\Repository\WorkPlaceRepository;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Attributes as OA;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class ActionController extends ApiController
 {
@@ -37,7 +39,7 @@ class ActionController extends ApiController
         content: new Model(type: EditUserFormType::class),
     )]
     #[Route(path: '/api/user/edit/{id}', name: 'app_users_edit', methods: ['PATCH'])]
-    public function update(Request $request, UserRepository $userRepository, WorkPlaceRepository $workPlaceRepository, WorkingPositionRepository $workingPositionRepository, TipMethodRepository $tipMethodRepository): Response
+    public function update(Request $request, UserRepository $userRepository, WorkPlaceRepository $workPlaceRepository, WorkingPositionRepository $workingPositionRepository, TipMethodRepository $tipMethodRepository, SluggerInterface $slugger): Response
     {
         $form = $this->createForm(EditUserFormType::class);
         $data = json_decode($request->getContent(), true);
@@ -61,9 +63,7 @@ class ActionController extends ApiController
             $dateOfBirth = $form->get('dateofbirth')->getData();
             $workPlaceId = $form->get('workplace')->getData();
             $workingPositionId = $form->get('workingposition')->getData();
-//            $avatarImagePath = $form->get('avatarImagePath')->getData();
-            var_dump($email);
-            die();
+            $avatarImagePath = $form->get('avatarImagePath')->getData();
             if ($workPlaceId == null) {
                 $workPlace = $currentUser->getWorkPlace();
             } else {
@@ -75,9 +75,23 @@ class ActionController extends ApiController
             } else {
                 $workingPosition = $workingPositionRepository->findOneById($workingPositionId);
             }
+            if($avatarImagePath){
+                $originalFilename = pathinfo($avatarImagePath->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$avatarImagePath->guessExtension();
+                try {
+                    $avatarImagePath->move(
+                        $this->getParameter('test'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    echo "Fail";
+                }
+                $test = $currentUser->setAvatarImgPath($newFilename);
+                $userRepository->updateUser($currentUser, $email, $firstName, $surName, $lastName, $nickName, $dateOfBirth, $workPlace, $workingPosition, $test);
+            }
 
-//            $userRepository->updateUser($currentUser, $email, $firstName, $surName, $lastName, $nickName, $dateOfBirth, $workPlace, $workingPosition, $avatarImagePath);
-            $userRepository->updateUser($currentUser, $email, $firstName, $surName, $lastName, $nickName, $dateOfBirth, $workPlace, $workingPosition);
+
             $responseDto = new ResponseDto();
             $responseDto->setMessages([
                 'User updated successfully!',
@@ -129,5 +143,4 @@ class ActionController extends ApiController
         $responseDto->getServer()->setHttpCode(200);
         return $this->json($responseDto);
     }
-
 }
