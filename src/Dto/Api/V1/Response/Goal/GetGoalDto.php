@@ -20,7 +20,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
      *
      * @return Goal[]
      */
-    public function getItems()
+    public function getGoals()
     {
         return $this->goals;
     }

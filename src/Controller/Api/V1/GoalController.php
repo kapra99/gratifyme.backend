@@ -141,4 +141,44 @@ class GoalController extends ApiController
         $getGoalDto->setGoals($goals);
         return $this->json($getGoalDto);
     }
+
+    #[OA\Get(
+        description: "This method returns all the Goals according to the userId",
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Goals returned successfully',
+        content: new Model(type: GetGoalDto::class, groups: ['BASE']),
+    )]
+    #[OA\Response(
+        response: 400,
+        description: 'Return the error message',
+        content: new Model(type: ResponseDto::class, groups: ['BASE']),
+    )]
+    #[OA\Tag(name: 'goal')]
+    #[Security(name: null)]
+    #[Route(path: '/api/goals/user/{userId}', name: 'app_goals_show_all_by_userid', methods: ['GET'])]
+    public function showAllById(GoalRepository $goalRepository, Request $request, UserRepository $userRepository)
+    {
+        $userId = $request->attributes->get("userId");
+        $user = $userRepository->findOneById($userId);
+
+        if (!$user) {
+            $getGoalDto = new GetGoalDto();
+            $getGoalDto->setMessages([
+                'User not found',
+            ]);
+            $getGoalDto->getServer()->setHttpCode(400);
+            return $this->json($getGoalDto);
+        }
+        $userGoals = $goalRepository->findOneByUser($user);
+        dd($userGoals);
+        $getGoalDto = new GetGoalDto();
+        $getGoalDto->setMessages([
+            "Goal found successfully: " . $goal->getName(),
+        ]);
+        $getGoalDto->getServer()->setHttpCode(200);
+        return $this->json($getGoalDto);
+
+    }
 }

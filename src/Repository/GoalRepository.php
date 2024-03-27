@@ -7,6 +7,7 @@ use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use function MongoDB\BSON\fromJSON;
 
 /**
  * @extends ServiceEntityRepository<Goal>
@@ -38,6 +39,21 @@ class GoalRepository extends ServiceEntityRepository
             ->getQuery();
 
         return $query->getOneOrNullResult();
+    }
+    public function findOneByUser(User $userId): float|int|array|string
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQueryBuilder()
+            ->select("goal")
+            ->from('App:Goal', 'goal')
+            ->leftJoin('goal.user', 'user') // Assuming 'user' is the property name representing the User entity in the Goal entity
+            ->where('user.id = :userId')
+            ->setParameter('userId', $userId)
+            ->getQuery();
+
+        return $query->getArrayResult();
+
     }
 
     public function findOneById(string $goalId): ?Goal
