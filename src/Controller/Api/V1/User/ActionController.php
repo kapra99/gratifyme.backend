@@ -4,6 +4,8 @@ namespace App\Controller\Api\V1\User;
 
 use App\Controller\Api\ApiController;
 use App\Dto\Api\V1\Response\ResponseDto;
+use App\Dto\Api\V1\Response\User\UploadAvatarDto;
+use App\Form\User\AvatarFormType;
 use App\Form\User\EditUserFormType;
 use App\Repository\TipMethodRepository;
 use App\Repository\UserRepository;
@@ -11,7 +13,9 @@ use App\Repository\WorkingPositionRepository;
 use App\Repository\WorkPlaceRepository;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -75,10 +79,10 @@ class ActionController extends ApiController
             } else {
                 $workingPosition = $workingPositionRepository->findOneById($workingPositionId);
             }
-            if($avatarImagePath){
+            if ($avatarImagePath) {
                 $originalFilename = pathinfo($avatarImagePath->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$avatarImagePath->guessExtension();
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $avatarImagePath->guessExtension();
                 try {
                     $avatarImagePath->move(
                         $this->getParameter('test'),
@@ -142,5 +146,54 @@ class ActionController extends ApiController
         ]);
         $responseDto->getServer()->setHttpCode(200);
         return $this->json($responseDto);
+    }
+
+    #[OA\Response(
+        response: 200,
+        description: '',
+        content: new Model(type: UploadAvatarDto::class, groups: ['BASE']),
+    )]
+    #[OA\Response(
+        response: 400,
+        description: 'Return the error message',
+        content: new Model(type: \App\Dto\Api\V1\Response\ResponseDto::class, groups: ['BASE']),
+    )]
+    #[OA\RequestBody(
+        content: new OA\MediaType(mediaType: 'multipart/form-data', schema: new OA\Schema(ref: new Model(type: AvatarFormType::class)))
+    )]
+    #[OA\Tag(name: 'user')]
+    #[Security(name: 'Bearer')]
+    #[Route(path: '/api/v1/user/avatar', name: 'user.avatar', methods: ['POST'])]
+    public function uploadavatar(Request $request, ParameterBagInterface $parameterBag): Response
+    {
+        $form = $this->createForm(AvatarFormType::class);
+        $form->handleRequest($request);
+
+        /** @var UploadedFile|null $file */
+        $file = $form->get('file')->getData();
+
+        if (empty($file)) {
+            return $this->json([
+                'message' => 'File Not found.',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+        $uploadsBaseDir = $parameterBag->get('app.uploadDir');
+        $extension = $file->getExtension();
+        $newFilename = md5(uniqid()) . '.' . $extension;
+        $savedFilePath = $uploadsBaseDir . '/' . $newFilename;
+        $imagick = new \Imagick($file->getRealPath());
+        if (!file_exists($uploadsBaseDir)) {
+            mkdir($uploadsBaseDir, 0775, true);
+        }
+        $imagick->writeImage($savedFilePath);
+        $imagick->clear();
+        $imagick->destroy();
+
+
+        $responseDto = new UploadAvatarDto();
+        $responseDto->setDetails($savedFilePath);
+
+        return $this->json($responseDto);
+
     }
 }

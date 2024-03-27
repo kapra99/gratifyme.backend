@@ -79,18 +79,11 @@ class EditUserFormType extends BaseType
                     new Length(null, 2, 255),
                 ],
             ])
-            ->add('avatarImagePath', FileType::class, [
-                'mapped' => false,
-                'required' => false,
+            ->add('avatarImagePath', TextType::class, [
+                'required' => true,
+                'trim' => true,
                 'constraints' => [
-                    new File([
-                        'maxSize' => '1024k',
-                        'mimeTypes' => [
-                            'application/image/jpeg',
-                            'application/png',
-                        ],
-                        'mimeTypesMessage' => 'Please upload a valid Image',
-                    ])
+                    new Length(null, 2, 255),
                 ],
             ]);
     }
