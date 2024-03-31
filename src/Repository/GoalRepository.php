@@ -47,7 +47,7 @@ class GoalRepository extends ServiceEntityRepository
         $query = $entityManager->createQueryBuilder()
             ->select("goal")
             ->from('App:Goal', 'goal')
-            ->leftJoin('goal.user', 'user') // Assuming 'user' is the property name representing the User entity in the Goal entity
+            ->leftJoin('goal.user', 'user')
             ->where('user.id = :userId')
             ->setParameter('userId', $userId)
             ->getQuery();
