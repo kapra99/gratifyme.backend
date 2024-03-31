@@ -173,7 +173,7 @@ class GoalController extends ApiController
         }
         $userGoals = $goalRepository->findOneByUser($user);
         $getGoalDto = new GetGoalDto();
-        $getGoalDto->setGoals([$userGoals]);
+        $getGoalDto->setGoals($userGoals);
         $getGoalDto->getServer()->setHttpCode(200);
         return $this->json($getGoalDto);
 
