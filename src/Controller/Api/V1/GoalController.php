@@ -158,7 +158,7 @@ class GoalController extends ApiController
     #[OA\Tag(name: 'goal')]
     #[Security(name: null)]
     #[Route(path: '/api/goals/user/{userId}', name: 'app_goals_show_all_by_userid', methods: ['GET'])]
-    public function showAllById(GoalRepository $goalRepository, Request $request, UserRepository $userRepository)
+    public function showAllByUserId(GoalRepository $goalRepository, Request $request, UserRepository $userRepository):Response
     {
         $userId = $request->attributes->get("userId");
         $user = $userRepository->findOneById($userId);
@@ -172,11 +172,8 @@ class GoalController extends ApiController
             return $this->json($getGoalDto);
         }
         $userGoals = $goalRepository->findOneByUser($user);
-        dd($userGoals);
         $getGoalDto = new GetGoalDto();
-        $getGoalDto->setMessages([
-            "Goal found successfully: " . $goal->getName(),
-        ]);
+        $getGoalDto->setGoals($userGoals);
         $getGoalDto->getServer()->setHttpCode(200);
         return $this->json($getGoalDto);
 
