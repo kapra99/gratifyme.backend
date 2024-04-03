@@ -178,8 +178,8 @@ class ActionController extends ApiController
             ], Response::HTTP_BAD_REQUEST);
         }
         $uploadsBaseDir = $parameterBag->get('app.uploadDir');
-//        $extension = $file->getExtension();
-//        $newFilename = md5(uniqid()) . '.' . $extension;
+        $extension = $file->getExtension();
+        $newFilename = md5(uniqid()) . '.' . $extension;
         $savedFilePath = $uploadsBaseDir . '/' . $file->getFilename();
         $imagick = new \Imagick($file->getRealPath());
         if (!file_exists($uploadsBaseDir)) {
