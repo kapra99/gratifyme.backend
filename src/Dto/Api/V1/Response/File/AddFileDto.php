@@ -1,24 +1,25 @@
 <?php
 
-namespace App\Dto\Api\V1\Response\User;
+namespace App\Dto\Api\V1\Response\File;
 
 use App\Dto\Api\V1\Response\ResponseDto;
+use App\Entity\File;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-class UploadAvatarDto extends ResponseDto
+class AddFileDto extends ResponseDto
 {
     /**
-     * @var String|null
+     * @var File|null
      */
     #[Groups(['BASE'])]
-    protected $avatarPath;
+    protected $details;
 
     /**
      * Get the value of details.
      */
-    public function getDetails(): ?String
+    public function getDetails(): ?File
     {
-        return $this->avatarPath;
+        return $this->details;
     }
 
     /**
@@ -26,11 +27,10 @@ class UploadAvatarDto extends ResponseDto
      *
      * @return self
      */
-    public function setDetails(?String $avatarPath)
+    public function setDetails(?File $details)
     {
-        $this->avatarPath = $avatarPath;
+        $this->details = $details;
 
         return $this;
     }
-
 }

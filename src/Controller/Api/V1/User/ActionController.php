@@ -79,21 +79,21 @@ class ActionController extends ApiController
             } else {
                 $workingPosition = $workingPositionRepository->findOneById($workingPositionId);
             }
-            if ($avatarImagePath) {
-                $originalFilename = pathinfo($avatarImagePath->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename . '-' . uniqid() . '.' . $avatarImagePath->guessExtension();
-                try {
-                    $avatarImagePath->move(
-                        $this->getParameter('test'),
-                        $newFilename
-                    );
-                } catch (FileException $e) {
-                    echo "Fail";
-                }
-                $test = $currentUser->setAvatarImgPath($newFilename);
-                $userRepository->updateUser($currentUser, $email, $firstName, $surName, $lastName, $nickName, $dateOfBirth, $workPlace, $workingPosition, $test);
-            }
+//            if ($avatarImagePath) {
+//                $originalFilename = pathinfo($avatarImagePath->getClientOriginalName(), PATHINFO_FILENAME);
+//                $safeFilename = $slugger->slug($originalFilename);
+//                $newFilename = $safeFilename . '-' . uniqid() . '.' . $avatarImagePath->guessExtension();
+//                try {
+//                    $avatarImagePath->move(
+//                        $this->getParameter('test'),
+//                        $newFilename
+//                    );
+//                } catch (FileException $e) {
+//                    echo "Fail";
+//                }
+//                $test = $currentUser->setAvatarImgPath($newFilename);
+//                $userRepository->updateUser($currentUser, $email, $firstName, $surName, $lastName, $nickName, $dateOfBirth, $workPlace, $workingPosition, $test);
+//            }
 
 
             $responseDto = new ResponseDto();
@@ -148,52 +148,52 @@ class ActionController extends ApiController
         return $this->json($responseDto);
     }
 
-    #[OA\Response(
-        response: 200,
-        description: '',
-        content: new Model(type: UploadAvatarDto::class, groups: ['BASE']),
-    )]
-    #[OA\Response(
-        response: 400,
-        description: 'Return the error message',
-        content: new Model(type: \App\Dto\Api\V1\Response\ResponseDto::class, groups: ['BASE']),
-    )]
-    #[OA\RequestBody(
-        content: new OA\MediaType(mediaType: 'multipart/form-data', schema: new OA\Schema(ref: new Model(type: AvatarFormType::class)))
-    )]
-    #[OA\Tag(name: 'user')]
-    #[Security(name: 'Bearer')]
-    #[Route(path: '/api/v1/user/avatar', name: 'user.avatar', methods: ['POST'])]
-    public function uploadavatar(Request $request, ParameterBagInterface $parameterBag): Response
-    {
-        $form = $this->createForm(AvatarFormType::class);
-        $form->handleRequest($request);
-
-        /** @var UploadedFile|null $file */
-        $file = $form->get('file')->getData();
-
-        if (empty($file)) {
-            return $this->json([
-                'message' => 'File Not found.',
-            ], Response::HTTP_BAD_REQUEST);
-        }
-        $uploadsBaseDir = $parameterBag->get('app.uploadDir');
-        $extension = $file->getExtension();
-        $newFilename = md5(uniqid()) . '.' . $extension;
-        $savedFilePath = $uploadsBaseDir . '/' . $file->getFilename();
-        $imagick = new \Imagick($file->getRealPath());
-        if (!file_exists($uploadsBaseDir)) {
-            mkdir($uploadsBaseDir, 0775, true);
-        }
-        $imagick->writeImage($savedFilePath);
-        $imagick->clear();
-        $imagick->destroy();
-
-
-        $responseDto = new UploadAvatarDto();
-        $responseDto->setDetails($savedFilePath);
-
-        return $this->json($responseDto);
-
-    }
+//    #[OA\Response(
+//        response: 200,
+//        description: '',
+//        content: new Model(type: UploadAvatarDto::class, groups: ['BASE']),
+//    )]
+//    #[OA\Response(
+//        response: 400,
+//        description: 'Return the error message',
+//        content: new Model(type: \App\Dto\Api\V1\Response\ResponseDto::class, groups: ['BASE']),
+//    )]
+//    #[OA\RequestBody(
+//        content: new OA\MediaType(mediaType: 'multipart/form-data', schema: new OA\Schema(ref: new Model(type: AvatarFormType::class)))
+//    )]
+//    #[OA\Tag(name: 'user')]
+//    #[Security(name: 'Bearer')]
+//    #[Route(path: '/api/v1/user/avatar', name: 'user.avatar', methods: ['POST'])]
+//    public function uploadavatar(Request $request, ParameterBagInterface $parameterBag): Response
+//    {
+//        $form = $this->createForm(AvatarFormType::class);
+//        $form->handleRequest($request);
+//
+//        /** @var UploadedFile|null $file */
+//        $file = $form->get('file')->getData();
+//
+//        if (empty($file)) {
+//            return $this->json([
+//                'message' => 'File Not found.',
+//            ], Response::HTTP_BAD_REQUEST);
+//        }
+//        $uploadsBaseDir = $parameterBag->get('app.uploadDir');
+//        $extension = $file->getExtension();
+//        $newFilename = md5(uniqid()) . '.' . $extension;
+//        $savedFilePath = $uploadsBaseDir . '/' . $file->getFilename();
+//        $imagick = new \Imagick($file->getRealPath());
+//        if (!file_exists($uploadsBaseDir)) {
+//            mkdir($uploadsBaseDir, 0775, true);
+//        }
+//        $imagick->writeImage($savedFilePath);
+//        $imagick->clear();
+//        $imagick->destroy();
+//
+//
+//        $responseDto = new UploadAvatarDto();
+//        $responseDto->setDetails($savedFilePath);
+//
+//        return $this->json($responseDto);
+//
+//    }
 }
