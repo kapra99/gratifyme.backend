@@ -79,7 +79,7 @@ class EditUserFormType extends BaseType
                     new Length(null, 2, 255),
                 ],
             ])
-            ->add('avatarImagePath', TextType::class, [
+            ->add('avatar', TextType::class, [
                 'required' => true,
                 'trim' => true,
                 'constraints' => [

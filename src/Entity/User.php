@@ -67,9 +67,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
     #[ORM\Column(nullable: true)]
     private ?int $rating = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $avatarImgPath = null;
-
     #[ORM\ManyToOne(inversedBy: 'user')]
     #[MaxDepth(1)]
     private ?WorkPlace $workPlace = null;
@@ -83,6 +80,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: TipMethod::class)]
     private Collection $tipMethod;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?File $avatar = null;
+
     public function __construct()
     {
         $this->id = Uuid::v4();
@@ -232,18 +233,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
         return $this;
     }
 
-    public function getAvatarImgPath(): ?string
-    {
-        return $this->avatarImgPath;
-    }
-
-    public function setAvatarImgPath(?string $avatarImgPath): static
-    {
-        $this->avatarImgPath = $avatarImgPath;
-
-        return $this;
-    }
-
     public function getWorkPlace(): ?WorkPlace
     {
         return $this->workPlace;
@@ -341,6 +330,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
                 $tipMethod->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAvatar(): ?File
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?File $avatar): static
+    {
+        $this->avatar = $avatar;
 
         return $this;
     }

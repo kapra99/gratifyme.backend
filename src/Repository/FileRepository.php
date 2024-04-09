@@ -65,9 +65,6 @@ class FileRepository extends ServiceEntityRepository
         $md5 = md5_file($resizedFile);
         $size = filesize($resizedFile);
 
-//        /** @var \App\Entity\User $creatorUser */
-//        $creatorUser = $this->security->getUser();
-//
         $fileEntity = $this->findOneBy([
             'md5' => $md5,
         ]);
@@ -90,8 +87,6 @@ class FileRepository extends ServiceEntityRepository
         $fileEntity->setMimeType($imagick->getImageMimeType());
         $fileEntity->setCreateDate(new \DateTime());
         $fileEntity->setSize($size);
-//        $fileEntity->setCreatorUser($creatorUser);
-//        $fileEntity->setWhitelabel($creatorUser->getWhitelabel());
 
         if (!file_exists(dirname($this->parameterBag->get('kernel.project_dir').'/'.$fileEntity->getPath()))) {
             if (!mkdir(dirname($this->parameterBag->get('kernel.project_dir').'/'.$fileEntity->getPath()), 0777, true)) {

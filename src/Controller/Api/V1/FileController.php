@@ -32,10 +32,7 @@ class FileController extends ApiController
     #[OA\Tag(name: 'files')]
     #[Security(name: 'Bearer')]
     #[Route(path: '/api/v1/files', name: 'files', methods: ['POST'])]
-    public function add(
-        Request $request,
-        FileRepository $fileRepository,
-    ): Response {
+    public function add(Request $request, FileRepository $fileRepository): Response {
         $form = $this->createForm(AddFileType::class);
         $form->handleRequest($request);
 
@@ -43,7 +40,7 @@ class FileController extends ApiController
         $file = $form->get('file')->getData();
 
         if (empty($file)) {
-            throw new \ErrorException('Файлът не е намерен.');
+            throw new \ErrorException('File not found.');
         }
 
         /**

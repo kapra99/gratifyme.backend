@@ -4,6 +4,7 @@
 
 namespace App\Repository;
 
+use App\Entity\File;
 use App\Entity\User;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use App\Entity\TipMethod;
@@ -68,7 +69,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $entityManager->persist($newUser);
         $entityManager->flush();
     }
-    public function updateUser(User $currentUser, string $email, string $firstName, string $surName, string $lastName, string $nickName, string $dateOfBirth, WorkPlace|null $workPlace, WorkingPosition|null $workingPosition, филе $avatarImagePath): void
+    public function updateUser(User $currentUser, string $email, string $firstName, string $surName, string $lastName, string $nickName, string $dateOfBirth, WorkPlace|null $workPlace, WorkingPosition|null $workingPosition, string|null $avatar): void
     {
         $entityManager = $this->getEntityManager();
         $currentUser->setEmail($email);
@@ -76,13 +77,15 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $currentUser->setSurName($surName);
         $currentUser->setLastName($lastName);
         $currentUser->setNickName($nickName);
-        $currentUser->setAvatarImgPath($avatarImagePath);
         $currentUser->setDateOfBirth($dateOfBirth);
         if ($workPlace !== null) {
             $currentUser->setWorkplace($workPlace);
         }
         if ($workingPosition !== null){
             $currentUser->setWorkingPosition($workingPosition);
+        }
+        if ($avatar !== null){
+            $currentUser->setAvatar($avatar);
         }
         $errors = $this->validator->validate($currentUser);
 
