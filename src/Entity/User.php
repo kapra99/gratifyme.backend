@@ -81,8 +81,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: TipMethod::class)]
     private Collection $tipMethod;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(inversedBy: 'users')]
     private ?File $avatar = null;
+
 
     public function __construct()
     {

@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Interface\SoftDeleteInterface;
 use App\Repository\FileRepository;
 use App\Trait\SoftDeleteTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -43,9 +45,13 @@ class File implements SoftDeleteInterface
     #[Groups(['BASE'])]
     private ?\DateTimeInterface $createDate = null;
 
+    #[ORM\OneToMany(mappedBy: 'avatar', targetEntity: User::class)]
+    private Collection $users;
+
     public function __construct()
     {
         $this->id = Uuid::v4();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -122,6 +128,36 @@ class File implements SoftDeleteInterface
     public function setCreateDate(\DateTimeInterface $createDate): static
     {
         $this->createDate = $createDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): static
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->setAvatar($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): static
+    {
+        if ($this->users->removeElement($user)) {
+            // set the owning side to null (unless already changed)
+            if ($user->getAvatar() === $this) {
+                $user->setAvatar(null);
+            }
+        }
 
         return $this;
     }
