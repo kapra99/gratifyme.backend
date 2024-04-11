@@ -28,6 +28,7 @@ class File implements SoftDeleteInterface
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['BASE'])]
     private ?string $path = null;
 
     #[ORM\Column]

@@ -82,6 +82,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
     private Collection $tipMethod;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
+    #[Groups(["BASE"])]
     private ?File $avatar = null;
 
 

@@ -80,7 +80,13 @@ class ActionController extends ApiController
             } else {
                 $workingPosition = $workingPositionRepository->findOneById($workingPositionId);
             }
-            $userRepository->updateUser($currentUser, $email, $firstName, $surName, $lastName, $nickName, $dateOfBirth, $workPlace, $workingPosition, $avatarId);
+            if ($avatarId == null) {
+                $avatar = $currentUser->getAvatar();
+            } else {
+                $avatar = $fileRepository->findOneById($avatarId);
+            }
+
+            $userRepository->updateUser($currentUser, $email, $firstName, $surName, $lastName, $nickName, $dateOfBirth, $workPlace, $workingPosition, $avatar);
             $responseDto = new ResponseDto();
             $responseDto->setMessages([
                 'User updated successfully!',

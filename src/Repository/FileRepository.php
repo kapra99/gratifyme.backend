@@ -160,4 +160,16 @@ class FileRepository extends ServiceEntityRepository
 
         return $queryBuilder->getQuery()->getResult();
     }
+    public function findOneById(string $avatarId)
+    {
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQueryBuilder()
+            ->select('file')
+            ->from('App:File', 'file')
+            ->where('file.id = :id')
+            ->setParameter('id', $avatarId)
+            ->getQuery();
+
+        return $query->getOneOrNullResult();
+    }
 }

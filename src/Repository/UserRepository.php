@@ -69,7 +69,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $entityManager->persist($newUser);
         $entityManager->flush();
     }
-    public function updateUser(User $currentUser, string $email, string $firstName, string $surName, string $lastName, string $nickName, string $dateOfBirth, WorkPlace|null $workPlace, WorkingPosition|null $workingPosition, string|null $avatar): void
+    public function updateUser(User $currentUser, string $email, string $firstName, string $surName, string $lastName, string $nickName, string $dateOfBirth, WorkPlace|null $workPlace, WorkingPosition|null $workingPosition, File|null $avatar): void
     {
         $entityManager = $this->getEntityManager();
         $currentUser->setEmail($email);

@@ -53,4 +53,25 @@ class FileController extends ApiController
 
         return $this->json($responseDto);
     }
+    #[Route(path: '/api/v1/files/{id}', name: 'get_file', methods: ['GET'])]
+    public function getFile(int $id, FileRepository $fileRepository): Response
+    {
+        // Fetch the file entity by its ID
+        $fileEntity = $fileRepository->find($id);
+
+        // Check if file entity exists
+        if (!$fileEntity) {
+            throw $this->createNotFoundException('File not found');
+        }
+
+        // Get the file content from the entity
+        $fileContent = $fileEntity->getFileContent(); // Adjust this according to your entity
+
+        // Create and return a response with the file content
+        $response = new Response($fileContent);
+        $response->headers->set('Content-Type', $fileEntity->getMimeType()); // Assuming you have a method to get MIME type
+        $response->headers->set('Content-Disposition', 'inline; filename="' . $fileEntity->getFilename() . '"');
+
+        return $response;
+    }
 }
