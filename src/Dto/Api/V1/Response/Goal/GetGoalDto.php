@@ -2,12 +2,12 @@
 
 namespace App\Dto\Api\V1\Response\Goal;
 
-use AllowDynamicProperties;
+
 use App\Dto\Api\V1\Response\ResponseDto;
 use App\Entity\Goal;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[AllowDynamicProperties] class GetGoalDto extends ResponseDto
+class GetGoalDto extends ResponseDto
 {
     /**
      * @var Goal[]

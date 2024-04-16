@@ -55,12 +55,18 @@ class ActionController extends ApiController
             $reviewMessage = $form->get('message')->getData();
             $reviewRating = $form->get('rating')->getData();
             $userId = $form->get('userId')->getData();
+            $authorId = $form->get('author')->getData();
             if ($userId == null) {
                 $user = $currentReview->getEvaluatedUser();
             } else {
                 $user = $userRepository->findOneById($userId);
             }
-            $reviewRepository->updateReview($user,$currentReview, $reviewMessage, $reviewRating);
+            if ($authorId == null) {
+                $author = $currentReview->getEvaluatedUser();
+            } else {
+                $author = $userRepository->findOneById($authorId);
+            }
+            $reviewRepository->updateReview($user,$currentReview, $reviewMessage, $reviewRating, $author);
             $getReviewDto = new GetReviewDto();
             $getReviewDto->setMessages([
                 'Review updated successfully!',

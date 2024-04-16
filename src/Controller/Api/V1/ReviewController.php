@@ -55,12 +55,18 @@ class ReviewController extends ApiController
             $reviewMessage = $form->get('message')->getData();
             $reviewRating = $form->get('rating')->getData();
             $userId = $form->get('userId')->getData();
+            $authorId = $form->get('author')->getData();
             if ($userId == null) {
                 $user = $existingReview->getEvaluatedUser();
             } else {
                 $user = $userRepository->findOneById($userId);
             }
-            $reviewRepository->addReview($user,$reviewMessage, $reviewRating);
+            if ($authorId == null) {
+                $author = $existingReview->getEvaluatedUser();
+            } else {
+                $author = $userRepository->findOneById($authorId);
+            }
+            $reviewRepository->addReview($user,$reviewMessage, $reviewRating,$author);
             $getReviewDto = new GetReviewDto();
             $getReviewDto->setMessages([
                 'Review added successfully!',

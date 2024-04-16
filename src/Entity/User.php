@@ -56,7 +56,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
     #[Groups(["BASE"])]
     private ?string $lastName = null;
 
-    #[ORM\Column(length: 255, nullable:true)]
+    #[ORM\Column(length: 255, nullable: true)]
     #[Groups(["BASE"])]
     private ?string $nickName = null;
 
@@ -76,14 +76,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
     private ?WorkingPosition $workingPosition = null;
 
     #[ORM\OneToMany(mappedBy: 'evaluatedUser', targetEntity: Review::class)]
+    #[MaxDepth(1)]
     private Collection $reviews;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: TipMethod::class)]
+    #[MaxDepth(1)]
     private Collection $tipMethod;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[Groups(["BASE"])]
     private ?File $avatar = null;
+
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Review::class)]
+    private Collection $reviewsAuthor;
 
 
     public function __construct()
@@ -91,6 +96,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
         $this->id = Uuid::v4();
         $this->reviews = new ArrayCollection();
         $this->tipMethod = new ArrayCollection();
+        $this->reviewsAuthor = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -117,7 +123,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
@@ -235,11 +241,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
         return $this;
     }
 
+    #[Groups(["BASE"])]
     public function getWorkPlace(): ?WorkPlace
     {
         return $this->workPlace;
     }
-    #[Groups(["BASE"])]
+
     public function getWorkPlaceId(): ?string
     {
         if ($this->workPlace !== null) {
@@ -255,15 +262,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
 
         return $this;
     }
+
     #[Groups(["BASE"])]
     public function getWorkingPosition(): ?WorkingPosition
     {
         return $this->workingPosition;
     }
-    #[Groups(["BASE"])]
-    public function getWorkingPositionId (): ?string
+
+    public function getWorkingPositionId(): ?string
     {
-        if($this->workingPosition !== null){
+        if ($this->workingPosition !== null) {
             return $this->workingPosition->getId();
         }
         return null;
@@ -276,6 +284,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
         return $this;
     }
 
+    #[Groups(["BASE"])]
     /**
      * @return Collection<int, Review>
      */
@@ -305,6 +314,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
 
         return $this;
     }
+
     #[Groups(["BASE"])]
     /**
      * @return Collection<int, TipMethod>
@@ -344,6 +354,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
     public function setAvatar(?File $avatar): static
     {
         $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Review>
+     */
+    public function getReviewsAuthor(): Collection
+    {
+        return $this->reviewsAuthor;
+    }
+
+    public function addReviewsAuthor(Review $reviewsAuthor): static
+    {
+        if (!$this->reviewsAuthor->contains($reviewsAuthor)) {
+            $this->reviewsAuthor->add($reviewsAuthor);
+            $reviewsAuthor->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReviewsAuthor(Review $reviewsAuthor): static
+    {
+        if ($this->reviewsAuthor->removeElement($reviewsAuthor)) {
+            // set the owning side to null (unless already changed)
+            if ($reviewsAuthor->getAuthor() === $this) {
+                $reviewsAuthor->setAuthor(null);
+            }
+        }
 
         return $this;
     }

@@ -23,9 +23,11 @@ class Review
     #[Groups(['BASE'])]
     #[ORM\Column(nullable: true)]
     private ?bool $subreview = null;
-    #[Groups(['BASE'])]
     #[ORM\ManyToOne(inversedBy: 'review')]
     private ?User $evaluatedUser = null;
+
+    #[ORM\ManyToOne(inversedBy: 'reviewsAuthor')]
+    private ?User $author = null;
 
     public function __construct()
     {
@@ -49,6 +51,7 @@ class Review
         return $this;
     }
 
+    #[Groups(["review"])]
     public function getRating(): ?float
     {
         return $this->rating;
@@ -61,6 +64,7 @@ class Review
         return $this;
     }
 
+    #[Groups(["review"])]
     public function isSubreview(): ?bool
     {
         return $this->subreview;
@@ -81,6 +85,18 @@ class Review
     public function setEvaluatedUser(?User $evaluatedUser): static
     {
         $this->evaluatedUser = $evaluatedUser;
+
+        return $this;
+    }
+    #[Groups(['BASE'])]
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): static
+    {
+        $this->author = $author;
 
         return $this;
     }

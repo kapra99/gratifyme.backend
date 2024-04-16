@@ -76,7 +76,6 @@ class TipMethodController extends ApiController
                 $user = $userRepository->findOneById($userId);
             }
             $tipMethodRepository->addTipMethod($user,$tipMethodName, $tipMethodUrl,$tipMethodStaticUrl, $tipMethodQrCodeImgPath);
-//            $tipMethodRepository->addTipMethod($tipMethodName, $tipMethodUrl,$tipMethodStaticUrl, $tipMethodQrCodeImgPath);
 
             $getTipMethodDto = new GetTipMethodDto();
             $getTipMethodDto->setMessages([
@@ -143,7 +142,7 @@ class TipMethodController extends ApiController
     #[OA\Tag(name: 'tip-method')]
     #[Security(name: null)]
     #[Route(path: '/api/tip-methods', name: 'app_tip_methods_show_all', methods: ['GET'])]
-    public function showAll(TipMethodRepository $tipMethodRepository): JsonResponse
+    public function showAll(TipMethodRepository $tipMethodRepository): Response
     {
         $tipMethods = $tipMethodRepository->findAllTipsMethod();
         $getTipMethodDto = new GetTipMethodDto();
@@ -171,7 +170,7 @@ class TipMethodController extends ApiController
     #[OA\Tag(name: 'tip-method')]
     #[Security(name: null)]
     #[Route(path: '/api/unique/tip-methods', name: 'app_tip_methods_show_all_unique', methods: ['GET'])]
-    public function showAllUnique(TipMethodRepository $tipMethodRepository): JsonResponse
+    public function showAllUnique(TipMethodRepository $tipMethodRepository): Response
     {
         $tipMethods = $tipMethodRepository->findAllUniqueTipsMethod();
         $getTipMethodDto = new GetTipMethodDto();

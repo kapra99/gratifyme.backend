@@ -1,39 +1,40 @@
 <?php
 
-namespace App\Dto\Api\V1\Response\TipMethod;
+namespace App\Dto\Api\V1\Response\Review;
 
 use App\Dto\Api\V1\Response\ResponseDto;
-use App\Entity\TipMethod;
+use App\Entity\Review;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-class GetTipMethodDto extends ResponseDto
+class GetReviewDto extends ResponseDto
 {
-    /**
-     * @var TipMethod[]
-     */
-    #[Groups(['BASE'])]
-    protected $tipMethods;
 
     /**
-     * Get the value of tipmethods.
-     *
-     * @return TipMethod[]
+     * @var Review[]
      */
-    public function getTipMethods()
+    #[Groups(['BASE'])]
+    protected $reviews;
+
+    /**
+     * Get the value of reviews.
+     *
+     * @return Review[]
+     */
+    public function getReviews()
     {
-        return $this->tipMethods;
+        return $this->reviews;
     }
 
     /**
-     * Set the value of tipmethods.
+     * Set the value of reviews.
      *
-     * @param TipMethod[] $tipMethods
+     * @param Review[] $reviews
      *
      * @return self
      */
-    public function setTipMethods(array $tipMethods)
+    public function setReviews(array $reviews)
     {
-        $this->tipMethods = $tipMethods;
+        $this->reviews = $reviews;
 
         return $this;
     }
