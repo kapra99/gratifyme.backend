@@ -57,14 +57,13 @@ class ActionController extends ApiController
             $tipMethodName = $form->get('name')->getData();
             $tipMethodUrl = $form->get('tipMethodUrl')->getData();
             $tipMethodStaticUrl = $form->get('tipMethodStaticUrl')->getData();
-            $tipQrCodeImgPath = $form->get('qrCodeImgPath')->getData();
             $userId = $form->get('userId')->getData();
             if ($userId == null) {
                 $user = $tipMethod->getuser();
             } else {
                 $user = $userRepository->findOneById($userId);
             }
-            $tipMethodRepository->updateTipMethod($user,$tipMethod, $tipMethodName, $tipMethodUrl, $tipMethodStaticUrl, $tipQrCodeImgPath);
+            $tipMethodRepository->updateTipMethod($user,$tipMethod, $tipMethodName, $tipMethodUrl, $tipMethodStaticUrl);
 
             $getTipMethodDto = new GetTipMethodDto();
             $getTipMethodDto->setMessages([

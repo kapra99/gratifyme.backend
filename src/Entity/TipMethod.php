@@ -23,9 +23,6 @@ class TipMethod
     #[Groups(['BASE'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $tipMethodStaticUrl = null;
-    #[Groups(['BASE'])]
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $qrCodeImgPath = null;
     #[ORM\ManyToOne(inversedBy: 'tipMethod')]
     private ?User $user = null;
 
@@ -72,18 +69,6 @@ class TipMethod
     public function setTipMethodStaticUrl(?string $tipMethodStaticUrl): static
     {
         $this->tipMethodStaticUrl = $tipMethodStaticUrl;
-
-        return $this;
-    }
-    #[Groups(["tip-method"])]
-    public function getQrCodeImgPath(): ?string
-    {
-        return $this->qrCodeImgPath;
-    }
-
-    public function setQrCodeImgPath(?string $qrCodeImgPath): static
-    {
-        $this->qrCodeImgPath = $qrCodeImgPath;
 
         return $this;
     }

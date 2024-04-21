@@ -44,7 +44,6 @@ class TipMethodController extends ApiController
         $data = json_decode($request->getContent(), true);
         $form->submit($data);
         if ($form->isSubmitted() && $form->isValid()) {
-//            $existingTipMethodUrl = $tipMethodRepository->findOneByTipMethodUrl($form->get('tipMethodUrl')->getData());
             $existingTipMethod = $tipMethodRepository->findOneById($form->get('id')->getData());
             $allTipMethods = $tipMethodRepository->findAllTipsMethod();
             foreach ($allTipMethods as $x) {
@@ -57,25 +56,16 @@ class TipMethodController extends ApiController
                     return $this->json($getTipMethodDto);
                 }
             }
-//            if ($existingTipMethodUrl) {
-//                $getTipMethodDto = new GetTipMethodDto();
-//                $getTipMethodDto->setMessages([
-//                    'Tip Method already added!',
-//                ]);
-//                $getTipMethodDto->getServer()->setHttpCode(400);
-//                return $this->json($getTipMethodDto);
-//            }
             $tipMethodName = $form->get('name')->getData();
             $tipMethodUrl = $form->get('tipMethodUrl')->getData();
             $tipMethodStaticUrl = $form->get('tipMethodStaticUrl')->getData();
-            $tipMethodQrCodeImgPath = $form->get('qrCodeImgPath')->getData();
             $userId = $form->get('userId')->getData();
             if ($userId == null) {
                 $user = $existingTipMethod->getuser();
             } else {
                 $user = $userRepository->findOneById($userId);
             }
-            $tipMethodRepository->addTipMethod($user,$tipMethodName, $tipMethodUrl,$tipMethodStaticUrl, $tipMethodQrCodeImgPath);
+            $tipMethodRepository->addTipMethod($user,$tipMethodName, $tipMethodUrl,$tipMethodStaticUrl);
 
             $getTipMethodDto = new GetTipMethodDto();
             $getTipMethodDto->setMessages([
