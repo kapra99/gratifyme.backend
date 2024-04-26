@@ -43,7 +43,7 @@ class WorkPlace
         $this->id = Uuid::v4();
         $this->user = new ArrayCollection();
     }
-
+    #[Groups(['BASE'])]
     public function getId(): ?string
     {
         return $this->id;
