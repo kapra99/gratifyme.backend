@@ -45,6 +45,8 @@ class GoalController extends ApiController
         if ($form->isSubmitted() && $form->isValid()) {
             $existingGoal = $goalRepository->findOneByName($form->get('name')->getData());
 
+            $currentUser = $this->getCurrentUser();
+
             if ($existingGoal) {
                 $getGoalDto = new GetGoalDto();
                 $getGoalDto->setMessages([
@@ -58,13 +60,13 @@ class GoalController extends ApiController
             $currentGoalSum = $form->get('currentGoalSum')->getData();
             $startDate = $form->get('startDate')->getData();
             $priority = $form->get('priority')->getData();
-            $userId = $form->get('userId')->getData();
+            /*$userId = $form->get('userId')->getData();
             if ($userId == null) {
                 $user = $existingGoal->getuser();
             } else {
                 $user = $userRepository->findOneById($userId);
-            }
-            $goalRepository->createGoal($user, $goalName, $endGoalSum, $currentGoalSum, $startDate, $priority);
+            }*/
+            $goalRepository->createGoal($currentUser, $goalName, $endGoalSum, $currentGoalSum, $startDate, $priority);
 
             $getGoalDto = new GetGoalDto();
             $getGoalDto->setMessages([
