@@ -60,13 +60,8 @@ class GoalController extends ApiController
             $currentGoalSum = $form->get('currentGoalSum')->getData();
             $startDate = $form->get('startDate')->getData();
             $priority = $form->get('priority')->getData();
-            /*$userId = $form->get('userId')->getData();
-            if ($userId == null) {
-                $user = $existingGoal->getuser();
-            } else {
-                $user = $userRepository->findOneById($userId);
-            }*/
-            $goalRepository->createGoal($currentUser, $goalName, $endGoalSum, $currentGoalSum, $startDate, $priority);
+            $isAchieved = $form->get('isAchieved')->getData();
+            $goalRepository->createGoal($currentUser, $goalName, $endGoalSum, $currentGoalSum, $startDate, $priority,$isAchieved);
 
             $getGoalDto = new GetGoalDto();
             $getGoalDto->setMessages([

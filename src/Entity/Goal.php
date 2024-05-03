@@ -33,6 +33,9 @@ class Goal
     #[ORM\ManyToOne]
     private ?User $user = null;
 
+    #[ORM\Column]
+    private ?bool $isAchieved = null;
+
     public function __construct()
     {
         $this->id = Uuid::v4();
@@ -111,6 +114,18 @@ class Goal
     public function setuser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function isIsAchieved(): ?bool
+    {
+        return $this->isAchieved;
+    }
+
+    public function setIsAchieved(bool $isAchieved): static
+    {
+        $this->isAchieved = $isAchieved;
 
         return $this;
     }

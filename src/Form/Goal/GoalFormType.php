@@ -4,6 +4,7 @@ namespace App\Form\Goal;
 
 use App\Entity\User;
 use App\Form\BaseType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -57,6 +58,14 @@ class GoalFormType extends BaseType
                 ],
             ])
             ->add('userId', TextType::class, [
+                'required' => true,
+                'trim' => true,
+                'constraints' => [
+                    new NotBlank(),
+                    new Length(max: 255),
+                ],
+            ])
+            ->add('isAchieved', TextType::class, [
                 'required' => true,
                 'trim' => true,
                 'constraints' => [
