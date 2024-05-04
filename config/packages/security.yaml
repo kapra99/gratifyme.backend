@@ -46,6 +46,7 @@ security:
         - { path: ^/api/register, roles: PUBLIC_ACCESS },
         - { path: ^/api/doc, roles: PUBLIC_ACCESS },
         - { path: ^/api/cities, roles: PUBLIC_ACCESS, method: GET },
+        - { path: ^/api/tip/add, roles: PUBLIC_ACCESS, method: GET},
         - { path: ^/api/city/*, roles: PUBLIC_ACCESS, method: GET },
         - { path: ^/api/cities, roles: PUBLIC_ACCESS, method: GET },
         - { path: ^/api/goals/*, roles: PUBLIC_ACCESS, method: GET },
@@ -61,7 +62,7 @@ security:
         - { path: ^/api/workplace/city/*, roles: PUBLIC_ACCESS, method: GET },
         - { path: ^/api/working-position/*, roles: PUBLIC_ACCESS, method: GET },
         - { path: ^/api/working-positions, roles: PUBLIC_ACCESS, method: GET },
-        - { path: ^/api/,       roles: IS_AUTHENTICATED_FULLY}
+#        - { path: ^/api/,       roles: IS_AUTHENTICATED_FULLY}
 
 when@test:
     security:

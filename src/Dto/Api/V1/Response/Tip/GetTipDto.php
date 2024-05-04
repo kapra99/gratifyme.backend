@@ -1,40 +1,38 @@
 <?php
 
-namespace App\Dto\Api\V1\Response\City;
-
+namespace App\Dto\Api\V1\Response\Tip;
 use App\Dto\Api\V1\Response\ResponseDto;
-use App\Entity\City;
+use App\Entity\Tip;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-class GetCityDto extends ResponseDto
+class GetTipDto extends ResponseDto
 {
-
     /**
-     * @var City[]
+     * @var Tip[]
      */
     #[Groups(['BASE'])]
-    protected $cities;
+    protected $tips;
 
     /**
-     * Get the value of cities.
+     * Get the value of tips.
      *
-     * @return City[]
+     * @return Tip[]
      */
-    public function getCities()
+    public function getTips()
     {
-        return $this->cities;
+        return $this->tips;
     }
 
     /**
-     * Set the value of cities.
+     * Set the value of tips.
      *
-     * @param City[] $cities
+     * @param Tip[] $tips
      *
      * @return self
      */
-    public function setCities(array $cities)
+    public function setTips(array $tips)
     {
-        $this->cities = $cities;
+        $this->tips = $tips;
 
         return $this;
     }

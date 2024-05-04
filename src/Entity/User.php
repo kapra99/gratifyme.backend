@@ -90,6 +90,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Review::class)]
     private Collection $reviewsAuthor;
 
+    #[ORM\OneToMany(mappedBy: 'userId', targetEntity: Tip::class)]
+    private Collection $tips;
+
 
     public function __construct()
     {
@@ -97,6 +100,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
         $this->reviews = new ArrayCollection();
         $this->tipMethod = new ArrayCollection();
         $this->reviewsAuthor = new ArrayCollection();
+        $this->tips = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -382,6 +386,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
             // set the owning side to null (unless already changed)
             if ($reviewsAuthor->getAuthor() === $this) {
                 $reviewsAuthor->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Tip>
+     */
+    public function getTips(): Collection
+    {
+        return $this->tips;
+    }
+
+    public function addTip(Tip $tip): static
+    {
+        if (!$this->tips->contains($tip)) {
+            $this->tips->add($tip);
+            $tip->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTip(Tip $tip): static
+    {
+        if ($this->tips->removeElement($tip)) {
+            // set the owning side to null (unless already changed)
+            if ($tip->getUserId() === $this) {
+                $tip->setUserId(null);
             }
         }
 
