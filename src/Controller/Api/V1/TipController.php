@@ -63,4 +63,44 @@ class TipController extends ApiController
         $getTipDto->getServer()->setHttpCode(400);
         return $this->json($getTipDto);
     }
+
+    #[OA\Get(
+        description: "This method returns all the Tips for current year",
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Tips returned successfully',
+        content: new Model(type: ResponseDto::class, groups: ['tips']),
+    )]
+    #[OA\Response(
+        response: 400,
+        description: 'Return the error message',
+        content: new Model(type: ResponseDto::class, groups: ['tips']),
+    )]
+    #[OA\Tag(name: 'tip')]
+    #[Route(path: '/api/tip/{userId}', name: 'app_tip_summary_by_year', methods: ['GET'])]
+    public function userTipSummaryByYear(TipRepository $tipRepository, Request $request): Response
+    {
+        $userId = $request->attributes->get("userId");
+        $tips = $tipRepository->findTipAmountsAndDatesByUser($userId);
+
+        // Initialize an array to hold tip amounts for each month
+        $tipsByMonth = array_fill(1, 12, 0);
+
+        // Iterate over tips and aggregate tip amounts by month
+        foreach ($tips as $tip) {
+            $month = (int) date('n', strtotime($tip['tipDate']));
+            $tipAmount = (float) $tip['tipAmount'];
+            $tipsByMonth[$month] += $tipAmount;
+        }
+
+        $getTipDto = new GetTipDto();
+        $getTipDto->setMessages([
+            "Tips found successfully!"
+        ]);
+        $getTipDto->getServer()->setHttpCode(200);
+        $getTipDto->setTips($tipsByMonth);
+        return $this->json($getTipDto);
+
+    }
 }

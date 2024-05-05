@@ -56,5 +56,4 @@ class GetTipDto extends ResponseDto
 
         return $this;
     }
-
 }

@@ -38,5 +38,17 @@ class TipRepository extends ServiceEntityRepository
         $entityManager->persist($tip);
         $entityManager->flush();
     }
+    public function findTipAmountsAndDatesByUser(string $userId): array
+    {
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQueryBuilder()
+            ->select('t.tipAmount', 't.tipDate')
+            ->from('App:Tip', 't')
+            ->where('t.user = :user')
+            ->setParameter('user', $userId)
+            ->getQuery();
+
+        return $query->getResult();
+    }
 
 }
