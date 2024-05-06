@@ -16,24 +16,30 @@ class Goal
     private string $id;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['BASE'])]
     private ?string $name = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['BASE'])]
     private ?float $endGoalSum = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['BASE'])]
     private ?float $currentGoalSum = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['BASE'])]
     private ?string $startDate = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['BASE'])]
     private ?int $priority = null;
 
     #[ORM\ManyToOne]
     private ?User $user = null;
 
     #[ORM\Column]
+    #[Groups(['BASE'])]
     private ?bool $isAchieved = null;
 
     public function __construct()

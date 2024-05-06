@@ -105,9 +105,10 @@ class GoalController extends ApiController
         }
         $getGoalDto = new GetGoalDto();
         $getGoalDto->setMessages([
-            "Goal found successfully: " . $goal->getName(),
+            "Goal found successfully!"
         ]);
         $getGoalDto->getServer()->setHttpCode(200);
+        $getGoalDto->setGoals([$goal]);
         return $this->json($getGoalDto);
     }
 
