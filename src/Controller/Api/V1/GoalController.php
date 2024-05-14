@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use function Webmozart\Assert\Tests\StaticAnalysis\oneOf;
 
 class GoalController extends ApiController
 {
@@ -46,6 +47,7 @@ class GoalController extends ApiController
             $existingGoal = $goalRepository->findOneByName($form->get('name')->getData());
 
             $currentUser = $this->getCurrentUser();
+            dd($currentUser);
 
             if ($existingGoal) {
                 $getGoalDto = new GetGoalDto();

@@ -33,7 +33,7 @@ class Goal
 
     #[ORM\Column(nullable: true)]
     #[Groups(['BASE'])]
-    private ?int $priority = null;
+    private ?float $priority = null;
 
     #[ORM\ManyToOne]
     private ?User $user = null;

@@ -100,7 +100,7 @@ class GoalRepository extends ServiceEntityRepository
         $entityManager->flush();
 
     }
-    public function updateGoal(User|null $user, Goal $goal, string $goalName, string $endGoalSum, string $currentGoalSum, string $startDate, bool $priority):void
+    public function updateGoal(User|null $user, Goal $goal, string $goalName, string $endGoalSum, string $currentGoalSum, string $startDate, string $priority, string $isAchieved):void
     {
         $entityManager = $this->getEntityManager();
         $goal->setName($goalName);
@@ -108,6 +108,7 @@ class GoalRepository extends ServiceEntityRepository
         $goal->setcurrentGoalSum($currentGoalSum);
         $goal->setStartDate($startDate);
         $goal->setPriority($priority);
+        $goal->setIsAchieved($isAchieved);
         $goal->setuser($user);
         $errors = $this->validator->validate($goal);
         if (count($errors) > 0) {
@@ -116,5 +117,11 @@ class GoalRepository extends ServiceEntityRepository
         $entityManager->persist($goal);
         $entityManager->flush();
 
+    }
+    public function deleteGoal(Goal $goal): void
+    {
+        $entityManager = $this->getEntityManager();
+        $entityManager->remove($goal);
+        $entityManager->flush();
     }
 }

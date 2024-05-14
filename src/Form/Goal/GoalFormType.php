@@ -2,10 +2,9 @@
 
 namespace App\Form\Goal;
 
-use App\Entity\User;
+
 use App\Form\BaseType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -49,7 +48,7 @@ class GoalFormType extends BaseType
                     new Length(max: 255),
                 ],
             ])
-            ->add('priority', IntegerType::class, [
+            ->add('priority', NumberType::class, [
                 'required' => true,
                 'trim' => true,
                 'constraints' => [
@@ -65,13 +64,9 @@ class GoalFormType extends BaseType
                     new Length(max: 255),
                 ],
             ])
-            ->add('isAchieved', TextType::class, [
+            ->add('isAchieved', CheckboxType::class, [
                 'required' => true,
                 'trim' => true,
-                'constraints' => [
-                    new NotBlank(),
-                    new Length(max: 255),
-                ],
             ]);
     }
 }

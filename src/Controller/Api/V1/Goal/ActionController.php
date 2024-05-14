@@ -61,6 +61,7 @@ class ActionController extends ApiController
             $currentGoalSum = $form->get('currentGoalSum')->getData();
             $startDate = $form->get('startDate')->getData();
             $priority = $form->get('priority')->getData();
+            $isAchieved = $form->get('isAchieved')->getData();
             $userId = $form->get('userId')->getData();
             if ($userId == null) {
                 $user = $goal->getuser();
@@ -68,7 +69,7 @@ class ActionController extends ApiController
                 $user = $userRepository->findOneById($userId);
             }
 
-            $goalRepository->updateGoal($user,$goal, $goalName, $endGoalSum, $currentGoalSum, $startDate, $priority);
+            $goalRepository->updateGoal($user,$goal, $goalName, $endGoalSum, $currentGoalSum, $startDate, $priority,$isAchieved);
 
             $getGoalDto = new GetGoalDto();
             $getGoalDto->setMessages([
@@ -113,7 +114,7 @@ class ActionController extends ApiController
             $getGoalDto->getServer()->setHttpCode(400);
             return $this->json($getGoalDto);
         }
-        $goalRepository->deleteCity($goal);
+        $goalRepository->deleteGoal($goal);
         $getGoalDto = new GetGoalDto();
         $getGoalDto->setMessages([
             'Goal deleted successfully!',
