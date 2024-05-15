@@ -47,7 +47,7 @@ class GoalController extends ApiController
             $existingGoal = $goalRepository->findOneByName($form->get('name')->getData());
 
             $currentUser = $this->getCurrentUser();
-            dd($currentUser);
+//            dd($currentUser);
 
             if ($existingGoal) {
                 $getGoalDto = new GetGoalDto();

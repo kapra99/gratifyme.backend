@@ -62,7 +62,7 @@ security:
         - { path: ^/api/workplace/city/*, roles: PUBLIC_ACCESS, method: GET },
         - { path: ^/api/working-position/*, roles: PUBLIC_ACCESS, method: GET },
         - { path: ^/api/working-positions, roles: PUBLIC_ACCESS, method: GET },
-#        - { path: ^/api/,       roles: IS_AUTHENTICATED_FULLY}
+        - { path: ^/api/,       roles: IS_AUTHENTICATED_FULLY}
 
 when@test:
     security:
