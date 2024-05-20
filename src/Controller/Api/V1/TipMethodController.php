@@ -171,4 +171,41 @@ class TipMethodController extends ApiController
         $getTipMethodDto->setTipMethods($tipMethods);
         return $this->json($getTipMethodDto);
     }
+
+    #[OA\Get(
+        description: "This method returns all the Tip Methods according to the userId",
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Tip Methods returned successfully',
+        content: new Model(type: GetTipMethodDto::class, groups: ['BASE']),
+    )]
+    #[OA\Response(
+        response: 400,
+        description: 'Return the error message',
+        content: new Model(type: ResponseDto::class, groups: ['BASE']),
+    )]
+    #[OA\Tag(name: 'tip-method')]
+    #[Security(name: null)]
+    #[Route(path: '/api/tip-methods/user/{userId}', name: 'app_tip_methods_show_all_by_userid', methods: ['GET'])]
+    public function showAllByUserId(TipMethodRepository $tipMethodRepository, Request $request, UserRepository $userRepository):Response
+    {
+        $userId = $request->attributes->get("userId");
+        $user = $userRepository->findOneById($userId);
+
+        if (!$user) {
+            $getTipMethodDto = new GetTipMethodDto();
+            $getTipMethodDto->setMessages([
+                'User not found',
+            ]);
+            $getTipMethodDto->getServer()->setHttpCode(400);
+            return $this->json($getTipMethodDto);
+        }
+        $userTipMethods = $tipMethodRepository->findOneByUser($user);
+        $getTipMethodDto = new GetTipMethodDto();
+        $getTipMethodDto->setTipMethods($userTipMethods);
+        $getTipMethodDto->getServer()->setHttpCode(200);
+        return $this->json($getTipMethodDto);
+
+    }
 }

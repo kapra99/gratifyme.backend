@@ -112,4 +112,19 @@ class TipMethodRepository extends ServiceEntityRepository
         $entityManager->remove($tipMethod);
         $entityManager->flush();
     }
+    public function findOneByUser(User $userId): float|int|array|string
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQueryBuilder()
+            ->select("tipMethod")
+            ->from('App:TipMethod', 'tipMethod')
+            ->leftJoin('tipMethod.user', 'user')
+            ->where('user.id = :userId')
+            ->setParameter('userId', $userId)
+            ->getQuery();
+
+        return $query->getArrayResult();
+
+    }
 }
