@@ -46,6 +46,7 @@ class TipMethodController extends ApiController
         if ($form->isSubmitted() && $form->isValid()) {
             $existingTipMethod = $tipMethodRepository->findOneById($form->get('id')->getData());
             $allTipMethods = $tipMethodRepository->findAllTipsMethod();
+            $currentUser = $this->getCurrentUser();
             foreach ($allTipMethods as $x) {
                 if ($existingTipMethod === $x){
                     $getTipMethodDto = new GetTipMethodDto();
@@ -59,13 +60,7 @@ class TipMethodController extends ApiController
             $tipMethodName = $form->get('name')->getData();
             $tipMethodUrl = $form->get('tipMethodUrl')->getData();
             $tipMethodStaticUrl = $form->get('tipMethodStaticUrl')->getData();
-            $userId = $form->get('userId')->getData();
-            if ($userId == null) {
-                $user = $existingTipMethod->getuser();
-            } else {
-                $user = $userRepository->findOneById($userId);
-            }
-            $tipMethodRepository->addTipMethod($user,$tipMethodName, $tipMethodUrl,$tipMethodStaticUrl);
+            $tipMethodRepository->addTipMethod($currentUser,$tipMethodName, $tipMethodUrl,$tipMethodStaticUrl);
 
             $getTipMethodDto = new GetTipMethodDto();
             $getTipMethodDto->setMessages([

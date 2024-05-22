@@ -44,14 +44,6 @@ class TipMethodFormType extends BaseType
                     new Length(max: 255),
                 ],
             ])
-//            ->add('qrCodeImgPath', TextType::class, [
-//                'required' => false,
-//                'trim' => true,
-//                'constraints' => [
-//                    new NotBlank(),
-//                    new Length(max: 255),
-//                ],
-//            ])
             ->add('userId', TextType::class, [
                 'required' => true,
                 'trim' => true,
