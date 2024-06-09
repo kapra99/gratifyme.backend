@@ -47,6 +47,7 @@ security:
         - { path: ^/api/doc, roles: PUBLIC_ACCESS },
         - { path: ^/api/cities, roles: PUBLIC_ACCESS, method: GET },
         - { path: ^/api/tip/add, roles: PUBLIC_ACCESS, method: GET},
+        - { path: ^/api/tips/*, roles: PUBLIC_ACCESS, method: GET},
         - { path: ^/api/city/*, roles: PUBLIC_ACCESS, method: GET },
         - { path: ^/api/cities, roles: PUBLIC_ACCESS, method: GET },
         - { path: ^/api/goals/*, roles: PUBLIC_ACCESS, method: GET },

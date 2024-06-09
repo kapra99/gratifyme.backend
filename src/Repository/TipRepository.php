@@ -50,5 +50,30 @@ class TipRepository extends ServiceEntityRepository
 
         return $query->getResult();
     }
+    public function findAllTips(string $userId): array
+    {
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQueryBuilder()
+            ->select('t.tipAmount', 't.tipDate')
+            ->from('App:Tip', 't')
+            ->where('t.user = :user')
+            ->setParameter('user', $userId)
+            ->getQuery();
+
+        return $query->getResult();
+    }
+    public function updateTip(User|null $user, Tip $tip, string $tipAmount, string $tipDate): void
+    {
+        $entityManager = $this->getEntityManager();
+        $tip->setTipAmount($tipAmount);
+        $tip->setTipDate($tipDate);
+        $tip->setUser($user);
+        $errors = $this->validator->validate($tip);
+        if (count($errors) > 0) {
+            throw new \Exception((string)$errors);
+        }
+        $entityManager->persist($tip);
+        $entityManager->flush();
+    }
 
 }

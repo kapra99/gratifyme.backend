@@ -4,14 +4,16 @@ namespace App\Entity;
 
 use App\Repository\TipRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: TipRepository::class)]
 class Tip
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[Groups(['BASE'])]
+    private string $id;
 
     #[ORM\Column]
     private ?float $tipAmount = null;
@@ -21,6 +23,10 @@ class Tip
 
     #[ORM\ManyToOne(inversedBy: 'tips')]
     private ?User $user = null;
+    public function __construct()
+    {
+        $this->id = Uuid::v4();
+    }
 
     public function getId(): ?int
     {
@@ -51,12 +57,12 @@ class Tip
         return $this;
     }
 
-    public function getUserId(): ?User
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUserId(?User $user): static
+    public function setUser(?User $user): static
     {
         $this->user = $user;
 

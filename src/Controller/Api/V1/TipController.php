@@ -3,13 +3,13 @@
 namespace App\Controller\Api\V1;
 
 use App\Controller\Api\ApiController;
-use App\Dto\Api\V1\Response\City\GetCityDto;
 use App\Dto\Api\V1\Response\ResponseDto;
 use App\Dto\Api\V1\Response\Tip\GetTipDto;
 use App\Form\Tip\TipFormType;
 use App\Repository\TipRepository;
 use App\Repository\UserRepository;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,12 +31,12 @@ class TipController extends ApiController
         content: new Model(type: GetTipDto::class, groups: ['tip']),
     )]
     #[OA\Tag(name: 'tip')]
-//    #[Security(name: 'Bearer')]
+    #[Security(name: 'Bearer')]
     #[OA\RequestBody(
         content: new Model(type: TipFormType::class),
     )]
     #[Route(path: '/api/tip/add', name: 'app_tip_add', methods: ['POST'])]
-    public function addCity(Request $request, TipRepository $tipRepository, UserRepository $userRepository): Response
+    public function addTip(Request $request, TipRepository $tipRepository, UserRepository $userRepository): Response
     {
         $form = $this->createForm(TipFormType::class);
         $data = json_decode($request->getContent(), true);
@@ -48,7 +48,7 @@ class TipController extends ApiController
             $tipAmount = $form->get('tipAmount')->getData();
             $tipDate = $form->get('tipDate')->getData();
             $tipRepository->addTip($user, $tipAmount, $tipDate);
-            $getTipDto = new GetCityDto();
+            $getTipDto = new GetTipDto();
             $getTipDto->setMessages([
                 'Tip added successfully!',
             ]);
@@ -89,8 +89,8 @@ class TipController extends ApiController
 
         // Iterate over tips and aggregate tip amounts by month
         foreach ($tips as $tip) {
-            $month = (int) date('n', strtotime($tip['tipDate']));
-            $tipAmount = (float) $tip['tipAmount'];
+            $month = (int)date('n', strtotime($tip['tipDate']));
+            $tipAmount = (float)$tip['tipAmount'];
             $tipsByMonth[$month] += $tipAmount;
         }
 
@@ -102,5 +102,33 @@ class TipController extends ApiController
         $getTipDto->setTips($tipsByMonth);
         return $this->json($getTipDto);
 
+    }
+    #[OA\Get(
+        description: "This method returns all the Tips",
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Tips returned successfully',
+        content: new Model(type: ResponseDto::class, groups: ['tips']),
+    )]
+    #[OA\Response(
+        response: 400,
+        description: 'Return the error message',
+        content: new Model(type: ResponseDto::class, groups: ['tips']),
+    )]
+    #[OA\Tag(name: 'tip')]
+    #[Route(path: '/api/tips/{userId}', name: 'app_tip_get_all', methods: ['GET'])]
+    public function getAllUserTips(TipRepository $tipRepository, Request $request): Response
+    {
+        $userId = $request->attributes->get("userId");
+        $tips = $tipRepository->findAllTips($userId);
+
+        $getTipDto = new GetTipDto();
+        $getTipDto->setMessages([
+            "Tips found successfully!"
+        ]);
+        $getTipDto->getServer()->setHttpCode(200);
+        $getTipDto->setTips($tips);
+        return $this->json($getTipDto);
     }
 }
