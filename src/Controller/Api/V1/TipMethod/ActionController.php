@@ -103,7 +103,7 @@ class ActionController extends ApiController
         if (!$tipMethod) {
             $getTipMethodDto = new GetTipMethodDto();
             $getTipMethodDto->setMessages([
-                'Donation Method was not found',
+                'Tip Method was not found!',
             ]);
             $getTipMethodDto->getServer()->setHttpCode(400);
             return $this->json($getTipMethodDto);

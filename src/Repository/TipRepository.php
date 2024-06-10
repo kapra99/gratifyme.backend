@@ -28,7 +28,7 @@ class TipRepository extends ServiceEntityRepository
     {
         $entityManager = $this->getEntityManager();
         $tip = new Tip();
-        $tip->setUserId($user);
+        $tip->setUser($user);
         $tip->setTipAmount($tipAmount);
         $tip->setTipDate($tipDate);
         $errors = $this->validator->validate($tip);
@@ -62,6 +62,19 @@ class TipRepository extends ServiceEntityRepository
 
         return $query->getResult();
     }
+    public function findOneById(string|null $id): ?Tip
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQueryBuilder()
+            ->select("tp")
+            ->from('App:Tip', 'tp')
+            ->where('tp.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery();
+
+        return $query->getOneOrNullResult();
+    }
     public function updateTip(User|null $user, Tip $tip, string $tipAmount, string $tipDate): void
     {
         $entityManager = $this->getEntityManager();
@@ -75,5 +88,10 @@ class TipRepository extends ServiceEntityRepository
         $entityManager->persist($tip);
         $entityManager->flush();
     }
-
+    public function deleteTip(Tip $tip): void
+    {
+        $entityManager = $this->getEntityManager();
+        $entityManager->remove($tip);
+        $entityManager->flush();
+    }
 }

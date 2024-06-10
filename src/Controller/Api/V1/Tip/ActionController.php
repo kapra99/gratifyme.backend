@@ -8,6 +8,7 @@ use App\Dto\Api\V1\Response\Tip\GetTipDto;
 use App\Form\Tip\TipFormType;
 use App\Repository\TipRepository;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use Symfony\Component\Routing\Annotation\Route;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -80,11 +81,11 @@ class ActionController extends ApiController
     }
 
     #[OA\Delete(
-        description: "This method deletes Tip Method",
+        description: "This method deletes a Tip!",
     )]
     #[OA\Response(
         response: 200,
-        description: 'Tip Method deleted successfully',
+        description: 'Tip deleted successfully!',
         content: new Model(type: GetTipDto::class, groups: ['BASE']),
     )]
     #[OA\Response(
@@ -92,25 +93,25 @@ class ActionController extends ApiController
         description: 'Return the error message',
         content: new Model(type: ResponseDto::class, groups: ['BASE']),
     )]
-    #[OA\Tag(name: 'tip-method')]
+    #[OA\Tag(name: 'tip')]
     #[Security(name: 'Bearer')]
-    #[Route(path: '/api/tip-method/delete/{id}', name: 'app_tip_method_delete', methods: ['DELETE'])]
-    public function delete(EntityManagerInterface $entityManager, Request $request, TipMethodRepository $tipMethodRepository): Response
+    #[Route(path: '/api/tip/delete/{id}', name: 'app_tip_delete', methods: ['DELETE'])]
+    public function delete(EntityManagerInterface $entityManager, Request $request, TipRepository $tipRepository): Response
     {
-        $tipMethodId = $request->attributes->get("id");
-        $tipMethod = $tipMethodRepository->findOneById($tipMethodId);
-        if (!$tipMethod) {
-            $getTipDto = new GetTipMethodDto();
+        $tipId = $request->attributes->get("id");
+        $tip = $tipRepository->findOneById($tipId);
+        if (!$tip) {
+            $getTipDto = new GetTipDto();
             $getTipDto->setMessages([
-                'Donation Method was not found',
+                'Tip was not found!',
             ]);
             $getTipDto->getServer()->setHttpCode(400);
             return $this->json($getTipDto);
         }
-        $tipMethodRepository->deleteTipMethod($tipMethod);
+        $tipRepository->deleteTip($tip);
         $getTipDto = new ResponseDto();
         $getTipDto->setMessages([
-            'Tip Method deleted successfully!',
+            'Tip deleted successfully!',
         ]);
         $getTipDto->getServer()->setHttpCode(200);
         return $this->json($getTipDto);
