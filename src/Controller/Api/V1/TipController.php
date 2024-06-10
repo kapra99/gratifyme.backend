@@ -129,4 +129,37 @@ class TipController extends ApiController
         $getTipDto->setTips($tips);
         return $this->json($getTipDto);
     }
+    #[OA\Response(
+        response: 200,
+        description: "Returns the details of a single Tip",
+        content: new Model(type: GetTipDto::class, groups: ['BASE']),
+    )]
+    #[OA\Response(
+        response: 404,
+        description: 'Tip not found',
+        content: new Model(type: ResponseDto::class, groups: ['BASE']),
+    )]
+    #[OA\Tag(name: 'tip')]
+    #[Security(name: null)]
+    #[Route(path: '/api/single-tip/{id}', name: 'app_tip_show', methods: ['GET'])]
+    public function showSingleTip(TipRepository $tipRepository, Request $request): Response
+    {
+        $tipId = $request->attributes->get("id");
+        $tip = $tipRepository->findOneById($tipId);
+        if (!$tip) {
+            $getTipDto = new GetTipDto();
+            $getTipDto->setMessages([
+                'Tip with this id was not found!',
+            ]);
+            $getTipDto->getServer()->setHttpCode(400);
+            return $this->json($getTipDto);
+        }
+        $getTipDto = new GetTipDto();
+        $getTipDto->setMessages([
+            "Tip found successfully!",
+        ]);
+        $getTipDto->getServer()->setHttpCode(200);
+        $getTipDto->setTips([$tip]);
+        return $this->json($getTipDto);
+    }
 }
