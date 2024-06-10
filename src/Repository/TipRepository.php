@@ -54,7 +54,7 @@ class TipRepository extends ServiceEntityRepository
     {
         $entityManager = $this->getEntityManager();
         $query = $entityManager->createQueryBuilder()
-            ->select('t.tipAmount', 't.tipDate')
+            ->select('t.id','t.tipAmount', 't.tipDate')
             ->from('App:Tip', 't')
             ->where('t.user = :user')
             ->setParameter('user', $userId)
@@ -62,6 +62,7 @@ class TipRepository extends ServiceEntityRepository
 
         return $query->getResult();
     }
+
     public function findOneById(string|null $id): ?Tip
     {
         $entityManager = $this->getEntityManager();

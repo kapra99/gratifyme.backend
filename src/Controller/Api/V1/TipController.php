@@ -84,10 +84,8 @@ class TipController extends ApiController
         $userId = $request->attributes->get("userId");
         $tips = $tipRepository->findTipAmountsAndDatesByUser($userId);
 
-        // Initialize an array to hold tip amounts for each month
         $tipsByMonth = array_fill(1, 12, 0);
 
-        // Iterate over tips and aggregate tip amounts by month
         foreach ($tips as $tip) {
             $month = (int)date('n', strtotime($tip['tipDate']));
             $tipAmount = (float)$tip['tipAmount'];
