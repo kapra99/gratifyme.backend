@@ -28,12 +28,12 @@ class Tip
         $this->id = Uuid::v4();
     }
 
-    #[Groups(["tip"])]
+    #[Groups(["BASE"])]
     public function getId(): ?string
     {
         return $this->id;
     }
-    #[Groups(["tip"])]
+    #[Groups(["BASE"])]
     public function getTipAmount(): ?float
     {
         return $this->tipAmount;
@@ -45,7 +45,7 @@ class Tip
 
         return $this;
     }
-    #[Groups(["tip"])]
+    #[Groups(["BASE"])]
     public function getTipDate(): ?string
     {
         return $this->tipDate;

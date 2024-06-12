@@ -149,14 +149,14 @@ class TipController extends ApiController
         if (!$tip) {
             $getTipDto = new GetTipDto();
             $getTipDto->setMessages([
-                'Tip with this id was not found!',
+                'Tip with this id was not found',
             ]);
             $getTipDto->getServer()->setHttpCode(400);
             return $this->json($getTipDto);
         }
         $getTipDto = new GetTipDto();
         $getTipDto->setMessages([
-            "Tip found successfully!",
+            "Tip found successfully: "
         ]);
         $getTipDto->getServer()->setHttpCode(200);
         $getTipDto->setTips([$tip]);
