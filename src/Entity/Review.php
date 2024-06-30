@@ -20,14 +20,19 @@ class Review
     #[Groups(['BASE'])]
     #[ORM\Column(nullable: true)]
     private ?float $rating = null;
-    #[Groups(['BASE'])]
-    #[ORM\Column(nullable: true)]
-    private ?bool $subreview = null;
     #[ORM\ManyToOne(inversedBy: 'review')]
     private ?User $evaluatedUser = null;
 
-    #[ORM\ManyToOne(inversedBy: 'reviewsAuthor')]
-    private ?User $author = null;
+    #[Groups(['BASE'])]
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $author_firstName = null;
+    #[Groups(['BASE'])]
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $author_lastName = null;
+
+    #[ORM\ManyToOne(inversedBy: 'reviews')]
+    #[Groups(["BASE"])]
+    private ?File $avatar = null;
 
     public function __construct()
     {
@@ -51,6 +56,27 @@ class Review
         return $this;
     }
 
+    public function getAuthorFirstName(): ?string
+    {
+        return $this->author_firstName;
+    }
+
+    public function getAuthorLastName(): ?string
+    {
+        return $this->author_lastName;
+    }
+
+    public function setAuthorFirstName(?string $author_firstName): void
+    {
+        $this->author_firstName = $author_firstName;
+    }
+
+
+    public function setAuthorLastName(?string $author_lastName): void
+    {
+        $this->author_lastName = $author_lastName;
+    }
+
     #[Groups(["review"])]
     public function getRating(): ?float
     {
@@ -60,19 +86,6 @@ class Review
     public function setRating(?float $rating): static
     {
         $this->rating = $rating;
-
-        return $this;
-    }
-
-    #[Groups(["review"])]
-    public function isSubreview(): ?bool
-    {
-        return $this->subreview;
-    }
-
-    public function setSubreview(?bool $subreview): static
-    {
-        $this->subreview = $subreview;
 
         return $this;
     }
@@ -88,15 +101,14 @@ class Review
 
         return $this;
     }
-    #[Groups(['BASE'])]
-    public function getAuthor(): ?User
+    public function getAvatar(): ?File
     {
-        return $this->author;
+        return $this->avatar;
     }
 
-    public function setAuthor(?User $author): static
+    public function setAvatar(?File $avatar): static
     {
-        $this->author = $author;
+        $this->avatar = $avatar;
 
         return $this;
     }
