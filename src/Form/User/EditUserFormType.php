@@ -49,14 +49,6 @@ class EditUserFormType extends BaseType
                     new Length(null, 2, 255),
                 ],
             ])
-            ->add('nickname', TextType::class, [
-                'required' => true,
-                'trim' => true,
-                'constraints' => [
-                    new NotBlank(),
-                    new Length(null, 2, 255),
-                ],
-            ])
             ->add('dateofbirth', TextType::class, [
                 'required' => true,
                 'trim' => true,

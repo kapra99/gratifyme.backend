@@ -56,9 +56,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
     #[Groups(["BASE"])]
     private ?string $lastName = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["BASE"])]
-    private ?string $nickName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(["BASE"])]
@@ -205,18 +202,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, SoftDel
     public function setLastName(?string $lastName): static
     {
         $this->lastName = $lastName;
-
-        return $this;
-    }
-
-    public function getNickName(): ?string
-    {
-        return $this->nickName;
-    }
-
-    public function setNickName(string $nickName): static
-    {
-        $this->nickName = $nickName;
 
         return $this;
     }

@@ -91,6 +91,7 @@
     }
   },
   "require-dev": {
+    "doctrine/doctrine-fixtures-bundle": "^3.6",
     "symfony/maker-bundle": "^1.53",
     "symfony/stopwatch": "6.0.*",
     "symfony/web-profiler-bundle": "6.0.*"

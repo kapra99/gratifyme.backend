@@ -64,7 +64,6 @@ class ActionController extends ApiController
             $firstName = $form->get('firstname')->getData();
             $surName = $form->get('surname')->getData();
             $lastName = $form->get('lastname')->getData();
-            $nickName = $form->get('nickname')->getData();
             $dateOfBirth = $form->get('dateofbirth')->getData();
             $workPlaceId = $form->get('workplace')->getData();
             $workingPositionId = $form->get('workingposition')->getData();
@@ -86,7 +85,7 @@ class ActionController extends ApiController
                 $avatar = $fileRepository->findOneById($avatarId);
             }
 
-            $userRepository->updateUser($currentUser, $email, $firstName, $surName, $lastName, $nickName, $dateOfBirth, $workPlace, $workingPosition, $avatar);
+            $userRepository->updateUser($currentUser, $email, $firstName, $surName, $lastName, $dateOfBirth, $workPlace, $workingPosition, $avatar);
             $responseDto = new ResponseDto();
             $responseDto->setMessages([
                 'User updated successfully!',
