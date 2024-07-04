@@ -6,6 +6,7 @@ use App\Controller\Api\ApiController;
 use App\Dto\Api\V1\Response\ResponseDto;
 use App\Dto\Api\V1\Review\GetReviewDto;
 use App\Form\Review\ReviewFormType;
+use App\Repository\FileRepository;
 use App\Repository\ReviewRepository;
 use App\Repository\UserRepository;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -37,7 +38,7 @@ class ReviewController extends ApiController
         content: new Model(type: ReviewFormType::class),
     )]
     #[Route(path: '/api/review/create', name: 'app_review_create', methods: ['POST'])]
-    public function create(Request $request, ReviewRepository $reviewRepository, UserRepository $userRepository): Response
+    public function create(Request $request, ReviewRepository $reviewRepository, UserRepository $userRepository, FileRepository $fileRepository): Response
     {
         $form = $this->createForm(ReviewFormType::class);
         $data = json_decode($request->getContent(), true);
@@ -55,18 +56,21 @@ class ReviewController extends ApiController
             $reviewMessage = $form->get('message')->getData();
             $reviewRating = $form->get('rating')->getData();
             $userId = $form->get('userId')->getData();
-            $authorId = $form->get('author')->getData();
+            $author_firstname = $form->get('author_firstname')->getData();
+            $author_lastname = $form->get('author_lastname')->getData();
+            $avatarId = $form->get('avatar')->getData();
+
             if ($userId == null) {
                 $user = $existingReview->getEvaluatedUser();
             } else {
                 $user = $userRepository->findOneById($userId);
             }
-            if ($authorId == null) {
-                $author = $existingReview->getEvaluatedUser();
+            if ($avatarId == null) {
+                $avatar = $existingReview->getAvatar();
             } else {
-                $author = $userRepository->findOneById($authorId);
+                $avatar = $fileRepository->findOneById($avatarId);
             }
-            $reviewRepository->addReview($user,$reviewMessage, $reviewRating,$author);
+            $reviewRepository->addReview($user,$reviewMessage, $reviewRating,$author_firstname, $author_lastname, $avatar);
             $getReviewDto = new GetReviewDto();
             $getReviewDto->setMessages([
                 'Review added successfully!',

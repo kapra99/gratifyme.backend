@@ -38,12 +38,27 @@ class ReviewFormType extends BaseType
                     new Length(max: 255),
                 ],
             ])
-            ->add('author', TextType::class, [
+            ->add('author_firstname', TextType::class, [
                 'required' => true,
                 'trim' => true,
                 'constraints' => [
                     new NotBlank(),
                     new Length(max: 255),
+                ],
+            ])
+            ->add('author_lastname', TextType::class, [
+                'required' => true,
+                'trim' => true,
+                'constraints' => [
+                    new NotBlank(),
+                    new Length(max: 255),
+                ],
+            ])
+            ->add('avatar', TextType::class, [
+                'required' => true,
+                'trim' => true,
+                'constraints' => [
+                    new Length(null, 2, 255),
                 ],
             ]);
     }

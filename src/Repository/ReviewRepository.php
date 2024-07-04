@@ -65,14 +65,16 @@ class ReviewRepository extends ServiceEntityRepository
         return $query->getOneOrNullResult();
     }
 
-    public function addReview(User|null $user, string $reviewMessage, string $reviewRating, User|null $author)
+    public function addReview(User|null $user, string $reviewMessage, string $reviewRating, $author_firstname, $author_lastname, $avatarId)
     {
         $entityManager = $this->getEntityManager();
         $review = new Review();
         $review->setMessage($reviewMessage);
         $review->setRating($reviewRating);
         $review->setEvaluatedUser($user);
-        $review->setAuthor($author);
+        $review->setAuthorFirstName($author_firstname);
+        $review->setAuthorLastName($author_lastname);
+        $review->setAvatar($avatarId);
 
         $errors = $this->validator->validate($review);
         if (count($errors) > 0) {
@@ -88,7 +90,7 @@ class ReviewRepository extends ServiceEntityRepository
         $currentReview->setMessage($reviewMessage);
         $currentReview->setRating($reviewRating);
         $currentReview->setEvaluatedUser($user);
-        $currentReview->setAuthor($author);
+//        $currentReview->setAuthor($author);
 
         $errors = $this->validator->validate($currentReview);
         if (count($errors) > 0) {
